@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "Propietary"}
 readme = "README.md"
-requires-python = "3.11"
+requires-python = ">3.11.0,<=3.11.14"
 dependencies = [
     "flask (>=3.1.2,<4.0.0)",
     "flask-cors (>=6.0.1,<7.0.0)",
