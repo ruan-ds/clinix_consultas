@@ -1,20 +1,22 @@
-[project]
-name = "clinix-consultas"
-version = "1.0.0"
-description = "Backend Python do sistema de agendamento"
-authors = [
-    {name = "Ruan, ruantmelon@icloud.com"}
-]
-license = {text = "Propietary"}
+[tool.poetry]
+name = "clinix-backend"
+version = "0.1.0"
+description = "Clinix BPO - Sistema de Agendamento"
+authors = ["Seu Nome <seu@email.com>"]
 readme = "README.md"
-requires-python = ">3.11.0,<=3.11.14"
-dependencies = [
-    "flask (>=3.1.2,<4.0.0)",
-    "flask-cors (>=6.0.1,<7.0.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)"
-]
+package-mode = false
 
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = "^0.129.0"
+uvicorn = {extras = ["standard"], version = "^0.40.0"}
+sqlalchemy = "^2.0.46"
+pymysql = "^1.1.2"
+pydantic-settings = "^2.12.0"
+python-jose = {extras = ["cryptography"], version = "^3.5.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.22"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
