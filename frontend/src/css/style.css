@@ -1,0 +1,25 @@
+:root {
+    --primary-color: #00897b; /* Verde-água escuro para melhor contraste */
+    --secondary-color: #ffffff;
+    --accent-color: #004d40;
+    --text-dark: #2c3e50;
+    --text-light: #546e7a;
+    --bg-light: #f4f7f6;
+    --error-color: #d32f2f;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+    margin-left: 3000px;
+}
+
+.banner2 {
+    max-width: 100%;
+    background-image: url("../assets/images/bannerHomepage.png");
+}
