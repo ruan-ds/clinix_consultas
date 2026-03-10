@@ -1,0 +1,140 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 800px;
+    width: 90%;
+}
+
+/* Card de Informação (Verde ao fundo) */
+.info-card {
+    background: linear-gradient(90deg, #0A413C 30%, #22C9BA 100%);
+    color: white;
+    padding: 60px 40px 60px 180px;
+    /* Padding extra na esquerda para o card de login */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-left: -150px;
+    /* Puxa o card para trás do login */
+    z-index: 1;
+    flex: 1;
+}
+
+.info-card h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.info-card p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Card de Login (Branco à frente) */
+.login-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 380px;
+    z-index: 2;
+    text-align: center;
+    /* Borda azul conforme a imagem */
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #eee;
+    border-radius: 25px;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+.btn-entrar {
+    width: 100%;
+    padding: 12px;
+    background-color: #1e6b5f;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-entrar:hover {
+    background-color: #154d44;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+    color: #1e6b5f;
+    text-decoration: none;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.signup-text {
+    margin-top: 30px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.signup-text a {
+    color: #0d5852;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .info-card {
+        margin-left: 0;
+        padding: 40px;
+        margin-top: -20px;
+        text-align: center;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .login-card {
+        width: 100%;
+    }
+}

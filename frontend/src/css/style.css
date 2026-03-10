@@ -1,0 +1,311 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    color: #333;
+    background-color: #fcfcfc;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Cores Principais */
+:root {
+    --primary-color: #108D82;
+    --primary-dark: #0A413C;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+}
+
+/* --- Cabeçalho (Header) --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.logo-container img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+.header-buttons .btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-entrar {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    margin-right: 10px;
+}
+
+.btn-entrar:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-registrar {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-registrar:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* --- Banner Principal (Hero Section) --- */
+.hero {
+    background: linear-gradient(rgba(26, 157, 140, 0.7), rgba(26, 157, 140, 0.7)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+    padding: 100px 20px;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.hero h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+
+/* --- Barra de Estatísticas --- */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.stat-item i {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+/* --- Seção: Por que usar? --- */
+.features-section {
+    padding: 60px 5%;
+    background-color: #fff;
+}
+
+.section-title {
+    margin-bottom: 40px;
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.feature-item {
+    flex: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.feature-item:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+.feature-item i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.feature-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+
+.feature-item p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+/* --- Banner de Clínicas (CTA) --- */
+.cta-section {
+    padding: 0 5% 60px 5%;
+    background-color: #fff;
+}
+
+.cta-banner {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
+.clinic-card {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    color: var(--text-dark);
+    width: 180px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.clinic-card img {
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.clinic-card h4 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.stars {
+    color: #f1c40f;
+    font-size: 0.8rem;
+}
+
+.cta-text {
+    flex: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.cta-text h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.cta-text p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.btn-white {
+    background-color: white;
+    color: var(--primary-color);
+    padding: 12px 24px;
+    border-radius: 4px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-white:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- Rodapé (Footer) --- */
+footer {
+    background-color: #fff;
+    padding: 40px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 1px solid #eee;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.footer-logo {
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.footer-logo img {
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+.footer-column h4 {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.footer-column p {
+    margin-bottom: 8px;
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 900px) {
+    .features-grid {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .feature-item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 30px;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    footer {
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .stats-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
