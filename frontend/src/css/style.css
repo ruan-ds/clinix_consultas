@@ -1,86 +1,403 @@
+/* ==========================================================================
+   VARIÁVEIS E RESET
+   ========================================================================== */
 :root {
-    --primary-color: #00897b; /* Verde-água escuro para melhor contraste */
-    --secondary-color: #ffffff;
-    --accent-color: #004d40;
-    --text-dark: #2c3e50;
-    --text-light: #546e7a;
-    --bg-light: #f4f7f6;
-    --error-color: #d32f2f;
-    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    --font-nav: 'Montserrat', sans-serif;
+  --primary-color: #00897b; /* Verde água */
+  --secondary-color: #ffffff; /* Branco */
+  --text-dark: #2c3e50;
+  --text-light: #546e7a;
+  --bg-light: #f4f7f6;
+  --border-color: #d1d5db;
+  --font-main: "Montserrat", sans-serif;
 }
-body{
-    font-family: var(--font-nav);
-}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-main {
-    padding-top: 100px; /* Use a mesma altura que você definiu para sua navbar */
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--secondary-color);
+  color: var(--text-dark);
 }
+
+/* ==========================================================================
+   CABEÇALHO (HEADER E NAV)
+   ========================================================================== */
 header {
-    position: fixed;        /* Fixa o elemento na tela */
-    top: 0;                 /* Gruda no topo absoluto */
-    left: 0;                /* Alinha à esquerda */
-    width: 100%;            /* Garante que ocupe toda a largura */
-    background-color: var(--secondary-color); /* Mantém o fundo branco */
-    z-index: 1000;          /* Garante que fique por cima de outros conteúdos */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Opcional: dá uma sombra leve ao descer */
+  position: fixed; /* Fixa o elemento na tela */
+  top: 0; /* Gruda no topo absoluto */
+  left: 0; /* Alinha à esquerda */
+  width: 100%; /* Garante que ocupe toda a largura */
+  background-color: var(--secondary-color); /* Mantém o fundo branco */
+  z-index: 1000; /* Garante que fique por cima de outros conteúdos */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Opcional: dá uma sombra leve ao descer */
 }
-navbar{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 100px;
-    background-color: var(--bg-light);
+navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  background-color: var(--bg-light);
 }
-navbar img{
-    width: 120px;
+navbar img {
+  width: 100px;
+  height: auto;
+  padding-left: 30px;
+}
+navbar p {
+  font-size: 40px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+navbar .buttonnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  height: 100%;
+  margin-right: 3%;
+  gap: 20px;
+}
+.buttonnav a {
+  text-decoration: none;
+  font-size: 22px;
+  color: var(--primary-color);
+  border-style: solid;
+  border-color: var(--primary-color);
+  display: inline-block; /* Permite definir largura e altura */
+  width: 120px; /* Define um tamanho fixo igual para os dois */
+  text-align: center; /* Centraliza o texto dentro do botão */
+  padding: 10px 0; /* Espaço em cima e embaixo */
+  text-decoration: none; /* Remove a linha de baixo */
+  border: 2px solid var(--primary-color); /* Cria a borda verde */
+  color: var(--primary-color);
+  border-radius: 5px; /* Deixa as pontas arredondadas */
+  font-weight: bold;
+  border-radius: 0px;
+}
+.buttonnav #bt1nv {
+  background-color: var(--primary-color);
+  color: white;
+}
+.buttonnav #bt1nv:hover {
+  transform: scale(1.1);
+}
+.buttonnav #bt2nv:hover {
+  transform: scale(1.1);
+}
+
+/* ==========================================================================
+   CONTEÚDO PRINCIPAL (MAIN)
+   ========================================================================== */
+main {
+  margin-top: 90px; /* Compensa a altura do header fixo */
+}
+
+/* BANNER HERO */
+.banner {
+  /* Use uma cor de fallback caso a imagem não carregue */
+  background-color: #6da29a;
+  /* Substitua pelo caminho real da sua imagem de fundo */
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../assets/images/bannerHomepage.png");
+  background-size: cover;
+  background-position: center;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.bannerH1 {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* ESTATÍSTICAS */
+.stats-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  padding: 40px 5%;
+  background-color: var(--secondary-color);
+  border-bottom: 1px solid #eee;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.stat-icon {
+  width: 35px;
+  height: 35px;
+  fill: var(--primary-color);
+}
+
+/* BENEFÍCIOS (POR QUE USAR) */
+.benefits-section,
+.cta-section {
+  padding: 60px 10%;
+  background-color: var(--secondary-color);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+.benefits-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.benefit-card {
+  flex: 1;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.middle-card {
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.benefit-icon {
+  width: 50px;
+  height: 50px;
+  fill: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.benefit-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.benefit-card p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* CTA BANNER (CLÍNICAS EM DESTAQUE) */
+.cta-banner {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.clinic-card {
+  background-color: var(--secondary-color);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 220px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.clinic-img-placeholder {
+  width: 100%;
+  height: 120px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.clinic-img-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clinic-name {
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.stars {
+  font-size: 0.9rem;
+}
+
+.cta-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 20px;
+}
+
+.cta-text {
+  color: var(--secondary-color);
+}
+
+.cta-text h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.cta-text p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.btn-cta {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 15px 25px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  transition: background-color 0.3s;
+}
+
+.btn-cta:hover {
+  background-color: #f1f1f1;
+}
+
+/* ==========================================================================
+   RODAPÉ (FOOTER)
+   ========================================================================== */
+footer {
+  background-color: var(--secondary-color);
+  padding: 40px 10%;
+  border-top: 1px solid #eee;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.footer-logo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo-col img {
+  width: 150px;
+}
+
+.footer-col h4 {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: var(--text-dark);
+}
+
+.footer-col p,
+.footer-col a {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-decoration: none;
+  display: block;
+}
+
+.footer-col a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE)
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* Ajustes intermediários para Tablets */
+  .cta-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .cta-content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Ajustes para Celulares (como na imagem) */
+  nav {
+    flex-direction: column;
     height: auto;
-}
-navbar p{
-    font-size: 40px;
-    color: var(--primary-color);
-    font-weight: 700;
-}
-navbar .buttonnav{
-    display: flex;
-    justify-content: space-between;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+  }
+
+  .buttonnav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  main {
+    margin-top: 112px; /* Header fica mais alto no mobile */
+  }
+
+  .banner {
+    height: 250px;
+  }
+
+  .bannerH1 {
+    font-size: 1.8rem;
+  }
+
+  .stats-section {
+    flex-direction: column;
     align-items: center;
-    width: auto;
-    height: 100%;
-    margin-right: 3%;
     gap: 20px;
-}
-.buttonnav a{
-    text-decoration: none;
-    font-size: 22px;
-    color: var(--primary-color);
-    border-style: solid;
-    border-color: var(--primary-color);
-    display: inline-block;     /* Permite definir largura e altura */
-    width: 120px;              /* Define um tamanho fixo igual para os dois */
-    text-align: center;        /* Centraliza o texto dentro do botão */
-    padding: 10px 0;           /* Espaço em cima e embaixo */
-    text-decoration: none;     /* Remove a linha de baixo */
-    border: 2px solid var(--primary-color); /* Cria a borda verde */
-    color: var(--primary-color);
-    border-radius: 5px;        /* Deixa as pontas arredondadas */
-    font-weight: bold;
-    border-radius: 0px;
-}
-.buttonnav #bt1nv{
-    background-color: var(--primary-color);
-    color: white;
-}
-.buttonnav #bt1nv:hover{
-    transform: scale(1.1);
-}
-.buttonnav #bt2nv:hover{
-    transform: scale(1.1);
+    padding: 30px 20px;
+  }
+
+  .benefits-grid {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .middle-card {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 40px 20px;
+  }
+
+  .footer-grid {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -124,75 +441,4 @@ navbar .buttonnav{
         padding: 8px 0;
     }
     
-    main {
-        padding-top: 110px; /* Aumenta o respiro pois a navbar fica mais alta no mobile */
-    }
-}
-.bannerH1{
-    font-size: 3rem;
-    color: #D6F8F5;
-}
-
-.banner {
-    background-image: url("../assets/images/bannerHomepage.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: auto;
-    height: 20rem; /* obrigatório ter altura */
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.btnHomepage {
-    background-color: var(--primary-color);
-    border: 2px solid var(--primary-color);   
-    color: white;
-    font-size: 2rem ;
-
-    display: inline-block;
-    width: fit-content;
-    padding: 1rem;
-
-    margin-top: 2rem;
-    text-decoration: none;
-}
-/* --- RESPONSIVIDADE DO BANNER --- */
-
-/* Ajustes para Tablets (Telas até 992px) */
-@media (max-width: 992px) {
-    .bannerH1 {
-        font-size: 2.2rem; /* Diminui o título principal */
-        padding: 0 10px;
-    }
-
-    .btnHomepage {
-        font-size: 1.5rem; /* Diminui o botão */
-        width: 90%;        /* Botão ocupa quase toda a largura */
-        max-width: 400px;
-    }
-}
-
-/* Ajustes para Celulares (Telas até 768px) */
-@media (max-width: 768px) {
-    .banner {
-        height: 25rem;    /* Aumenta a altura para o texto não ficar apertado */
-        background-position: center; 
-        padding: 20px;
-    }
-
-    .bannerH1 {
-        font-size: 1.8rem; /* Título menor para telemóveis */
-        line-height: 1.2;
-    }
-
-    .btnHomepage {
-        font-size: 1.2rem;
-        padding: 0.8rem;
-        margin-top: 1.5rem;
-    }
 }
