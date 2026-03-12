@@ -9,6 +9,7 @@
   --bg-light: #f4f7f6;
   --border-color: #d1d5db;
   --font-main: "Montserrat", sans-serif;
+  --transparente:#ffffff00;
 }
 
 * {
@@ -35,7 +36,7 @@ header {
   z-index: 1000; /* Garante que fique por cima de outros conteúdos */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Opcional: dá uma sombra leve ao descer */
 }
-navbar {
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,17 +44,17 @@ navbar {
   height: 100px;
   background-color: var(--bg-light);
 }
-navbar img {
+nav img {
   width: 100px;
   height: auto;
   padding-left: 30px;
 }
-navbar p {
+nav p {
   font-size: 40px;
   color: var(--primary-color);
   font-weight: 700;
 }
-navbar .buttonnav {
+nav .buttonnav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -99,20 +100,19 @@ main {
 
 /* BANNER HERO */
 .banner {
-  /* Use uma cor de fallback caso a imagem não carregue */
-  background-color: #6da29a;
-  /* Substitua pelo caminho real da sua imagem de fundo */
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("../assets/images/bannerHomepage.png");
-  background-size: cover;
-  background-position: center;
+  background-image: 
+    linear-gradient(to right, var(--primary-color) 55%, transparent 75%),
+    url(../assets/images/bannerHomepage.jpg) ;
+
+  background-position: left top, right center; 
+  background-size: cover, contain; 
+  background-repeat: no-repeat, no-repeat;
+  
   height: 350px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 20px;
+  justify-content: flex-start;
+  padding: 0 5%;
 }
 
 .bannerH1 {
@@ -126,7 +126,7 @@ main {
 .stats-section {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   gap: 60px;
   padding: 40px 5%;
   background-color: var(--secondary-color);
@@ -246,14 +246,15 @@ main {
 
 .cta-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px; 
   flex: 1;
-  gap: 20px;
 }
 
 .cta-text {
   color: var(--secondary-color);
+  margin-bottom: 20px;
 }
 
 .cta-text h3 {
@@ -264,6 +265,7 @@ main {
 .cta-text p {
   font-size: 1rem;
   opacity: 0.9;
+  margin-bottom:100px ;
 }
 
 .btn-cta {
@@ -404,17 +406,17 @@ footer {
 
 /* Ajustes para Tablets e telas médias */
 @media (max-width: 992px) {
-    navbar p {
+    nav p {
         font-size: 30px; /* Diminui o nome CLINIX */
     }
-    navbar img {
+    nav img {
         width: 100px;
     }
 }
 
 /* Ajustes para Celulares (Telas até 768px) */
 @media (max-width: 768px) {
-    navbar {
+    nav {
         height: auto; /* Deixa a altura livre para o conteúdo se ajustar */
         padding: 15px 2%;
         flex-wrap: wrap; /* Permite que os itens "pulem" de linha se necessário */
@@ -422,15 +424,15 @@ footer {
         gap: 10px;
     }
 
-    navbar p {
+    nav p {
         display: none; /* Dica: esconder o nome escrito e deixar só a logo economiza muito espaço no celular */
     }
 
-    navbar img {
+    nav img {
         width: 80px;
     }
 
-    navbar .buttonnav {
+    nav .buttonnav {
         margin-right: 0; /* Remove a margem lateral no mobile */
         gap: 10px;
     }
@@ -441,4 +443,83 @@ footer {
         padding: 8px 0;
     }
     
+}
+
+/* --- Seção: O que é o CLINIX --- */
+.about-clinix-section {
+    padding: 10px 20px;
+    background-color: #f4fbfa; /* Fundo verde bem clarinho para destacar do resto da página */
+    border-top: 1px solid #e0f2f0;
+    border-bottom: 1px solid #e0f2f0;
+    border-radius: 8px;
+}
+
+.about-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto; /* Centraliza o conteúdo */
+}
+
+.about-content {
+    flex: 1;
+}
+
+.about-description {
+    font-size: 1.05rem;
+    color: var(--text-light, #7f8c8d);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.about-list-title {
+    font-size: 1.1rem;
+    color: var(--text-dark, #2c3e50);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.about-list {
+    list-style: none;
+    padding: 0;
+}
+
+.about-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: var(--text-light, #7f8c8d);
+    line-height: 1.5;
+}
+
+.about-list li i {
+    font-size: 1.5rem;
+    color: var(--primary-color, #1a9d8c);
+    margin-top: 3px; /* Alinha o ícone com a primeira linha do texto */
+}
+
+.about-list li strong {
+    color: var(--text-dark, #2c3e50);
+    display: block;
+    margin-bottom: 3px;
+}
+
+/* Responsividade para a seção About */
+@media (max-width: 900px) {
+    .about-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .about-title {
+        font-size: 1.8rem;
+    }
+    
+    .about-subtitle {
+        font-size: 1.1rem;
+    }
 }
