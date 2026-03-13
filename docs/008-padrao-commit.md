@@ -10,7 +10,7 @@ O sistema precisa seguir um padrão rigido de commit.
 
 ## Decisão
 
-Antes do versionamento utilizar de Black para formatação e Ruff como linter.
+Antes do versionamento, para arquivos Python, utilizar de Black para formatação e Ruff como linter. Para arquivos JSX e HTML, utilizar de Prettier para formatação e ESLint como linter.
 
 Padrão de commits:
 
