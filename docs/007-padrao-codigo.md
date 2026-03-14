@@ -11,7 +11,7 @@ O sistema precisa seguir um padrão rigido de escrita.
 Seguir o PEP8:
 - funções e variaveis(snake_case) - def funcao_exemplo() / variavel_exemplo = x
 - classes(PascalCase) - class ClasseExemplo
-- constantes(UPPERCASE+SNAKE_CASE) - CONSTANTE_EXEMPLO
+- constantes(UPPER_SNAKE_CASE) - CONSTANTE_EXEMPLO
 - espaço entre funções - duas linhas em branco
 - limite de caracteres por linha - 79
 - imports no topo e separados

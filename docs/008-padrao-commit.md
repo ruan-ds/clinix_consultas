@@ -24,6 +24,13 @@ Padrão de commits:
 
 Exemplo: feat: Dockerfile config
 
+Fluxo:
+1- bun run lint
+2- bun run format
+3- git add
+4- git commit -m "feat: Dockerfile config"
+
+
 ## Consequências
 
 - Padrão de versionamento
