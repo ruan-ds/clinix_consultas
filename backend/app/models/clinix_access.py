@@ -1,6 +1,12 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Index, UniqueConstraint
-from app.core.database import Base
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    ForeignKey,
+)
+from app.models.entity import Entity
+
 
 class ClinixAccess(Entity):
     __tablename__ = "clinix_access"
