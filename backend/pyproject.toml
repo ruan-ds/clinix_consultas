@@ -20,3 +20,8 @@ python-multipart = "^0.0.22"
 [build-system]
 requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "black (>=26.3.1,<27.0.0)",
+    "ruff (>=0.15.6,<0.16.0)"
+]
