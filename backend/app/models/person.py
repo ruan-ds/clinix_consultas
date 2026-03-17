@@ -13,9 +13,9 @@ class Person(Entity):
     birthday = Column(Date, nullable=False)
     address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
 
-    address = relationship("Address", back_populates="persons")
+    address = relationship("Address", back_populates="person")
     patient = relationship("Patient", back_populates="person", uselist=False)
-
+    clinical_access = relationship("ClinicalAccess", back_populates="person")
     __mapper_args__ = {
         "polymorphic_identity": "P",
     }
