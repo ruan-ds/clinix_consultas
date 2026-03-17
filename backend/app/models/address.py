@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
+
 class Address(Base):
     __tablename__ = "address"
 
