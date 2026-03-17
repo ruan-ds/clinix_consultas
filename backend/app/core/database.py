@@ -1,10 +1,3 @@
-from app.core.database import Base
-from app.models.clinic import Clinic
-from app.models.address import Address
-from app.models.clinical_access import ClinicalAccess
-from app.models.clinix_access import ClinixAccess
-from app.models.entity import Entity
-from app.models.logs import Logs
-from app.models.patient import Patient
-from app.models.person import Person
-from app.models.phone import Phone
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
