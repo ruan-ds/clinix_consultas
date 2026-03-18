@@ -19,6 +19,7 @@ Padrão de commits:
 - fix - Corrigiu erro
 - refactor - Refatorou
 - docs - Apenas docs
+- test - Testes no geral
 
 - mensagens de commit devem ser escritas em inglês, ser generalizadas e usar letras minúsculas (exceto siglas e nomes próprios)
 
