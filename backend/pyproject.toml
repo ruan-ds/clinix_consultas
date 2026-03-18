@@ -16,6 +16,8 @@ pydantic-settings = "^2.12.0"
 python-jose = {extras = ["cryptography"], version = "^3.5.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.22"
+cryptography = "^46.0.5"
+pytest = "^9.0.2"
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
