@@ -12,7 +12,7 @@ Base = declarative_base()
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("BACKEND_DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Criar a engine
 # pool_pre_ping=True impede que o MySQL nao derrube conexões ociosas
