@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from backend.app.models.entity import Entity
+from app.models.entity import Entity
 
 
 class Person(Entity):
@@ -13,9 +13,9 @@ class Person(Entity):
     birthday = Column(Date, nullable=False)
     address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
 
-    address = relationship("Address", back_populates="person")
-    patient = relationship("Patient", back_populates="person", uselist=False)
+    address = relationship("Address", back_populates="persons")
+    patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
     clinical_access = relationship("ClinicalAccess", back_populates="person")
-    __mapper_args__ = {
-        "polymorphic_identity": "P",
-    }
+    clinix_access = relationship("ClinixAccess", back_populates="person")
+
+    __mapper_args__ = {"polymorphic_identity": "P"}

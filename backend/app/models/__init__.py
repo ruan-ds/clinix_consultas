@@ -2,8 +2,8 @@ from .address import Address
 from .clinic import Clinic
 from .clinical_access import ClinicalAccess
 from .clinix_access import ClinixAccess
+from .patient_access import PatientAccess
 from .entity import Entity
 from .logs import Logs
-from .patient import Patient
 from .person import Person
 from .phone import Phone
