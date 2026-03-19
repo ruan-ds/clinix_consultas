@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Clinix BPO - Sistema de Agendamento"
 authors = ["Seu Nome <seu@email.com>"]
 readme = "README.md"
-package-mode = false
+package-mode = true
+packages = [
+    { include = "app" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.13"
@@ -18,6 +21,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.22"
 cryptography = "^46.0.5"
 pytest = "^9.0.2"
+alembic = "^1.18.4"
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
