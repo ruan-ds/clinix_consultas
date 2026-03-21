@@ -14,9 +14,9 @@ class ClinicalAccess(Base):
     __tablename__ = "clinical_access"
 
     id = Column(Integer, primary_key=True)
-    clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False, index=True)
-    person_id = Column(Integer, ForeignKey("person.id"), nullable=False, index=True)
-    email = Column(String(300), unique=True, index=True)
+    clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False)
+    person_id = Column(Integer, ForeignKey("person.id"), nullable=False)
+    email = Column(String(300), unique=True)
     password_hash = Column(String(255), nullable=False)
     role = Column(String(30), nullable=False)
     is_active = Column(Boolean, default=True)

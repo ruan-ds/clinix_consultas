@@ -13,8 +13,8 @@ class Clinic(Entity):
     __tablename__ = "clinic"
 
     id = Column(Integer, ForeignKey("entity.id"), primary_key=True)
-    name = Column(String(50), nullable=False, unique=True, index=True)
-    cnpj = Column(String(14), nullable=False, unique=True, index=True)
+    name = Column(String(50), nullable=False, unique=True)
+    cnpj = Column(String(14), nullable=False, unique=True)
     address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
     is_active = Column(Boolean, default=True)
 
