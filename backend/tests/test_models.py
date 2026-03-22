@@ -6,6 +6,7 @@ from app.models.address import Address
 from app.models.person import Person
 from app.models.patient_access import PatientAccess
 from app.models.entity import Entity
+from app.schemas.person import CreatePerson
 
 def test_person_with_address_and_pacient_access(db_session):
     address = Address(
@@ -80,3 +81,30 @@ def test_entity_created_for_person(db_session):
 
     assert entity is not None
     assert entity.type == "P"
+
+
+def test_person_persistence(db_session):
+
+    db_address = Address( 
+        state="MG",  
+        city="Betim",  
+        neighborhood="Centro",  
+        street="Rua A",  
+        number="123",  
+        cep="32600000"  
+    )  
+    db_session.add(db_address)  
+    db_session.flush()  
+    db_session.refresh(db_address)
+
+    schema_data = CreatePerson(name = "Ruan", 
+                     cpf = "12345678900",
+                     sex = "M",
+                     birthday=date(2000, 9, 6),
+                     address_id=db_address.id)
+    
+    db_person = Person(**schema_data.model_dump())
+    db_session.add(db_person)
+    db_session.flush()
+
+    assert db_person.id is not None
