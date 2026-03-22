@@ -1,8 +1,8 @@
-"""create initial tables
+"""first migration
 
-Revision ID: 83f60896d15b
+Revision ID: 07f7360463f3
 Revises: 
-Create Date: 2026-03-19 19:23:11.221510
+Create Date: 2026-03-22 00:06:25.133727
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '83f60896d15b'
+revision: str = '07f7360463f3'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -53,16 +53,17 @@ def upgrade() -> None:
     op.create_index(op.f('ix_logs_record_id'), 'logs', ['record_id'], unique=False)
     op.create_table('clinic',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('trade_name', sa.String(length=60), nullable=False),
+    sa.Column('legal_name', sa.String(length=90), nullable=False),
     sa.Column('cnpj', sa.String(length=14), nullable=False),
     sa.Column('address_id', sa.Integer(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['address_id'], ['address.id'], name=op.f('fk_clinic_address_id_address')),
     sa.ForeignKeyConstraint(['id'], ['entity.id'], name=op.f('fk_clinic_id_entity')),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_clinic'))
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_clinic')),
+    sa.UniqueConstraint('cnpj', name=op.f('uq_clinic_cnpj')),
+    sa.UniqueConstraint('legal_name', name=op.f('uq_clinic_legal_name'))
     )
-    op.create_index(op.f('ix_clinic_cnpj'), 'clinic', ['cnpj'], unique=True)
-    op.create_index(op.f('ix_clinic_name'), 'clinic', ['name'], unique=True)
     op.create_table('person',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
@@ -80,10 +81,10 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('entity_id', sa.Integer(), nullable=False),
     sa.Column('phone', sa.String(length=11), nullable=False),
+    sa.Column('type', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['entity_id'], ['entity.id'], name=op.f('fk_phone_entity_id_entity')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_phone'))
     )
-    op.create_index(op.f('ix_phone_entity_id'), 'phone', ['entity_id'], unique=False)
     op.create_table('clinical_access',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('clinic_id', sa.Integer(), nullable=False),
@@ -95,11 +96,9 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['clinic_id'], ['clinic.id'], name=op.f('fk_clinical_access_clinic_id_clinic')),
     sa.ForeignKeyConstraint(['person_id'], ['person.id'], name=op.f('fk_clinical_access_person_id_person')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_clinical_access')),
-    sa.UniqueConstraint('clinic_id', 'person_id', name=op.f('uq_clinical_access_clinic_id'))
+    sa.UniqueConstraint('clinic_id', 'person_id', name=op.f('uq_clinical_access_clinic_id')),
+    sa.UniqueConstraint('email', name=op.f('uq_clinical_access_email'))
     )
-    op.create_index(op.f('ix_clinical_access_clinic_id'), 'clinical_access', ['clinic_id'], unique=False)
-    op.create_index(op.f('ix_clinical_access_email'), 'clinical_access', ['email'], unique=True)
-    op.create_index(op.f('ix_clinical_access_person_id'), 'clinical_access', ['person_id'], unique=False)
     op.create_table('clinix_access',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('person_id', sa.Integer(), nullable=False),
@@ -109,10 +108,9 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['person_id'], ['person.id'], name=op.f('fk_clinix_access_person_id_person')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_clinix_access')),
+    sa.UniqueConstraint('email', name=op.f('uq_clinix_access_email')),
     sa.UniqueConstraint('person_id', name=op.f('uq_clinix_access_person_id'))
     )
-    op.create_index(op.f('ix_clinix_access_email'), 'clinix_access', ['email'], unique=True)
-    op.create_index(op.f('ix_clinix_access_person_id'), 'clinix_access', ['person_id'], unique=False)
     op.create_table('patient_access',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('person_id', sa.Integer(), nullable=False),
@@ -121,9 +119,9 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['person_id'], ['person.id'], name=op.f('fk_patient_access_person_id_person')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_patient_access')),
-    sa.UniqueConstraint('email', name=op.f('uq_patient_access_email'))
+    sa.UniqueConstraint('email', name=op.f('uq_patient_access_email')),
+    sa.UniqueConstraint('person_id', name=op.f('uq_patient_access_person_id'))
     )
-    op.create_index(op.f('ix_patient_access_person_id'), 'patient_access', ['person_id'], unique=True)
     # ### end Alembic commands ###
 
 
@@ -134,9 +132,12 @@ def downgrade() -> None:
     op.drop_table('clinix_access')
     op.drop_table('clinical_access')
     op.drop_table('phone')
+    op.drop_index(op.f('ix_person_name'), table_name='person')
     op.drop_table('person')
     op.drop_table('clinic')
+    op.drop_index(op.f('ix_logs_record_id'), table_name='logs')
     op.drop_table('logs')
     op.drop_table('entity')
+    op.drop_index(op.f('ix_address_cep'), table_name='address')
     op.drop_table('address')
     # ### end Alembic commands ###
