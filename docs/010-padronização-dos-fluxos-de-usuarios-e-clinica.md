@@ -52,8 +52,8 @@ Fluxo de funcionários:
 - Email
 - Senha
 - Cargo
-- Vínculo com uma pessoa (ID)
-- Vínculo com uma clínica
+- Vínculo com uma pessoa
+- Vínculo com uma clínica (O sistema analisará a origem do registro do novo funcionário e atribuirá o vinculo)
 
 A equipe Clinix também poderá cadastrar funcionários em clínicas,porém somente mediante solicitação
 formal (chamado) feita pelo RH ou administrador da clínica.
