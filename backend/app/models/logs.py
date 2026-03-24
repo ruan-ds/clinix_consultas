@@ -15,7 +15,7 @@ class Logs(Base):
 
     id = Column(Integer, primary_key=True)
     table_name = Column(String(30), nullable=False)
-    record_id = Column(Integer, nullable=False)
+    record_id = Column(Integer, nullable=False, index=True)
     action = Column(String(1), nullable=False)
     author = Column(String(30), nullable=False)
     description = Column(String(400), nullable=False)

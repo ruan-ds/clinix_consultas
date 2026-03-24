@@ -15,7 +15,7 @@ class ClinixAccess(Base):
 
     id = Column(Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey("person.id"), nullable=False, unique=True)
-    email = Column(String(300), unique=True)
+    email = Column(String(300), unique=True, nullable=False)
     password_hash = Column(String(500), nullable=False)
     role = Column(String(30), nullable=False)
     is_active = Column(Boolean, default=True)

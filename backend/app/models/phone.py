@@ -9,7 +9,7 @@ class Phone(Base):
     id = Column(Integer, primary_key=True)
     entity_id = Column(Integer, ForeignKey("entity.id"), nullable=False, index=True)
     phone = Column(String(11), nullable=False)
-    type = Column(String(50))
+    type = Column(String(50), nullable=False)
 
     entity = relationship("Entity", back_populates="phones")
 
