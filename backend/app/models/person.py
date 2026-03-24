@@ -11,7 +11,7 @@ class Person(Entity):
     cpf = Column(String(11), nullable=False, unique=True)
     sex = Column(String(1), nullable=False)
     birthday = Column(Date, nullable=False)
-    address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
+    address_id = Column(Integer, ForeignKey("address.id"), nullable=False, index=True)
 
     address = relationship("Address", back_populates="persons")
     patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
