@@ -21,9 +21,6 @@ class CreatePatientAccess(BasePatientAccess):
     @field_validator("password")
     @classmethod
     def hash_password(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Senha muito curta.")
-
         return ph.hash(v)
         
 
@@ -49,9 +46,6 @@ class UpdatePatientAccess(BaseModel):
     def hash_password(cls, v: Optional[str]) -> Optional[str]:
         if v is None:
             return None
-        if len(v)< 8:
-            raise ValueError("Senha muito curta.")
-
         return ph.hash(v)
     
 

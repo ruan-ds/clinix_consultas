@@ -28,7 +28,7 @@ class BaseLogs(BaseModel):
     action: LogAction
     author: Annotated[str, StringConstraints(max_length=30)]
     description: Annotated[str, StringConstraints(max_length=400)]
-    payload: dict[str, Any]
+    payload: Optional[dict[str, Any]]
     ip: Annotated[str, StringConstraints(max_length=45)]
 
 
