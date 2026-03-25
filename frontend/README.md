@@ -1,4 +1,4 @@
-# Clinix Frontend
+# Clinix frontend
 
 Este diretório contém o frontend da plataforma Clinix.
 
@@ -25,7 +25,7 @@ O frontend é uma **SPA (Single Page Application)** com entrada única via `inde
 
 ---
 
-## Estrutura do Frontend
+## Estrutura do frontend
 
 ```text
 frontend/

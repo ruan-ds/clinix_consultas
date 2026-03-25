@@ -1,4 +1,4 @@
-# Clinix Backend
+# Clinix backend
 
 Este diretório contém o backend da plataforma Clinix.
 
@@ -33,7 +33,7 @@ O backend segue uma organização em camadas para separar responsabilidades entr
 
 ---
 
-## Estrutura do Backend
+## Estrutura do backend
 
 Pasta raiz do backend:
 

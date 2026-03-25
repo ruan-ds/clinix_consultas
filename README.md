@@ -16,7 +16,7 @@ Este repositório contém a plataforma Clinix, com **FastAPI + PostgreSQL** no b
 ## Demo
 
 O protótipo de interface está disponível no Figma:
-[**Acessar protótipo no Figma →**](https://www.figma.com/site/l3HKqgjDUaQutbjHsKcy7B/Clinix?node-id=0-1&t=a90QyX7mZNNS0r0D-1) _(link do projeto)_
+**Acessar protótipo no Figma →** _(https://www.figma.com/site/l3HKqgjDUaQutbjHsKcy7B/Clinix?node-id=0-1&t=a90QyX7mZNNS0r0D-1)_
 
 > Deploy planejado na **AWS**. API e interface estarão disponíveis publicamente em versão futura.
 
@@ -43,7 +43,7 @@ A Clinix atua como uma **central terceirizada de agendamentos**, operada por uma
 - Centralizar dados com **integridade referencial** (base relacional).
 - Reduzir no-show com lembretes/confirmações estruturadas.
 - Entregar indicadores e relatórios para apoiar decisões gerenciais.
-- Garantir segurança e privacidade (LGPD) com **controle de acesso por perfil (RBAC)** — todos os endpoints protegidos por autenticação na API.
+- Garantir segurança e privacidade (LGPD) com **controle de acesso por perfil (RBAC)** —  endpoints críticos protegidos por autenticação na API.
 
 ---
 
@@ -59,8 +59,8 @@ A Clinix atua como uma **central terceirizada de agendamentos**, operada por uma
 
 ## Stack Tecnológica
 
-- **Backend:** FastAPI, PostgreSQL, SQLAlchemy, Alembic
-- **Frontend:** React, TypeScript
+- **backend:** FastAPI, PostgreSQL, SQLAlchemy, Alembic
+- **frontend:** React, TypeScript
 - **Testes:** Pytest
 - **Infra de desenvolvimento:** Docker
 
@@ -117,8 +117,8 @@ Para detalhes técnicos de execução e desenvolvimento:
 
 | Membro | Papel | GitHub |
 |---|---|---|
-| Ruan | Backend & Tech Lead | [@ruan-ds](https://github.com/ruan-ds) |
-| Bernardo | Backend | [@Bernardo-Policarpo](https://github.com/Bernardo-Policarpo) |
-| Pablo | Frontend — UI & Design | [@dev-pabloF](https://github.com/dev-pabloF) |
-| Lucas | Frontend — UX | [@Lucas-Gama360](https://github.com/Lucas-Gama360) |
-| Gabriel | Frontend — Design & Protótipo | [@Furlanf60](https://github.com/Furlanf60) |
+| Ruan | backend & Tech Lead | [@ruan-ds](https://github.com/ruan-ds) |
+| Bernardo | backend | [@Bernardo-Policarpo](https://github.com/Bernardo-Policarpo) |
+| Pablo | frontend — UI & Design | [@dev-pabloF](https://github.com/dev-pabloF) |
+| Lucas | frontend — UX | [@Lucas-Gama360](https://github.com/Lucas-Gama360) |
+| Gabriel | frontend — Design & Protótipo | [@Furlanf60](https://github.com/Furlanf60) |
