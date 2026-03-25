@@ -64,13 +64,13 @@ backend/app/
 
 ## Controle de Acesso (RBAC)
 
-O sistema utiliza **Role-Based Access Control** implementado no back-end para garantir a governança dos dados e a segurança do fluxo operacional entre os diferentes perfis de usuário:
+O sistema utiliza **Role-Based Access Control** implementado no backend para garantir a governança dos dados e a segurança do fluxo operacional entre os diferentes perfis de usuário:
 
 - **Paciente:** Solicitação e acompanhamento de agendamentos.
 - **Funcionário da Clínica:** Gestão da agenda local e operações de rotina (confirmação/no-show).
 - **Operador Clinix (BPO):** Gestão multi-clínica, padronização e rastreabilidade do fluxo.
 
-> A autorização é validada integralmente na API; o front-end atua como uma camada de interface que reflete as permissões do perfil autenticado.
+> A autorização é validada integralmente na API; o frontend atua como uma camada de interface que reflete as permissões do perfil autenticado.
 
 ---
 
@@ -136,15 +136,19 @@ Fluxo típico:
    ```bash
    cd backend
    ```
-2. Instalar dependências:
+2. Copiar e configurar as variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+   ```
+3. Instalar dependências:
    ```bash
    poetry install
    ```
-3. Aplicar migrations:
+4. Aplicar migrations:
    ```bash
    poetry run alembic upgrade head
    ```
-4. Rodar a API:
+5. Rodar a API:
    ```bash
    poetry run uvicorn app.main:app --reload
    ```
@@ -155,12 +159,22 @@ Documentação interativa (Swagger): `http://localhost:8000/docs`
 
 ## Testes
 
-O projeto possui testes unitários e de integração.
+O projeto possui testes unitários e de integração cobrindo modelos, schemas e conexão com banco.
 
 ```bash
 cd backend
-poetry run pytest
+poetry run pytest --cov
 ```
+
+Cobertura atual:
+
+| Arquivo | Cobertura |
+|---|---|
+| `tests/conftest.py` | 96% |
+| `tests/test_database.py` | 80% |
+| `tests/test_models.py` | 100% |
+| `tests/test_schemas.py` | 100% |
+| **Total** | **96%** |
 
 ---
 
@@ -181,3 +195,4 @@ Decisões arquiteturais (ADRs), guias e contexto interno do time estão em:
 - Sempre rodar `alembic upgrade head` após `git pull`.
 - Manter regras de negócio em `services/`.
 - Manter segurança (RBAC/auth) em `core/` e dependências em `api/`.
+- Executar `poetry run black .` e `poetry run ruff check` somente após o code review estar aprovado — não antes do commit, para não poluir o diff.
