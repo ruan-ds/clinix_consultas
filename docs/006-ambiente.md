@@ -1,5 +1,5 @@
 
-# ADR 006 – Uso de Poetry e NPM
+# ADR 006 – Uso de Poetry e Bun
 
 ## Status
 Definido
@@ -8,7 +8,7 @@ Definido
 O sistema precisa de gerenciadores de depêndencias eficientes para evitar conflitos.
 
 ## Decisão
-Utilizar Poetry no Backend e para o Frontend  o Bun.
+Utilizar Poetry no Backend e para o Frontend o Bun.
 
 ## Consequências
 - Maior profissionalismo
