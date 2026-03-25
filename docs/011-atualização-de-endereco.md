@@ -15,6 +15,7 @@ Para padronizar a atualização de endereços, foi definido o seguinte fluxo:
 
 Ao receber um novo endereço, o sistema deve:
 - Verificar se o endereço atual é compartilhado ou exclusivo.
+(Um endereço é considerado compartilhado quando está vinculado a mais de uma entidade no banco de dados)
 
 Caso o endereço atual seja exclusivo:
 - Se o novo endereço não existir no banco:
