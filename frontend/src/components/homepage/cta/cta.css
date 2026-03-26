@@ -1,0 +1,122 @@
+/* --- Seção Geral --- */
+.cta-section {
+  padding: 40px 5%;
+  background-color: var(--secondary-color);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+}
+
+/* --- Banner Principal --- */
+.cta-banner {
+  background-color: var(--primary-color);
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- Card de Informações (About) --- */
+.about-clinix-section {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.95); /* Branco suave para contraste */
+  border-radius: 8px;
+}
+
+.about-description {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.about-list-title {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.about-list li {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.about-list li i {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+/* --- Texto de Ação (CTA) --- */
+.cta-content {
+  text-align: center;
+  color: #fff;
+}
+
+.cta-text h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.cta-text p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 20px; /* Removido o excesso de 100px */
+}
+
+.btn-cta {
+  display: inline-block;
+  background-color: #fff;
+  color: var(--primary-color);
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+}
+
+/* --- Responsividade (Desktop) --- */
+@media (min-width: 992px) {
+  .cta-banner {
+    flex-direction: row;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .about-clinix-section {
+    flex: 1.2;
+  }
+
+  .cta-content {
+    flex: 1;
+    text-align: left;
+    padding-left: 20px;
+  }
+  
+  .btn-cta {
+    width: auto;
+  }
+}
+
+/* --- Responsividade (Mobile) --- */
+@media (max-width: 600px) {
+  .about-list li strong {
+    display: inline; /* Menos linhas no mobile */
+  }
+  
+  .btn-cta {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
