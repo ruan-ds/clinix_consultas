@@ -16,7 +16,7 @@ Este repositório contém a plataforma Clinix, com **FastAPI + PostgreSQL** no b
 ## Demo
 
 O protótipo de interface está disponível no Figma:
-**Acessar protótipo no Figma →** _(https://www.figma.com/site/l3HKqgjDUaQutbjHsKcy7B/Clinix?node-id=0-1&t=a90QyX7mZNNS0r0D-1)_
+**Acessar protótipo no Figma →** (https://www.figma.com/site/l3HKqgjDUaQutbjHsKcy7B/Clinix?node-id=0-1&t=a90QyX7mZNNS0r0D-1)
 
 > Deploy planejado na **AWS**. API e interface estarão disponíveis publicamente em versão futura.
 
