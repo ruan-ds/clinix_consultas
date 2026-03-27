@@ -17,7 +17,7 @@ Definição de três tipos de usuários:
 Regras de negócio:
 - Um funcionário Clinix não pode ser funcionário de clínica.
 - Um funcionário de clínica não pode ser funcionário Clinix.
-- Qualquer usuário pode possuir também um perfil de paciente.
+- Qualquer funcionário pode possuir também um perfil de paciente.
 
 ## Consequências
 - Estrutura clara para o modelo de usuários.
