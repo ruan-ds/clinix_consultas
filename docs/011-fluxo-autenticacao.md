@@ -8,11 +8,11 @@ O sistema necessita de um fluxo padronizado de autenticação para permitir aces
 
 ## Decisão
 Fluxo de criação de conta de paciente dividido em duas etapas:
-- Criação da conta com email e senha.
-- Preenchimento de dados pessoais (nome, CPF, sexo, data de nascimento e endereço).
+- Preenchimento de email (ou CPF) e senha.
+- Completar dados pessoais (nome, CPF, sexo, data de nascimento e endereço).
 
 Fluxo de login:
-- Realizado com email (ou CPF) e senha.
+- Preenchimento de email (ou CPF) e senha.
 - Validação das credenciais no banco de dados.
 - Liberação de acesso conforme o perfil do usuário.
 
