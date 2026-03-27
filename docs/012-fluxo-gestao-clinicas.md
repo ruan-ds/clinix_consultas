@@ -19,7 +19,6 @@ Durante o cadastro da clínica, serão informados:
 - Nome legal (legal_name)
 - CNPJ
 - Endereço (address_id)
-- Status de ativação (is_active)
 
 Após o cadastro, o perfil de administrador será criado e enviado ao responsável pela clínica.
 
