@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 CASES = {
     0: 0,
     1: 0,
@@ -32,7 +35,7 @@ CPF_REGION = {
 }
 
 
-def cpf_validator(cpf):
+def cpf_validator(cpf: str) -> bool:
     cpf = cpf_convert_numbers(cpf)
 
     if len(cpf) != 11:
@@ -72,11 +75,11 @@ def cpf_validator(cpf):
     return cpf_list[9] == first_digit and cpf_list[10] == second_digit
 
 
-def cpf_convert_numbers(cpf):
+def cpf_convert_numbers(cpf: str) -> str:
     return ''.join(filter(str.isdigit, cpf))
 
 
-def cpf_get_region(cpf):
+def cpf_get_region(cpf: str) -> Optional[list]:
     if not cpf_validator(cpf):
         return None
     cpf = cpf_convert_numbers(cpf)
