@@ -19,16 +19,15 @@ Ao receber um novo endereço, o sistema deve:
 
 Caso o endereço atual seja exclusivo:
 - Se o novo endereço não existir no banco:
-- Atualizar o registro atual com os novos dados.
+  Atualizar o registro atual com os novos dados.
 - Se o novo endereço já existir no banco:
-- Apenas substituir a referência para o endereço já existente.
+  Apenas substituir a referência para o endereço já existente.
 
 Caso o endereço atual seja compartilhado:
 - Se o novo endereço já existir no banco:
-- Apenas substituir a referência para o endereço já existente.
+  Apenas substituir a referência para o endereço já existente.
 - Se o novo endereço não existir no banco:
-- Criar um novo registro de endereço com os dados informados.
-- Atualizar a referência para o novo endereço criado.
+  Criar um novo registro de endereço com os dados informados e atualizar a referência para o novo endereço criado.
 
 ## Consequências
 - Redução de duplicidade de endereços no banco de dados.
