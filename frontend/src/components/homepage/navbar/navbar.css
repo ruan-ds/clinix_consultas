@@ -62,12 +62,12 @@ nav .buttonnav {
   transform: scale(1.1);
 }
 @media (max-width: 992px) {
-    nav p {
-        font-size: 30px; /* Diminui o nome CLINIX */
-    }
-    nav img {
-        width: 100px;
-    }
+  nav p {
+    font-size: 30px; /* Diminui o nome CLINIX */
+  }
+  nav img {
+    width: 100px;
+  }
 }
 @media (max-width: 768px) {
   /* Mantém os itens em linha e ajusta o espaçamento */

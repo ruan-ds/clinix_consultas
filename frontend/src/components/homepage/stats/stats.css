@@ -24,17 +24,17 @@
 }
 
 @media (max-width: 768px) {
-.stats-section {
+  .stats-section {
     gap: 15px;
     padding: 30px;
     padding-left: auto;
   }
-.stat-item {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-.stat-icon {
-  width: 45px;
-  height: 45px;
-}
+  .stat-item {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+  }
 }

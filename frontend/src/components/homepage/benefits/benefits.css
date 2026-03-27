@@ -1,4 +1,4 @@
-.benefits-section{
+.benefits-section {
   padding: 60px 10%;
   background-color: var(--secondary-color);
 }
@@ -57,5 +57,5 @@
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
     padding: 12px 0px;
-}
+  }
 }

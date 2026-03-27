@@ -5,8 +5,8 @@
   --text-light: #546e7a;
   --bg-light: #f4f7f6;
   --border-color: #d1d5db;
-  --font-main: "Montserrat", sans-serif;
-  --transparente:#ffffff00;
+  --font-main: 'Montserrat', sans-serif;
+  --transparente: #ffffff00;
 }
 
 * {
@@ -31,7 +31,7 @@ main {
 }
 
 @media (max-width: 768px) {
-   main {
+  main {
     margin-top: 70px; /* Header fica mais alto no mobile */
   }
 }

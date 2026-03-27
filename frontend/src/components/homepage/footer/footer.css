@@ -42,7 +42,7 @@ footer {
   text-decoration: underline;
 }
 @media (max-width: 768px) {
-    .footer-grid {
+  .footer-grid {
     flex-direction: column;
     text-align: center;
     align-items: center;
