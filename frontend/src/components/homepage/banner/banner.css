@@ -16,7 +16,7 @@
     linear-gradient(to right, rgba(0, 71, 71, 0.9) 55%, rgba(0, 71, 71, 0) 70%),
     url(../../../assets/images/bannerHomepage.png);
 
-  height: 450px;
+  height: 455px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
