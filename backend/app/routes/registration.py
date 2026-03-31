@@ -11,35 +11,34 @@ from app.services.registration import  (
                                         create_patient_access
                                        )
 
-from app.utils.security import hash_password
+from app.core.database import get_db
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, Session
 
 
 router = APIRouter(prefix="/registration", tags=["Registration"])
 
 
 @router.post("/patient_access", response_model=OutPatientAccess)
-def register_patient_access(data: FullPatientAccessRegistration, db_session) -> PatientAccess:
-    person = register_person(data.person, db_session)
-    address = register_address(data.address, db_session)
-    phone = register_phone(data.phone, db_session)
+def register_patient_access(data: FullPatientAccessRegistration,
+                            db: Session = Depends(get_db)) -> PatientAccess:
+    person = register_person(data.person, db)    # noqa: F841
+    address = register_address(data.address, db) # noqa: F841
+    phone = register_phone(data.phone, db)       # noqa: F841
 
     new_patient_access = create_patient_access(
         patient_access_data=data.access,
-        db_session=db_session
+        db=db
     )
 
-    db_session.add(new_patient_access)
-
     try:
-        db_session.commit()
-        db_session.refresh(new_patient_access)
+        db.commit()
+        db.refresh(new_patient_access)
 
     except IntegrityError as e:
-        db_session.rollback()
+        db.rollback()
 
         error_message = str(e.orig).lower()
 
