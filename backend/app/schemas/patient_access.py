@@ -37,3 +37,8 @@ class FullPatientAccessRegistration(BaseModel):
     address: CreateAddress
     phone: CreatePhone
     access: CreatePatientAccess
+
+
+class LoginPatientAccess(BaseModel):
+    email: Annotated[str, StringConstraints(max_length=300)]
+    password: Annotated[str, StringConstraints(min_length=8)]
