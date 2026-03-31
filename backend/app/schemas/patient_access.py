@@ -4,11 +4,9 @@ from app.schemas.phone import CreatePhone
 
 from pydantic import (BaseModel,
                       StringConstraints,
-                      ConfigDict,
-                      field_validator)
+                      ConfigDict
+                      )
 from typing import Optional, Annotated
-
-from app.utils.security import hash_password
 
 
 class BasePatientAccess(BaseModel):

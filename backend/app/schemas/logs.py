@@ -1,8 +1,8 @@
 from pydantic import (BaseModel,
                       StringConstraints,
-                      ConfigDict,
-                      field_validator)
-from typing import Optional, Annotated, Literal, Any
+                      ConfigDict
+                      )
+from typing import Optional, Annotated, Any
 
 from argon2 import PasswordHasher
 
