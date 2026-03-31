@@ -1,5 +1,3 @@
-import pytest
-
 from datetime import date
 
 from app.models.address import Address
