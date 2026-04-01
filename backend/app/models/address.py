@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
+
 class Address(Base):
     __tablename__ = "address"
 
@@ -15,3 +16,4 @@ class Address(Base):
     cep = Column(String(8), nullable=False, index=True)
 
     persons = relationship("Person", back_populates="address")
+    clinic = relationship("Clinic", back_populates="address", uselist=False)

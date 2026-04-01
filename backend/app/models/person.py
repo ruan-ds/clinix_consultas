@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
-from app.core.database import Base
-from backend.app.models.entity import Entity
+from app.models.entity import Entity
+
 
 class Person(Entity):
     __tablename__ = "person"
@@ -11,11 +11,15 @@ class Person(Entity):
     cpf = Column(String(11), nullable=False, unique=True)
     sex = Column(String(1), nullable=False)
     birthday = Column(Date, nullable=False)
-    address_id = Column(Integer, ForeignKey("address.id"), nullable=False)
+    address_id = Column(Integer, ForeignKey("address.id"), nullable=False, index=True)
 
     address = relationship("Address", back_populates="persons")
-    patient = relationship("Patient", back_populates="person", uselist=False)
+    patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
+    clinical_access = relationship("ClinicalAccess", back_populates="person")
+    clinix_access = relationship("ClinixAccess", back_populates="person")
 
-    __mapper_args__ = {  
-        "polymorphic_identity": "P",  
-    }
+    __mapper_args__ = {"polymorphic_identity": "P"}
+
+    __table_args__ = (
+        UniqueConstraint("cpf", name="uq_person_cpf"),
+    )

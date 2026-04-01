@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Clinix BPO - Sistema de Agendamento"
 authors = ["Seu Nome <seu@email.com>"]
 readme = "README.md"
-package-mode = false
+package-mode = true
+packages = [
+    { include = "app" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.13"
@@ -16,6 +19,12 @@ pydantic-settings = "^2.12.0"
 python-jose = {extras = ["cryptography"], version = "^3.5.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.22"
+cryptography = "^46.0.5"
+pytest = "^9.0.2"
+alembic = "^1.18.4"
+pydantic = "^2.12.5"
+psycopg = {extras = ["binary"], version = "^3.3.3"}
+argon2-cffi = "^25.1.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
@@ -23,5 +32,6 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "black (>=26.3.1,<27.0.0)",
-    "ruff (>=0.15.6,<0.16.0)"
+    "ruff (>=0.15.6,<0.16.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)"
 ]
