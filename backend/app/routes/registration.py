@@ -15,7 +15,9 @@ from app.core.database import get_db
 
 from fastapi import APIRouter, HTTPException, Depends
 
-from sqlalchemy.exc import IntegrityError, Session
+from sqlalchemy.orm import Session
+
+from sqlalchemy.exc import IntegrityError
 
 
 router = APIRouter(prefix="/registration", tags=["Registration"])
