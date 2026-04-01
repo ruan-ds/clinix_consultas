@@ -24,6 +24,7 @@ pytest = "^9.0.2"
 alembic = "^1.18.4"
 pydantic = "^2.12.5"
 psycopg = {extras = ["binary"], version = "^3.3.3"}
+argon2-cffi = "^25.1.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
@@ -31,5 +32,6 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 dev = [
     "black (>=26.3.1,<27.0.0)",
-    "ruff (>=0.15.6,<0.16.0)"
+    "ruff (>=0.15.6,<0.16.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)"
 ]

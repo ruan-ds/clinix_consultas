@@ -3,8 +3,9 @@ from sqlalchemy import (
     Integer,
     String,
     DateTime,
-    ForeignKey,
     JSON,
+    Index,
+    func,
 )
 from app.core.database import Base
 
@@ -20,4 +21,8 @@ class Logs(Base):
     description = Column(String(400), nullable=False)
     payload = Column(JSON, nullable=True)
     ip = Column(String(45), nullable=False)
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        Index("ix_logs_table_record", "table_name", "record_id"),
+    )

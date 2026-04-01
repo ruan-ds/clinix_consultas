@@ -9,7 +9,7 @@
 - docker compose ps
 
 ## Acessar o terminal de um container
-- docker compose exec <nome_do_serviço> sh
+- docker compose exec <nome_do_serviço> bash
 
 ## Derrubar o container e apagar os volumes
 - docker compose down -v

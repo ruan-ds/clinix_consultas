@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
@@ -8,8 +8,12 @@ class PatientAccess(Base):
 
     id = Column(Integer, primary_key=True)
     person_id = Column(Integer, ForeignKey("person.id"), nullable=False, unique=True)
-    email = Column(String(300), nullable=False, unique=True)
-    password_hash = Column(String(255), nullable=False)
+    email = Column(String(300), unique=True)
+    password_hash = Column(String(500), nullable=False)
     is_active = Column(Boolean, default=True)
 
     person = relationship("Person", back_populates="patient_access")
+
+    __table_args__ = (
+        UniqueConstraint("email", name="uq_patient_access_email"),
+    )

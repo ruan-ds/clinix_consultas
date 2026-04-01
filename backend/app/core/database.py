@@ -22,7 +22,7 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Criar a engine
-# pool_pre_ping=True impede que o MySQL nao derrube conexões ociosas
+# pool_pre_ping=True garante que a conexão não seja fechada pelo PostgreSQL por inatividade
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,

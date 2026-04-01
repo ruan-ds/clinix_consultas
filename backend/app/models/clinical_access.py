@@ -14,10 +14,10 @@ class ClinicalAccess(Base):
     __tablename__ = "clinical_access"
 
     id = Column(Integer, primary_key=True)
-    clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False)
-    person_id = Column(Integer, ForeignKey("person.id"), nullable=False)
-    email = Column(String(300), unique=True)
-    password_hash = Column(String(255), nullable=False)
+    clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False, index=True)
+    person_id = Column(Integer, ForeignKey("person.id"), nullable=False, index=True)
+    email = Column(String(300), unique=True, nullable=False)
+    password_hash = Column(String(500), nullable=False)
     role = Column(String(30), nullable=False)
     is_active = Column(Boolean, default=True)
 
@@ -25,5 +25,5 @@ class ClinicalAccess(Base):
     person = relationship("Person", back_populates="clinical_access")
 
     __table_args__ = (
-        UniqueConstraint("clinic_id", "person_id"),
+        UniqueConstraint("clinic_id", "person_id", name="uq_clinic_id_person_id"),
     )
