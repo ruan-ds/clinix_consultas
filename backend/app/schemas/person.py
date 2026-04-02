@@ -1,3 +1,4 @@
+from app.schemas.address import CreateAddress
 from pydantic import BaseModel, StringConstraints, ConfigDict
 from typing import Optional, Literal, Annotated
 from datetime import date
@@ -8,11 +9,13 @@ class BasePerson(BaseModel):
     cpf: Annotated[str, StringConstraints(min_length=11, max_length=11)]
     sex: Literal["M", "F", "L"]
     birthday: date
-    address_id: int
 
 
-class CreatePerson(BasePerson):
-    pass
+class CreatePerson(BaseModel):
+    name: Annotated[str, StringConstraints(max_length=50)]
+    cpf: Annotated[str, StringConstraints(min_length=11, max_length=11)]
+    sex: Literal["M", "F", "L"]
+    birthday: date
 
 
 class UpdatePerson(BaseModel):
