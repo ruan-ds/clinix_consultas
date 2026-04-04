@@ -3,7 +3,6 @@ from pydantic import ValidationError
 from datetime import date
 
 from app.schemas.person import CreatePerson
-from app.schemas.address import CreateAddress
 
 def test_person_schema_validation():
     with pytest.raises(ValidationError):

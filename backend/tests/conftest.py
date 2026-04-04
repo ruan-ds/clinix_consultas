@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 
 from app.core.database import Base
-from app import models
+from app import models # noqa: F401
 
 load_dotenv()
 
