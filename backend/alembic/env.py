@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 import os
 
-from app.core.database import Base
+from app.core.base_model import Base
 
 load_dotenv()
 
@@ -19,13 +19,7 @@ target_metadata = Base.metadata
 
 config = context.config
 
-destiny  = "test"
-
-if destiny  == "prod":
-    database_url = os.getenv("DATABASE_URL")
-elif destiny  == "test":
-    database_url = os.getenv("TEST_DATABASE_URL")
-
+database_url = os.getenv("DATABASE_URL")
 if not database_url:
     raise ValueError("DATABASE não encontrado no .env")
 
