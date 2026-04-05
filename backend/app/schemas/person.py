@@ -1,6 +1,7 @@
-from app.schemas.address import CreateAddress
+from app.schemas.address import CreateAddress, OutAddress
+from app.schemas.phone import OutPhone
 from pydantic import BaseModel, StringConstraints, ConfigDict
-from typing import Optional, Literal, Annotated
+from typing import List, Optional, Literal, Annotated
 from datetime import date
 
 
@@ -27,3 +28,5 @@ class UpdatePerson(BaseModel):
 class OutPerson(BasePerson):
     id: int
     model_config = ConfigDict(from_attributes=True)
+    address: Optional[OutAddress] = None  
+    phones: Optional[List[OutPhone]] = None
