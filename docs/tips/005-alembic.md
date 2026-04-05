@@ -9,3 +9,6 @@
 # Reverter migração
 - alembic downgrade -1
 (-1 volta uma migração)
+
+# Escolher banco de aplicação
+- export DATABASE_URL="postgresql+psycopg://user:password@localhost:5432/example"
