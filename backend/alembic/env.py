@@ -19,10 +19,15 @@ target_metadata = Base.metadata
 
 config = context.config
 
-database_url = os.getenv("DATABASE_URL")
+destiny  = "test"
+
+if destiny  == "prod":
+    database_url = os.getenv("DATABASE_URL")
+elif destiny  == "test":
+    database_url = os.getenv("TEST_DATABASE_URL")
 
 if not database_url:
-    raise ValueError("DATABASE_URL não encontrado no .env")
+    raise ValueError("DATABASE não encontrado no .env")
 
 config.set_main_option("sqlalchemy.url", database_url)
 
