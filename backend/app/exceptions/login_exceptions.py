@@ -1,19 +1,10 @@
 from fastapi import HTTPException
 
 
-def user_not_found() -> None:
+def login_error() -> None:
     raise HTTPException(
-        status_code=404,
+        status_code=401,
         detail={
-                "message": "Usuário não encontrado"
-        }
-    )
-
-
-def user_inactive(detail: str) -> None:
-    raise HTTPException(
-        status_code=403,
-        detail={
-                "message": "Usuário inativo"
+                "message": "Usuário ou senha inválidos"
         }
     )
