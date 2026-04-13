@@ -1,4 +1,4 @@
-from app.routes.registration import router as registration_router
+from app.api.public.registration import router as registration_router
 
 from fastapi import FastAPI
 

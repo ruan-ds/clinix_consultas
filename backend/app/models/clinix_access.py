@@ -6,7 +6,7 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
 )
-from app.core.database import Base
+from app.core.base_model import Base
 
 
 class ClinixAccess(Base):
