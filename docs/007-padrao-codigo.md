@@ -18,6 +18,10 @@ Seguir o PEP8:
 - espaços - spam(ham[1], {eggs: 2})
 - evitar linhas complexas
 
+## Boas Práticas
+
+- Não executar formatadores (Black, Ruff, Prettier, ESLint) antes de um code review — a formatação deve ocorrer somente após o review estar aprovado, para não poluir o diff com mudanças puramente estéticas.
+
 ## Consequências
 - Alinhamento com padrões originais
 - Maior legibilidade e organização
