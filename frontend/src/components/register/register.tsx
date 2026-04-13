@@ -1,10 +1,11 @@
 import React from 'react';
-import './login.css';
+import './register.css';
 import logo from '../../assets/images/logoNome.png';
 
-function Login() {
+
+function Register() {
   return (
-     <main className="login-container">
+    <main className="login-container">
 
       <section className="login-card">
         
@@ -21,12 +22,12 @@ function Login() {
             <input type="password" id="password" placeholder="Senha" required />
           </div>
 
-          <button type="submit" className="btn-login">Criar Conta</button>
+          <button type="submit" className="btn-login">PROSSEGUIR</button>
           
         </form>
 
         <div className="signup-footer">
-          <p>Não possui uma conta? <a href="/register">Cadastre-se aqui</a></p>
+          <p>Você já possui uma conta? <a href="/login">Entre aqui</a></p>
         </div>
 
       </section>
@@ -40,4 +41,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
