@@ -5,7 +5,6 @@ from sqlalchemy import (
     String,
     Boolean,
     ForeignKey,
-    UniqueConstraint,
 )
 from app.core.database import Base
 

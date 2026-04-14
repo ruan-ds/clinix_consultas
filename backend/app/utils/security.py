@@ -1,45 +1,53 @@
 from sqlalchemy import text
+from sqlalchemy.orm import Session
+
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError, VerificationError
 
-ph = PasswordHasher()
 
+ph = PasswordHasher()
 
 def hash_password(password: str) -> str:
     return ph.hash(password)
 
 
-def verify_password(password: str, email: str) -> str | tuple | None:
+def verify_password(db: Session, email: str, password: str) -> bool:
     try:
-        row = db_session(
-        text(
-                "SELECT id, person_id, password_hash, is_active "
-                "FROM patient_access WHERE email = :email"
-        ),
-        {"email": email}
+        row = db.execute(
+            text("""
+                SELECT password_hash
+                FROM patient_access
+                WHERE email = :email
+            """),
+            {"email": email}
         ).fetchone()
 
         if not row:
-            return None
+            return False
 
-        if not row[3]:
-            return "User is inactive"
+        password_hash = row[0]
 
+        ph.verify(password_hash, password)
 
-        hashed_password = row[2]
+        if ph.check_needs_rehash(password_hash):
+            _rehash_password(db, email, password)
 
-        ph.verify(hashed_password, password)
-
-        if ph.check_needs_rehash(hashed_password):
-            new_hashed_password = hash_password(password)
-
-            db_session(
-                text("UPDATE patient_access SET password_hash = :hash WHERE email = :email"),
-                {"hash": new_hashed_password, "email": email}
-            )
-            db_session.commit()
-
-        return (row[0], row[1])
+        return True
 
     except (VerifyMismatchError, VerificationError):
-        return None
+        return False
+
+
+def _rehash_password(db: Session, email: str, password: str):
+    new_hash = hash_password(password)
+
+    db.execute(
+        text("""
+            UPDATE patient_access
+            SET password_hash = :hash
+            WHERE email = :email
+        """),
+        {"hash": new_hash, "email": email}
+    )
+
+    db.commit()

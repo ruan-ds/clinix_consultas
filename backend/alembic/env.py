@@ -1,4 +1,4 @@
-from app import models 
+from app import models # noqa: F401
 from logging.config import fileConfig
 
 from sqlalchemy import create_engine
@@ -31,7 +31,6 @@ if config.config_file_name is not None:
 
 
 def run_migrations_offline() -> None:
-    url = database_url
     context.configure(
         url=database_url,
         target_metadata=target_metadata,

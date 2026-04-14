@@ -7,8 +7,9 @@ class BasePhone(BaseModel):
     type: Annotated[str, StringConstraints(max_length=50)]
 
 
-class CreatePhone(BasePhone):
-    pass
+class CreatePhone(BaseModel):
+    phone: Annotated[str, StringConstraints(min_length=11, max_length=11)]
+    type: Annotated[str, StringConstraints(max_length=50)]
 
 
 class UpdatePhone(BaseModel):
