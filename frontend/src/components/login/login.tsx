@@ -14,7 +14,7 @@ function Login() {
 
         <form>
           <div className="input-group">
-            <input type="text" id="user" placeholder="E-mail" required />
+            <input type="text" id="user" placeholder="login" required />
           </div>
           
           <div className="input-group">

@@ -7,10 +7,10 @@ function Navbar() {
       <img src={logo} alt="logo clinix" />
       <p>CLINIX</p>
       <div className="buttonnav">
-        <a href="/login.html" id="bt1nv">
+        <a href="authenticantion.html?tela=1" id="bt1nv">
           Entrar
         </a>
-        <a href="/authenticantion.html" id="bt2nv">
+        <a href="authenticantion.html?tela=0" id="bt2nv">
           Registrar
         </a>
       </div>

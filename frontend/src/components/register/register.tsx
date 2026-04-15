@@ -44,7 +44,7 @@ function Register() {
         </form>
 
         <div className="signup-footer">
-          <p>Você já possui uma conta? <a href="/login">Entre aqui</a></p>
+          <p>Você já possui uma conta? <a href="/authenticantion.html">Entre aqui</a></p>
         </div>
 
       </section>
