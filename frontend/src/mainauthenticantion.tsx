@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Homepage from './components/register/register';
-import Register from './components/register/register';
+import Authenticantion from './pages/auth/authenticantion';
 
 ReactDOM.createRoot(document.getElementById('root-register')!).render(
   <React.StrictMode>
-    <Register />
+    <Authenticantion />
   </React.StrictMode>,
 );

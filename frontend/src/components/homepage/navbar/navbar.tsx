@@ -10,7 +10,7 @@ function Navbar() {
         <a href="/login.html" id="bt1nv">
           Entrar
         </a>
-        <a href="/register.html" id="bt2nv">
+        <a href="/authenticantion.html" id="bt2nv">
           Registrar
         </a>
       </div>

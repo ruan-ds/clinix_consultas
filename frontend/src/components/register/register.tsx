@@ -20,6 +20,7 @@ function Register() {
     };
     //a linha abaixo envia o data para fazer a requisição
     const response = await createAccount(data);
+  }
   return (
     <main className="login-container">
 
@@ -55,7 +56,6 @@ function Register() {
 
     </main>
   );
-}
 }
 
 export default Register;
