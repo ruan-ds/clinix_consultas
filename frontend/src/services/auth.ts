@@ -1,4 +1,5 @@
 import { api } from "./api";
+import React from "react";
 
 //esse tipo serve para verificar se os argumentos passados do data estão corretos
 type CreateAccountData = {

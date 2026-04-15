@@ -13,15 +13,54 @@ type Props = {
 function Register({ changeAuth }: Props) { 
   //armazena dados
   //obs:fazer um para atualizar inputs
-  const [estado, setEstado] = useState(false)
+  const [estado, setEstado] = useState(0)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [endereco, setEndereco] = useState("");
+  const [cep, setCep] = useState("");
   const [nascimento, setNascimento] = useState("");
   const [sexo, setSexo] = useState("");
+
+  function renderEstados(){
+    const estados: { nome: string; sigla: string }[] = [
+      { nome: "Acre", sigla: "AC" },
+      { nome: "Alagoas", sigla: "AL" },
+      { nome: "Amapá", sigla: "AP" },
+      { nome: "Amazonas", sigla: "AM" },
+      { nome: "Bahia", sigla: "BA" },
+      { nome: "Ceará", sigla: "CE" },
+      { nome: "Distrito Federal", sigla: "DF" },
+      { nome: "Espírito Santo", sigla: "ES" },
+      { nome: "Goiás", sigla: "GO" },
+      { nome: "Maranhão", sigla: "MA" },
+      { nome: "Mato Grosso", sigla: "MT" },
+      { nome: "Mato Grosso do Sul", sigla: "MS" },
+      { nome: "Minas Gerais", sigla: "MG" },
+      { nome: "Pará", sigla: "PA" },
+      { nome: "Paraíba", sigla: "PB" },
+      { nome: "Paraná", sigla: "PR" },
+      { nome: "Pernambuco", sigla: "PE" },
+      { nome: "Piauí", sigla: "PI" },
+      { nome: "Rio de Janeiro", sigla: "RJ" },
+      { nome: "Rio Grande do Norte", sigla: "RN" },
+      { nome: "Rio Grande do Sul", sigla: "RS" },
+      { nome: "Rondônia", sigla: "RO" },
+      { nome: "Roraima", sigla: "RR" },
+      { nome: "Santa Catarina", sigla: "SC" },
+      { nome: "São Paulo", sigla: "SP" },
+      { nome: "Sergipe", sigla: "SE" },
+      { nome: "Tocantins", sigla: "TO" }
+    ];
+  
+    return estados.map((e) => (
+      <option key={e.sigla} value={e.sigla}>
+        {e.nome}
+      </option>
+      ));
+  }
+    
 
   // a função sign_up armazena os datos no data, que são passados para fazer a requisição
   async function sign_up() {
@@ -43,7 +82,7 @@ function Register({ changeAuth }: Props) {
   }
 
   
-  if (estado == false){
+  if (estado === 0){
   return (
     <main className="register-container">
 
@@ -54,7 +93,7 @@ function Register({ changeAuth }: Props) {
         </div>
 
         {/*  // o e.preventDefault abaixo serve para dizer que ao ocorrer o evento a página nao deve ser recarregada */}
-        <form onSubmit={(e) => {e.preventDefault(); setEstado(true);}} > 
+        <form onSubmit={(e) => {e.preventDefault(); setEstado(1);}} > 
           <div className="input-group">
             <input type ="email" id="user" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)}required /> {/* Aqui pega as informaçoes alteradas no input*/}
           </div>
@@ -63,7 +102,7 @@ function Register({ changeAuth }: Props) {
             <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
           </div>
 
-          <button type="submit" className="btn-register">PROSSEGUIR</button>
+          <button type="submit" className="btn-register">Prosseguir</button>
           
         </form>
 
@@ -80,7 +119,90 @@ function Register({ changeAuth }: Props) {
 
     </main>
   );
-  }else {
+  }else if (estado === 1){
+    return (
+      <main className="register-container">
+        <section className="register-card">
+          <div className="logo-box">
+            <img src={logo} alt="Clinix Consultas" className="logo" />
+          </div>
+
+          <form onSubmit={(e) => {e.preventDefault(); setEstado(2);}}> 
+            <div className="input-row">
+              <div className="input-group">
+                <input type="text" placeholder="Nome Completo" onChange={(e) => setNome(e.target.value)} required />
+              </div>
+              <div className="input-group">
+
+                {/*Faz a verificação sé é valido o cpf usando a regrinha abaixo e mostra o valor da váriavel cpf para
+                o usuário ver em tempo real oque está digitando*/}
+                <input type="text" placeholder="CPF" maxLength={11} minLength={11} value = {cpf} onChange={(e) => {
+                  // A regra /\D/g significa "tudo que NÃO for número"
+                  // O replace substitui o que não for número por "nada" (vazio)
+                const apenasNumeros = e.target.value.replace(/\D/g, '');
+                setCpf(apenasNumeros);
+                }} 
+                required 
+                />
+              </div>
+            </div>
+
+            <div className="input-row">
+              <div className="input-group">
+                <input type="text" placeholder="Telefone" maxLength={11} minLength={11} value = {telefone} onChange={(e) => {
+                  // A regra /\D/g significa "tudo que NÃO for número"
+                  // O replace substitui o que não for número por "nada" (vazio)
+                const apenasNumeros = e.target.value.replace(/\D/g, '');
+                setTelefone(apenasNumeros);
+                }} 
+                required 
+                />
+              </div>
+              <div className="input-group">
+                <input type="text" placeholder="CEP" maxLength={8} minLength={8} value = {cep} onChange={(e) => {
+                  // A regra /\D/g significa "tudo que NÃO for número"
+                  // O replace substitui o que não for número por "nada" (vazio)
+                const apenasNumeros = e.target.value.replace(/\D/g, '');
+                setCep(apenasNumeros);
+                }} 
+                required 
+                />
+              </div>
+            </div>
+
+            <div className="input-row">
+              <div className="input-group">
+                <input type="text" placeholder="Data nascimento" onFocus={(e) => e.target.type = 'date'} onChange={(e) => setNascimento(e.target.value)} required />
+              </div>
+              <div className="input-group">
+                <select 
+                  style={{width: '100%', padding: '16px', borderRadius: '40px', border: '1px solid #E0E0E0', background: 'white'}}
+                  onChange={(e) => setSexo(e.target.value)}
+                  required
+                >
+                  <option value="">Sexo</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Feminino</option>
+                  <option value="O">Outro</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" className="btn-register">Prosseguir</button>
+          </form>
+
+          <div className="signup-footer">
+            <p>Já tem uma conta? <a href="#" onClick={() => changeAuth(1)}>Fazer Login</a></p>
+          </div>
+        </section>
+
+        <aside className="promo-card">
+          <h2>Saúde na palma<br />da mão</h2>
+          <p>Histórico médico, agendamento rápidos e<br />receitas digitais. Tudo em um só lugar.</p>
+        </aside>
+      </main>
+    );
+  } else {
     return (
       <main className="register-container">
         <section className="register-card">
@@ -110,10 +232,17 @@ function Register({ changeAuth }: Props) {
 
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Telefone" onChange={(e) => setTelefone(e.target.value)} required />
+                <input type="text" placeholder="Telefone" maxLength={11} minLength={11} value = {telefone} onChange={(e) => {
+                  // A regra /\D/g significa "tudo que NÃO for número"
+                  // O replace substitui o que não for número por "nada" (vazio)
+                const apenasNumeros = e.target.value.replace(/\D/g, '');
+                setTelefone(apenasNumeros);
+                }} 
+                required 
+                />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="Endereço" onChange={(e) => setEndereco(e.target.value)} required />
+                <input type="text" placeholder="CEP" onChange={(e) => setCep(e.target.value)} required />
               </div>
             </div>
 
@@ -122,20 +251,11 @@ function Register({ changeAuth }: Props) {
                 <input type="text" placeholder="Data nascimento" onFocus={(e) => e.target.type = 'date'} onChange={(e) => setNascimento(e.target.value)} required />
               </div>
               <div className="input-group">
-                <select 
-                  style={{width: '100%', padding: '16px', borderRadius: '40px', border: '1px solid #E0E0E0', background: 'white'}}
-                  onChange={(e) => setSexo(e.target.value)}
-                  required
-                >
-                  <option value="">Sexo</option>
-                  <option value="M">Masculino</option>
-                  <option value="F">Feminino</option>
-                  <option value="O">Outro</option>
-                </select>
+
               </div>
             </div>
 
-            <button type="submit" className="btn-register">CRIAR CONTA</button>
+            <button type="submit" className="btn-register">Criar Conta</button>
           </form>
 
           <div className="signup-footer">
@@ -148,8 +268,8 @@ function Register({ changeAuth }: Props) {
           <p>Histórico médico, agendamento rápidos e<br />receitas digitais. Tudo em um só lugar.</p>
         </aside>
       </main>
-    );
-  }
+    )
+}
 }
 
 export default Register;
