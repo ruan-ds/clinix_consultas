@@ -9,18 +9,18 @@ function Authenticantion() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search); //pega as info da url pra saber pque renderizar
-    const tela = params.get("tela"); //pega a variavel tela passada pela url
+    const auth = params.get("auth"); //pega a variavel tela passada pela url
 
-    if (tela !== null) {
-      setEstado(Number(tela)); //se tela diferente de nulo converte pra numero
+    if (auth !== null) {
+      setEstado(Number(auth)); //se tela diferente de nulo converte pra numero
     }
   }, []);//esse final significa que roda so quando a pagina carrega
 
   //verifica o estado pra saber qual componente renderizar
   if (estado === 0) {
-    return <Register />;
+    return <Register changeAuth={setEstado} />; //Por props, passo a função setEstado pro componente poder definir o estado e atualizar a tela
   }
-  return <Login />;
+  return <Login changeAuth={setEstado} />;
   }
 
 export default Authenticantion;

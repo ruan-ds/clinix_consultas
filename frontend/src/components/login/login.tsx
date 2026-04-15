@@ -1,8 +1,12 @@
 import React from 'react';
 import './login.css';
 import logo from '../../assets/images/logoNome.png';
+// Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
+type Props = {
+  changeAuth: (valor: number) => void;//defino que o parâmetro changeAuth deve receber somente numeros, é void pois nao retorna nada
+};
 
-function Login() {
+function Login({changeAuth}:  Props) {
   return (
      <main className="login-container">
 
@@ -26,7 +30,7 @@ function Login() {
         </form>
 
         <div className="signup-footer">
-          <p>Não possui uma conta? <a href="/register">Cadastre-se aqui</a></p>
+          <p>Não possui uma conta? <a href="#" onClick={()=> changeAuth(0)}>Cadastre-se aqui</a></p>
         </div>
 
       </section>
