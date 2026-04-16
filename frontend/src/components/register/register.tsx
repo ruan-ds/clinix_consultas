@@ -10,7 +10,7 @@ type Props = {
 };
 
 // Abaixo é a função principal do componente e nos parenteses o props passado a ela
-function Register({ changeAuth }: Props) { 
+function Register({ changeAuth }: Props) {
   //armazena dados
   //obs:fazer um para atualizar inputs
   const [estado, setEstado] = useState(0)
@@ -19,11 +19,19 @@ function Register({ changeAuth }: Props) {
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [cep, setCep] = useState("");
   const [nascimento, setNascimento] = useState("");
   const [sexo, setSexo] = useState("");
 
-  function renderEstados(){
+  //requisicao do endereco
+  const [estados, setEstados] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [rua, setRua] = useState("");
+  const [numero, setNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [cep, setCep] = useState("");
+
+  function renderEstados() {
     const estados: { nome: string; sigla: string }[] = [
       { nome: "Acre", sigla: "AC" },
       { nome: "Alagoas", sigla: "AL" },
@@ -53,14 +61,14 @@ function Register({ changeAuth }: Props) {
       { nome: "Sergipe", sigla: "SE" },
       { nome: "Tocantins", sigla: "TO" }
     ];
-  
+
     return estados.map((e) => (
       <option key={e.sigla} value={e.sigla}>
         {e.nome}
       </option>
-      ));
+    ));
   }
-    
+
 
   // a função sign_up armazena os datos no data, que são passados para fazer a requisição
   async function sign_up() {
@@ -75,51 +83,60 @@ function Register({ changeAuth }: Props) {
       access: {
         email: email,
         password: password
+      },
+      address: {
+        state: estados,
+        city: cidade,
+        neighborhood: bairro,
+        street: rua,
+        number: numero,
+        complement: complemento,
+        cep: cep
       }
     };
     //a linha abaixo envia o data para fazer a requisição
     const response = await createAccount(data);
   }
 
-  
-  if (estado === 0){
-  return (
-    <main className="register-container">
 
-      <section className="register-card">
-        
-        <div className="logo-box">
-          <img src={logo} alt="Clinix Consultas" className="logo" />
-        </div>
+  if (estado === 0) {
+    return (
+      <main className="register-container">
 
-        {/*  // o e.preventDefault abaixo serve para dizer que ao ocorrer o evento a página nao deve ser recarregada */}
-        <form onSubmit={(e) => {e.preventDefault(); setEstado(1);}} > 
-          <div className="input-group">
-            <input type ="email" id="user" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)}required /> {/* Aqui pega as informaçoes alteradas no input*/}
-          </div>
-          
-          <div className="input-group">
-            <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
+        <section className="register-card">
+
+          <div className="logo-box">
+            <img src={logo} alt="Clinix Consultas" className="logo" />
           </div>
 
-          <button type="submit" className="btn-register">Prosseguir</button>
-          
-        </form>
+          {/*  // o e.preventDefault abaixo serve para dizer que ao ocorrer o evento a página nao deve ser recarregada */}
+          <form onSubmit={(e) => { e.preventDefault(); setEstado(1); }} >
+            <div className="input-group">
+              <input type="email" id="user" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)} required /> {/* Aqui pega as informaçoes alteradas no input*/}
+            </div>
 
-        <div className="signup-footer">
-          <p>Você já possui uma conta? <a href="#" onClick={() => changeAuth(1)}>Entre aqui </a></p> 
-        </div>
+            <div className="input-group">
+              <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
+            </div>
 
-      </section>
+            <button type="submit" className="btn-register">Prosseguir</button>
 
-      <aside className="promo-card">
-        <h2>Agende consultas<br />com 1 Clique</h2>
-        <p>Acesse milhares de especialistas e<br />gerencie sua saúde</p>
-      </aside>
+          </form>
 
-    </main>
-  );
-  }else if (estado === 1){
+          <div className="signup-footer">
+            <p>Você já possui uma conta? <a href="#" onClick={() => changeAuth(1)}>Entre aqui </a></p>
+          </div>
+
+        </section>
+
+        <aside className="promo-card">
+          <h2>Agende consultas<br />com 1 Clique</h2>
+          <p>Acesse milhares de especialistas e<br />gerencie sua saúde</p>
+        </aside>
+
+      </main>
+    );
+  } else if (estado === 1) {
     return (
       <main className="register-container">
         <section className="register-card">
@@ -127,7 +144,7 @@ function Register({ changeAuth }: Props) {
             <img src={logo} alt="Clinix Consultas" className="logo" />
           </div>
 
-          <form onSubmit={(e) => {e.preventDefault(); setEstado(2);}}> 
+          <form onSubmit={(e) => { e.preventDefault(); setEstado(2); }}>
             <div className="input-row">
               <div className="input-group">
                 <input type="text" placeholder="Nome Completo" onChange={(e) => setNome(e.target.value)} required />
@@ -136,36 +153,36 @@ function Register({ changeAuth }: Props) {
 
                 {/*Faz a verificação sé é valido o cpf usando a regrinha abaixo e mostra o valor da váriavel cpf para
                 o usuário ver em tempo real oque está digitando*/}
-                <input type="text" placeholder="CPF" maxLength={11} minLength={11} value = {cpf} onChange={(e) => {
+                <input type="text" placeholder="CPF" maxLength={11} minLength={11} value={cpf} onChange={(e) => {
                   // A regra /\D/g significa "tudo que NÃO for número"
                   // O replace substitui o que não for número por "nada" (vazio)
-                const apenasNumeros = e.target.value.replace(/\D/g, '');
-                setCpf(apenasNumeros);
-                }} 
-                required 
+                  const apenasNumeros = e.target.value.replace(/\D/g, '');
+                  setCpf(apenasNumeros);
+                }}
+                  required
                 />
               </div>
             </div>
 
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Telefone" maxLength={11} minLength={11} value = {telefone} onChange={(e) => {
+                <input type="text" placeholder="Telefone" maxLength={11} minLength={11} value={telefone} onChange={(e) => {
                   // A regra /\D/g significa "tudo que NÃO for número"
                   // O replace substitui o que não for número por "nada" (vazio)
-                const apenasNumeros = e.target.value.replace(/\D/g, '');
-                setTelefone(apenasNumeros);
-                }} 
-                required 
+                  const apenasNumeros = e.target.value.replace(/\D/g, '');
+                  setTelefone(apenasNumeros);
+                }}
+                  required
                 />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="CEP" maxLength={8} minLength={8} value = {cep} onChange={(e) => {
+                <input type="text" placeholder="CEP" maxLength={8} minLength={8} value={cep} onChange={(e) => {
                   // A regra /\D/g significa "tudo que NÃO for número"
                   // O replace substitui o que não for número por "nada" (vazio)
-                const apenasNumeros = e.target.value.replace(/\D/g, '');
-                setCep(apenasNumeros);
-                }} 
-                required 
+                  const apenasNumeros = e.target.value.replace(/\D/g, '');
+                  setCep(apenasNumeros);
+                }}
+                  required
                 />
               </div>
             </div>
@@ -175,8 +192,8 @@ function Register({ changeAuth }: Props) {
                 <input type="text" placeholder="Data nascimento" onFocus={(e) => e.target.type = 'date'} onChange={(e) => setNascimento(e.target.value)} required />
               </div>
               <div className="input-group">
-                <select 
-                  style={{width: '100%', padding: '16px', borderRadius: '40px', border: '1px solid #E0E0E0', background: 'white'}}
+                <select
+                  style={{ width: '100%', padding: '16px', borderRadius: '40px', border: '1px solid #E0E0E0', background: 'white' }}
                   onChange={(e) => setSexo(e.target.value)}
                   required
                 >
@@ -213,45 +230,34 @@ function Register({ changeAuth }: Props) {
           <form onSubmit={(e) => { e.preventDefault(); sign_up(); }}>
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Nome Completo" onChange={(e) => setNome(e.target.value)} required />
+                <select
+                  style={{ width: '100%', padding: '16px', borderRadius: '40px', border: '1px solid #E0E0E0', background: 'white' }}
+                  onChange={(e) => setEstados(e.target.value)}
+                  required
+                >
+                  <option value="">Estado</option>
+                  {renderEstados()}
+                </select>
               </div>
               <div className="input-group">
-
-                {/*Faz a verificação sé é valido o cpf usando a regrinha abaixo e mostra o valor da váriavel cpf para
-                o usuário ver em tempo real oque está digitando*/}
-                <input type="text" placeholder="CPF" maxLength={11} minLength={11} value = {cpf} onChange={(e) => {
-                  // A regra /\D/g significa "tudo que NÃO for número"
-                  // O replace substitui o que não for número por "nada" (vazio)
-                const apenasNumeros = e.target.value.replace(/\D/g, '');
-                setCpf(apenasNumeros);
-                }} 
-                required 
-                />
+                <input type="text" placeholder="Cidade" onChange={(e) => setCidade(e.target.value)} required />
+              </div>
+            </div>
+            <div className="input-row">
+              <div className="input-group">
+                <input type="text" placeholder="Bairro" onChange={(e) => setBairro(e.target.value)} required />
+              </div>
+              <div className="input-group">
+                <input type="text" placeholder="Rua" onChange={(e) => setRua(e.target.value)} required />
               </div>
             </div>
 
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Telefone" maxLength={11} minLength={11} value = {telefone} onChange={(e) => {
-                  // A regra /\D/g significa "tudo que NÃO for número"
-                  // O replace substitui o que não for número por "nada" (vazio)
-                const apenasNumeros = e.target.value.replace(/\D/g, '');
-                setTelefone(apenasNumeros);
-                }} 
-                required 
-                />
+                <input type="text" placeholder="Número" onChange={(e) => setNumero(e.target.value)} required />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="CEP" onChange={(e) => setCep(e.target.value)} required />
-              </div>
-            </div>
-
-            <div className="input-row">
-              <div className="input-group">
-                <input type="text" placeholder="Data nascimento" onFocus={(e) => e.target.type = 'date'} onChange={(e) => setNascimento(e.target.value)} required />
-              </div>
-              <div className="input-group">
-
+                <input type="text" placeholder="Complemento" onChange={(e) => setComplemento(e.target.value)} required />
               </div>
             </div>
 
@@ -269,7 +275,7 @@ function Register({ changeAuth }: Props) {
         </aside>
       </main>
     )
-}
+  }
 }
 
 export default Register;

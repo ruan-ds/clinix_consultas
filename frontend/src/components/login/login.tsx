@@ -18,7 +18,7 @@ function Login({changeAuth}:  Props) {
 
         <form>
           <div className="input-group">
-            <input type="text" id="user" placeholder="login" required />
+            <input type="text" id="user" placeholder="Login" required />
           </div>
           
           <div className="input-group">

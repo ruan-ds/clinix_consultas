@@ -9,9 +9,20 @@ type CreateAccountData = {
     sex: string;
     birthday: string;
   }
+
   access: {
     email: string;
     password: string;
+  }
+  
+  address:{
+    "state":string;
+    "city":string;
+    "neighborhood":string;
+    "street":string;
+    "number":string;
+    "complement":string;
+    "cep":string;
   };
 };
 
