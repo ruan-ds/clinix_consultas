@@ -11,6 +11,9 @@ type Props = {
 
 // Abaixo é a função principal do componente e nos parenteses o props passado a ela
 function Register({ changeAuth }: Props) {
+  //tirar os espaços na hora de manda pro banco 
+  const limparTexto = (str: string) => str.trim().replace(/\s+/g, ' ');
+
   //armazena dados
   //obs:fazer um para atualizar inputs
   const [estado, setEstado] = useState(0)
@@ -18,7 +21,6 @@ function Register({ changeAuth }: Props) {
   const [password, setPassword] = useState("");
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
-  const [telefone, setTelefone] = useState("");
   const [nascimento, setNascimento] = useState("");
   const [sexo, setSexo] = useState("");
 
@@ -30,6 +32,9 @@ function Register({ changeAuth }: Props) {
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
   const [cep, setCep] = useState("");
+
+  //requisicao do telefone 
+  const [telefone, setTelefone] = useState("");
 
   function renderEstados() {
     const estados: { nome: string; sigla: string }[] = [
@@ -72,7 +77,13 @@ function Register({ changeAuth }: Props) {
 
   // a função sign_up armazena os datos no data, que são passados para fazer a requisição
   async function sign_up() {
-    const nomeFormatado = nome.trim().replace(/\s+/g, ' '); // Regrinha pro Nome ir pro banco de daods Somente com espaços necessários
+    const nomeFormatado = limparTexto(nome) // Regrinha pro Nome ir pro banco de daods Somente com espaços necessários
+    const cidadeFormatado = limparTexto(cidade)
+    const bairroFormatado = limparTexto(bairro)
+    const ruaFormatada = limparTexto(rua) 
+    const complementoFormatado = limparTexto(complemento)
+
+
     const data = {
       person: {
         name: nomeFormatado,
@@ -80,18 +91,22 @@ function Register({ changeAuth }: Props) {
         sex: sexo,
         birthday: nascimento
       },
+      address: {
+        state: estados,
+        city: cidadeFormatado,
+        neighborhood: bairroFormatado,
+        street: ruaFormatada,  
+        number: numero,
+        complement: complementoFormatado,
+        cep: cep
+      },
+      phone: {
+        phone:telefone,
+        type:"celular"
+      },
       access: {
         email: email,
         password: password
-      },
-      address: {
-        state: estados,
-        city: cidade,
-        neighborhood: bairro,
-        street: rua,
-        number: numero,
-        complement: complemento,
-        cep: cep
       }
     };
     //a linha abaixo envia o data para fazer a requisição
@@ -200,7 +215,7 @@ function Register({ changeAuth }: Props) {
                   <option value="">Sexo</option>
                   <option value="M">Masculino</option>
                   <option value="F">Feminino</option>
-                  <option value="O">Outro</option>
+                  <option value="L">Outro</option>
                 </select>
               </div>
             </div>
@@ -240,24 +255,24 @@ function Register({ changeAuth }: Props) {
                 </select>
               </div>
               <div className="input-group">
-                <input type="text" placeholder="Cidade" onChange={(e) => setCidade(e.target.value)} required />
+                <input type="text" value={cidade} placeholder="Cidade" onChange={(e) => setCidade(e.target.value)} required />
               </div>
             </div>
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Bairro" onChange={(e) => setBairro(e.target.value)} required />
+                <input type="text" value={bairro} placeholder="Bairro" onChange={ (e) => setBairro(e.target.value)} required />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="Rua" onChange={(e) => setRua(e.target.value)} required />
+                <input type="text"  value={rua} placeholder="Rua" onChange={(e) => setRua(e.target.value)} required />
               </div>
             </div>
 
             <div className="input-row">
               <div className="input-group">
-                <input type="text" placeholder="Número" onChange={(e) => setNumero(e.target.value)} required />
+                <input type="text" value={numero} placeholder="Número" onChange={(e) => setNumero(e.target.value)} required />
               </div>
               <div className="input-group">
-                <input type="text" placeholder="Complemento" onChange={(e) => setComplemento(e.target.value)} required />
+                <input type="text" value={complemento} placeholder="Complemento" onChange={(e) => setComplemento(e.target.value)} required />
               </div>
             </div>
 
