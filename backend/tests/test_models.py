@@ -5,6 +5,7 @@ from app.models.person import Person
 from app.models.patient_access import PatientAccess
 from app.models.entity import Entity
 from app.schemas.person import CreatePerson
+from app.utils.security import hash_password
 
 def test_person_with_address_and_pacient_access(db_session):
     address = Address(
@@ -50,7 +51,6 @@ def test_person_with_address_and_pacient_access(db_session):
 
 
 def test_entity_created_for_person(db_session):
-
     address = Address(
         state = "SP",
         city = "FRANCISCO MORATO",
@@ -82,7 +82,6 @@ def test_entity_created_for_person(db_session):
 
 
 def test_person_persistence(db_session):
-
     db_address = Address( 
         state="MG",  
         city="Betim",  
@@ -101,8 +100,38 @@ def test_person_persistence(db_session):
                      birthday=date(2000, 9, 6),
                      address_id=db_address.id)
     
-    db_person = Person(**schema_data.model_dump())
+    db_person = Person(**schema_data.model_dump(), address_id=db_address.id)
     db_session.add(db_person)
     db_session.flush()
 
     assert db_person.id is not None
+
+def test_patient_access_persistence(db_session):
+    address = Address(
+        state="SP", city="SAO PAULO", neighborhood="CENTRO",
+        street="RUA A", number="10", cep="01001000"
+    )
+    db_session.add(address)
+    db_session.flush()
+
+    person = Person(
+        name="PACIENTE TESTE", cpf="98765432100", sex="M",
+        birthday=date(1990, 1, 1), address=address
+    )
+    db_session.add(person)
+    db_session.flush()
+
+    pwd_hash = hash_password("senha123")
+    access = PatientAccess(
+        person=person,
+        email="paciente@teste.com",
+        password_hash=pwd_hash,
+        is_active=True
+    )
+    db_session.add(access)
+    db_session.flush()
+
+    saved_access = db_session.query(PatientAccess).filter_by(email="paciente@teste.com").first()
+    assert saved_access is not None
+    assert saved_access.password_hash == pwd_hash
+    assert saved_access.person.name == "PACIENTE TESTE"
