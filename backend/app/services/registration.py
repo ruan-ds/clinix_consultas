@@ -5,8 +5,8 @@ from app.models.patient_access import PatientAccess
 from app.models.person import Person
 from app.models.phone import Phone
 
-from app.schemas.patient_access import CreatePatientAccess, FullPatientAccessRegistration
-from app.schemas.person import CreatePerson
+from app.schemas.patient_access import CreatePatientAccess, FullPatientAccessRegistration, OutFullPatientAccess
+from app.schemas.person import CreatePerson, OutPerson
 from app.schemas.address import CreateAddress
 from app.schemas.phone import CreatePhone
 
@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 
-def register_person(data: CreatePerson, db: Session, address_id: int) -> Person:
+def register_person(db: Session, data: CreatePerson, address_id: int) -> Person:
     new_person = Person(
         name=data.name,
         cpf=data.cpf,
@@ -30,11 +30,12 @@ def register_person(data: CreatePerson, db: Session, address_id: int) -> Person:
 
     db.add(new_person)
     db.flush()
+    db.refresh(new_person)
 
     return new_person
 
 
-def register_address(data: CreateAddress, db: Session) -> Address:
+def register_address(db: Session, data: CreateAddress) -> Address:
     new_address = Address(
         state=data.state,
         city=data.city,
@@ -47,31 +48,34 @@ def register_address(data: CreateAddress, db: Session) -> Address:
 
     db.add(new_address)
     db.flush()
+    db.refresh(new_address)
 
     return new_address
 
-def register_phone(data: CreatePhone, db: Session, entity_id: int) -> Phone:
+def register_phone(db: Session, data: CreatePhone, entity_id: int) -> Phone:
     new_phone = Phone(
         entity_id=entity_id,
-        number=data.phone,
+        phone=data.phone,
         type=data.type
     )
 
     db.add(new_phone)
     db.flush()
+    db.refresh(new_phone)
 
     return new_phone
 
 
-def create_patient_access(data: CreatePatientAccess, db: Session, person_id: int) -> PatientAccess:
+def create_patient_access(db: Session, data: CreatePatientAccess, person_id: int) -> PatientAccess:
     new_patient_access = PatientAccess(
         person_id=person_id,
         email=data.email,
-        password=hash_password(data.password)
+        password_hash=hash_password(data.password)
     )
 
     db.add(new_patient_access)
     db.flush()
+    db.refresh(new_patient_access)
 
     return new_patient_access
 
@@ -81,9 +85,18 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
         with db.begin():
 
             if not cpf_validator(data.person.cpf):
-                invalid_cpf()   
+                invalid_cpf()
+            
+            if db.query(Person).filter(Person.cpf == data.person.cpf).first():
+                cpf_already_exists()
 
-            address = register_address(data.address, db)
+            if db.query(PatientAccess).filter(PatientAccess.email == data.access.email).first():
+                email_already_exists()
+
+            address = register_address(
+                db=db,
+                data=data.address
+                )
 
             person = register_person(
                 db=db,
@@ -91,7 +104,7 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
                 address_id=address.id
             )
             
-            register_phone(
+            phone = register_phone(
                 db=db,
                 data=data.phone,
                 entity_id=person.id
@@ -103,16 +116,14 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
                 person_id=person.id
             )
 
-        return patient_access
-
-    except IntegrityError as e:
-        error_message = str(e.orig).lower()
-
-        if "uq_person_cpf" in error_message:
-            cpf_already_exists()
+            return OutFullPatientAccess(  
+                person=person,  
+                address=address,  
+                phone=phone,  
+                access=patient_access  
+            )
         
-        if "uq_patient_access_email" in error_message:
-            email_already_exists()
+    except IntegrityError as e:
 
         raise HTTPException(
         status_code=400,

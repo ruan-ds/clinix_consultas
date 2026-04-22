@@ -20,17 +20,19 @@ def test_person_with_address_and_pacient_access(db_session):
 
     db_session.add(address)
     db_session.flush()
+    db_session.refresh(address)
 
     person = Person(
-        name = "FRANCISCO CABRAL SOARES",
-        cpf = "12345678900",
-        sex = "M",
-        birthday = date(1986, 12, 11),
-        address = address
+        name="FRANCISCO CABRAL SOARES",
+        cpf="12345678900",
+        sex="M",
+        birthday=date(1986, 12, 11),
+        address_id=address.id
     )
 
     db_session.add(person)
     db_session.flush()
+    db_session.refresh(person)
 
     pacient_access = PatientAccess(
         person = person,
@@ -41,6 +43,7 @@ def test_person_with_address_and_pacient_access(db_session):
 
     db_session.add(pacient_access)
     db_session.flush()
+    db_session.refresh(pacient_access)
 
     saved_person = db_session.query(Person).first()
 
@@ -63,6 +66,7 @@ def test_entity_created_for_person(db_session):
 
     db_session.add(address)
     db_session.flush()
+    db_session.refresh(address)
 
     person = Person(
         name = "FRANCISCO CABRAL SOARES",
@@ -74,6 +78,7 @@ def test_entity_created_for_person(db_session):
 
     db_session.add(person)
     db_session.flush()
+    db_session.refresh(person)
 
     entity = db_session.query(Entity).filter(Entity.id == person.id).first()
 
@@ -82,7 +87,7 @@ def test_entity_created_for_person(db_session):
 
 
 def test_person_persistence(db_session):
-    db_address = Address( 
+    address = Address( 
         state="MG",  
         city="Betim",  
         neighborhood="Centro",  
@@ -90,21 +95,21 @@ def test_person_persistence(db_session):
         number="123",  
         cep="32600000"  
     )  
-    db_session.add(db_address)  
+    db_session.add(address)  
     db_session.flush()  
-    db_session.refresh(db_address)
+    db_session.refresh(address)
 
-    schema_data = CreatePerson(name = "Ruan", 
+    person = Person(name = "Ruan", 
                      cpf = "12345678900",
                      sex = "M",
                      birthday=date(2000, 9, 6),
-                     address_id=db_address.id)
+                     address_id=address.id)
     
-    db_person = Person(**schema_data.model_dump(), address_id=db_address.id)
+    db_person = Person(**schema_data.model_dump())
     db_session.add(db_person)
     db_session.flush()
 
-    assert db_person.id is not None
+    assert person.id is not None
 
 def test_patient_access_persistence(db_session):
     address = Address(

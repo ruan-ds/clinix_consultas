@@ -34,6 +34,11 @@ CPF_REGION = {
     9: ["PR", "SC"]
 }
 
+CPF_FOR_TESTS = [  
+    "12345678062",  
+    "11122233396"
+]
+
 
 def cpf_validator(cpf: str) -> bool:
     cpf = cpf_convert_numbers(cpf)
@@ -85,3 +90,10 @@ def cpf_get_region(cpf: str) -> Optional[list]:
     cpf = cpf_convert_numbers(cpf)
 
     return CPF_REGION[int(cpf[8])]
+
+
+def test_valid_cpf():
+    for cpf in CPF_FOR_TESTS:
+        print(f"Testando CPF: {cpf} - Valid: {cpf_validator(cpf)}")
+
+test_valid_cpf()
