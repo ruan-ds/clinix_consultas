@@ -3,6 +3,7 @@ from pydantic import ValidationError
 from datetime import date
 
 from app.schemas.person import CreatePerson
+from app.schemas.patient_access import LoginPatientAccess
 
 def test_person_schema_validation():
     with pytest.raises(ValidationError):
@@ -12,3 +13,10 @@ def test_person_schema_validation():
                      sex = "M",
                      birthday=date(2000, 9, 6),
                      address_id=1)
+
+def test_login_schema_validation():
+    with pytest.raises(ValidationError):
+        LoginPatientAccess(email="email_invalido", password="123")
+
+    with pytest.raises(ValidationError):
+        LoginPatientAccess(email="teste@clinix.com", password="")
