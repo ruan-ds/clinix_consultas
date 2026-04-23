@@ -4,7 +4,6 @@ from app.models.address import Address
 from app.models.person import Person
 from app.models.patient_access import PatientAccess
 from app.models.entity import Entity
-from app.schemas.person import CreatePerson
 from app.utils.security import hash_password
 
 def test_person_with_address_and_pacient_access(db_session):
@@ -45,7 +44,7 @@ def test_person_with_address_and_pacient_access(db_session):
     db_session.flush()
     db_session.refresh(pacient_access)
 
-    saved_person = db_session.query(Person).first()
+    saved_person = db_session.query(Person).filter(Person.id == person.id).first()
 
     assert saved_person is not None
     assert saved_person.address is not None
@@ -87,26 +86,26 @@ def test_entity_created_for_person(db_session):
 
 
 def test_person_persistence(db_session):
-    address = Address( 
-        state="MG",  
-        city="Betim",  
-        neighborhood="Centro",  
-        street="Rua A",  
-        number="123",  
-        cep="32600000"  
-    )  
-    db_session.add(address)  
-    db_session.flush()  
+    address = Address(
+        state="MG",
+        city="Betim",
+        neighborhood="Centro",
+        street="Rua A",
+        number="123",
+        cep="32600000"
+    )
+    db_session.add(address)
+    db_session.flush()
     db_session.refresh(address)
 
-    person = Person(name = "Ruan", 
-                     cpf = "12345678900",
-                     sex = "M",
-                     birthday=date(2000, 9, 6),
-                     address_id=address.id)
-    
-    db_person = Person(**schema_data.model_dump())
-    db_session.add(db_person)
+    person = Person(
+        name="Ruan",
+        cpf="12345678900",
+        sex="M",
+        birthday=date(2000, 9, 6),
+        address_id=address.id
+    )
+    db_session.add(person)
     db_session.flush()
 
     assert person.id is not None
