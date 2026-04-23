@@ -2,7 +2,7 @@
 
 ## Fluxo básico Poetry
 - poetry install (instalar as dependencias do poetry.lock)
-- poetry add packageexemplo (adicionar dependencia)
 
-## Manter o .venv na pasta do projeto
-- poetry config virtualenvs.in-project true
+## Funções extra
+- poetry config virtualenvs.in-project true (manter o .venv na pasta do projeto)
+- poetry add packageexemplo (adicionar dependencia)
