@@ -16,7 +16,7 @@ function Register({ changeAuth }: Props) {
 
   //armazena dados
   //obs:fazer um para atualizar inputs
-  const [estado, setEstado] = useState(0)
+  const [estado, setEstado] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cpf, setCpf] = useState("");
@@ -192,8 +192,6 @@ function Register({ changeAuth }: Props) {
               </div>
               <div className="input-group">
                 <input type="text" placeholder="CEP" maxLength={8} minLength={8} value={cep} onChange={(e) => {
-                  // A regra /\D/g significa "tudo que NÃO for número"
-                  // O replace substitui o que não for número por "nada" (vazio)
                   const apenasNumeros = e.target.value.replace(/\D/g, '');
                   setCep(apenasNumeros);
                 }}

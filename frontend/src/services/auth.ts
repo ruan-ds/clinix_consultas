@@ -33,6 +33,19 @@ type CreateAccountData = {
 
 };
 
+//requisicao do login(verificando por enquanto)
+type LoginData = {
+  
+  patient_access:{
+    email:string;
+    password:string;
+  }
+};
+
+export function getLogin(login: LoginData) {
+  return api.post("/login/patient_access", login)
+}
+
 export function createAccount(data: CreateAccountData) {
   return api.post("/registration/patient_access", data);
 }

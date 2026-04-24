@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createAccount } from "../auth";
-import { api } from "../api";
+import { createAccount } from "../src/services/auth";
+import { api } from "../src/services/api";
 
 // mock da API (evita chamada real)
 vi.mock("../api", () => ({
