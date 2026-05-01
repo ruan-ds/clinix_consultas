@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 import os
 
-from app.core.database import Base
+from app.core.base_model import Base
 
 load_dotenv()
 
@@ -20,9 +20,8 @@ target_metadata = Base.metadata
 config = context.config
 
 database_url = os.getenv("DATABASE_URL")
-
 if not database_url:
-    raise ValueError("DATABASE_URL não encontrado no .env")
+    raise ValueError("DATABASE não encontrado no .env")
 
 config.set_main_option("sqlalchemy.url", database_url)
 

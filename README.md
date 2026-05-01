@@ -1,15 +1,17 @@
 # Clinix
 
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-frontend-61DAFB?logo=react&logoColor=black)
-![License](https://img.shields.io/badge/license-Open--Source%20Autoral-blue)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![FastAPI](https://img.shields.io/badge/fastapi-%23009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/react-%2361DAFB?style=for-the-badge&logo=react&logoColor=black)
+![PostgreSQL](https://img.shields.io/badge/postgresql-%23336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
-**Clinix** é uma solução de **BPO (Business Process Outsourcing)** para marcação de consultas e gestão de dados administrativos de clínicas.
-O objetivo é centralizar solicitações vindas de múltiplos canais (presencial, telefone, WhatsApp, e-mail), padronizar o fluxo operacional e garantir **integridade, rastreabilidade e segurança** dos dados de agendamento.
+**Clinix** é uma solução de **BPO (Business Process Outsourcing)** para agendamento de consultas e gestão administrativa de clínicas. Atende equipes que precisam centralizar solicitações de canais como presencial, telefone, WhatsApp e e-mail, reduzindo retrabalho, inconsistência e falta de rastreabilidade.
 
-Este repositório contém a plataforma Clinix, com **FastAPI + PostgreSQL** no backend e um frontend em **React + TypeScript**.
+A plataforma combina backend em **FastAPI + PostgreSQL** com frontend em **React + TypeScript**. Backend centraliza regras de negócio, RBAC e persistência; frontend entrega a interface ao usuário.
+
+## Status
+
+Em desenvolvimento
 
 ---
 
@@ -18,36 +20,11 @@ Este repositório contém a plataforma Clinix, com **FastAPI + PostgreSQL** no b
 O protótipo de interface está disponível no Figma:
 **Acessar protótipo no Figma →** (https://www.figma.com/site/l3HKqgjDUaQutbjHsKcy7B/Clinix?node-id=0-1&t=a90QyX7mZNNS0r0D-1)
 
-> Deploy planejado na **AWS**. API e interface estarão disponíveis publicamente em versão futura.
+> **Deploy planejado: AWS** — API e interface estarão disponíveis publicamente em versão futura.
 
 ---
 
-## Visão do Produto
-
-Em muitas clínicas, o agendamento acontece por vários canais e costuma depender de controles paralelos (planilhas, anotações, mensagens). Isso gera:
-- demora entre solicitação e confirmação,
-- inconsistência entre canais,
-- retrabalho (remarcações, conflitos de agenda),
-- baixa rastreabilidade,
-- absenteísmo (no-show) por falta de confirmação/lembretes,
-- dados pouco confiáveis para gestão.
-
-A Clinix atua como uma **central terceirizada de agendamentos**, operada por uma equipe (Operadores Clinix) e suportada por uma plataforma própria.
-
----
-
-## Principais Objetivos
-
-- Terceirizar e profissionalizar o processo de marcação de consultas.
-- Padronizar e rastrear o fluxo **solicitação → confirmação → atendimento → status final**.
-- Centralizar dados com **integridade referencial** (base relacional).
-- Reduzir no-show com lembretes/confirmações estruturadas.
-- Entregar indicadores e relatórios para apoiar decisões gerenciais.
-- Garantir segurança e privacidade (LGPD) com **controle de acesso por perfil (RBAC)** —  endpoints críticos protegidos por autenticação na API.
-
----
-
-## Escopo Atual
+## Funcionalidades principais
 
 - API REST para cadastro/gestão de clínicas, usuários e agendamentos.
 - Fluxo básico de agendamento (solicitar, confirmar, reagendar, cancelar, registrar falta).
@@ -57,18 +34,54 @@ A Clinix atua como uma **central terceirizada de agendamentos**, operada por uma
 
 ---
 
-## Stack Tecnológica
+## Tecnologias
 
-- **backend:** FastAPI, PostgreSQL, SQLAlchemy, Alembic
-- **frontend:** React, TypeScript
-- **Testes:** Pytest
-- **Infra de desenvolvimento:** Docker
+- Backend: FastAPI, PostgreSQL e Alembic.
+- Frontend: React e TypeScript.
+- Testes: Pytest.
+- Dev: Docker.
+
+---
+
+## Como rodar o projeto
+
+### Backend
+
+```bash
+docker compose up
+cd backend
+poetry install
+poetry run alembic upgrade head
+poetry run uvicorn app.main:app --reload
+```
+
+A documentação interativa do backend estará disponível em:
+
+```text
+http://localhost:8000/docs
+```
+
+### Frontend
+
+```bash
+cd frontend
+bun install
+bun run dev
+```
+
+A aplicação frontend pode ser acessada em:
+
+```text
+http://localhost:5173
+```
+
+> Se o backend estiver rodando localmente, o frontend deve consumir a API em `http://localhost:8000`.
 
 ---
 
 ## Arquitetura (alto nível)
 
-- **Monólito modular**: módulos bem separados para facilitar extração futura em microsserviços.
+- **Monólito modular (preparado para futura extração em microsserviços)**: módulos bem separados para facilitar evolução.
 - **Regras de negócio no backend**: o frontend não é a barreira de segurança.
 - **Separação por camadas** (backend):
   - `api/` (rotas e dependências)

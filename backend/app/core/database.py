@@ -1,8 +1,10 @@
-import os
-
 from sqlalchemy import create_engine, MetaData
+
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+
 from dotenv import load_dotenv
+
+import os
 
 
 POSTGRES_NAMING_CONVENTION = {
@@ -13,8 +15,8 @@ POSTGRES_NAMING_CONVENTION = {
     "pk": "pk_%(table_name)s"
 }
 
-class Base(DeclarativeBase):
-    metadata = MetaData(naming_convention=POSTGRES_NAMING_CONVENTION)
+
+metadata = MetaData(naming_convention=POSTGRES_NAMING_CONVENTION)
 
 
 load_dotenv()

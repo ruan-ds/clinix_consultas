@@ -7,7 +7,7 @@ from sqlalchemy import (
     Index,
     func,
 )
-from app.core.database import Base
+from app.core.base_model import Base
 
 
 class Logs(Base):

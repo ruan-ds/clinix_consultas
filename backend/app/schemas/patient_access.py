@@ -1,6 +1,6 @@
-from app.schemas.address import CreateAddress
-from app.schemas.person import CreatePerson
-from app.schemas.phone import CreatePhone
+from app.schemas.address import CreateAddress, OutAddress
+from app.schemas.person import CreatePerson, OutPerson
+from app.schemas.phone import CreatePhone, OutPhone
 
 from pydantic import (BaseModel,
                       StringConstraints,
@@ -30,8 +30,25 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
-class FullPatientAccessRegistration(BaseModel):
-    person: CreatePerson
-    address: CreateAddress
-    phone: CreatePhone
+class OutLoginPatientAccess(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class OutFullPatientAccess(BaseModel):  
+    person: OutPerson  
+    address: OutAddress  
+    phone: OutPhone  
+    access: OutPatientAccess  
+    model_config = ConfigDict(from_attributes=True)
+
+
+class FullPatientAccessRegistration(BaseModel):  
+    person: CreatePerson  
+    address: CreateAddress  
+    phone: CreatePhone  
     access: CreatePatientAccess
+
+
+class LoginPatientAccess(CreatePatientAccess):
+    pass
