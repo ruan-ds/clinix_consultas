@@ -14,19 +14,6 @@ CPF_REGION = {
     9: ["PR", "SC"]
 }
 
-CPF_FOR_TESTS = [
-    "12345678062",
-    "11122233396",
-    "52998224725",
-    "93541134780",
-    "28625587887",
-    "39053344705",
-    "16899535009",
-    "71460238001",
-    "98765432100",
-    "74682489070"
-]
-
 
 def cpf_convert_numbers(cpf: str) -> str:
     return "".join(filter(str.isdigit, cpf))
@@ -77,11 +64,3 @@ def cpf_get_region(cpf: str) -> Optional[list]:
 
     cpf = cpf_convert_numbers(cpf)
     return CPF_REGION[int(cpf[8])]
-
-
-def test_valid_cpf():
-    for cpf in CPF_FOR_TESTS:
-        print(f"Testando CPF: {cpf} - Valid: {cpf_validator(cpf)}")
-
-
-test_valid_cpf()

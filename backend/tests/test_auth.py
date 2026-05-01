@@ -1,6 +1,6 @@
 from app.api.public.registration import register_patient_access
 
-from app.utils.cpf_utils import CPF_FOR_TESTS
+from tests.test_cpf_test_dataset import CPF_FOR_TESTS
 
 import random
 
