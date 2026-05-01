@@ -1,0 +1,62 @@
+/* navbar.css */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  height: 80px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-logo img {
+  height: 50px; /* Ajuste conforme o tamanho original da sua logo */
+  width: auto;
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  margin-right: auto; /* Empurra os links para perto da logo */
+  margin-left: 60px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #2d8b81; /* Cor verde da marca Clinix */
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  background-color: #f0fdfa; /* Um tom bem claro do verde da marca */
+  color: #2d8b81;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 2px solid #2d8b81;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.05);
+}
