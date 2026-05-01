@@ -30,16 +30,9 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
-class FullPatientAccessRegistration(BaseModel):  
-    person: CreatePerson  
-    address: CreateAddress  
-    phone: CreatePhone  
-    access: CreatePatientAccess
-
-
-class LoginPatientAccess(BaseModel):
-    email: Annotated[str, StringConstraints(max_length=300)]
-    password: Annotated[str, StringConstraints(min_length=8)]
+class OutLoginPatientAccess(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class OutFullPatientAccess(BaseModel):  
@@ -48,3 +41,14 @@ class OutFullPatientAccess(BaseModel):
     phone: OutPhone  
     access: OutPatientAccess  
     model_config = ConfigDict(from_attributes=True)
+
+
+class FullPatientAccessRegistration(BaseModel):  
+    person: CreatePerson  
+    address: CreateAddress  
+    phone: CreatePhone  
+    access: CreatePatientAccess
+
+
+class LoginPatientAccess(CreatePatientAccess):
+    pass

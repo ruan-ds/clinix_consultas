@@ -1,32 +1,92 @@
 from sqlalchemy.orm import Session
 
-from app.schemas.patient_access import LoginPatientAccess
-from app.repositories.patient_access import get_user_by_email, update_password_hash
-from app.utils.security import verify_password, needs_rehash, hash_password, DUMMY_HASH
+from app.models.patient_access import PatientAccess
+
+from app.schemas.patient_access import (
+    LoginPatientAccess,
+    OutLoginPatientAccess
+)
+
+from app.utils.security import (
+    verify_password,
+    needs_rehash,
+    hash_password,
+    DUMMY_HASH
+)
+
 from app.utils.jwt import create_access_token
+
 from app.exceptions.login_exceptions import login_error
 
 
-def login_patient_access(db: Session, data: LoginPatientAccess):
-    user = get_user_by_email(db, data.email)
+def get_user_by_email(
+    db: Session,
+    email: str
+) -> PatientAccess | None:
+    return (
+        db.query(PatientAccess)
+        .filter(PatientAccess.email == email)
+        .first()
+    )
 
-    # Sempre roda verify_password, mesmo se usuário não existir (evita timing attack)
-    password_hash = user["password_hash"] if user else DUMMY_HASH
-    is_valid = verify_password(data.password, password_hash)
+
+def update_password_hash(
+    db: Session,
+    user: PatientAccess,
+    new_hash: str
+) -> PatientAccess:
+    user.password_hash = new_hash
+
+    db.add(user)
+    db.flush()
+    db.refresh(user)
+
+    return user
+
+
+def login_patient_access_service(
+    db: Session,
+    data: LoginPatientAccess
+) -> OutLoginPatientAccess:
+    user = get_user_by_email(
+        db=db,
+        email=data.email
+    )
+
+    # Sempre roda verify_password
+    # mesmo se o usuário não existir
+    # para evitar timing attack
+    password_hash = (
+        user.password_hash
+        if user
+        else DUMMY_HASH
+    )
+
+    is_valid = verify_password(
+        data.password,
+        password_hash
+    )
 
     if not user or not is_valid:
         login_error()
 
-    if needs_rehash(user["password_hash"]):
+    if needs_rehash(user.password_hash):
         new_hash = hash_password(data.password)
-        update_password_hash(db, data.email, new_hash)
+
+        update_password_hash(
+            db=db,
+            user=user,
+            new_hash=new_hash
+        )
+
+        db.commit()
 
     token = create_access_token({
-        "sub": str(user["user_id"]),
-        "person_id": user["person_id"]
+        "sub": str(user.id),
+        "person_id": user.person_id
     })
 
-    return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
+    return OutLoginPatientAccess(
+        access_token=token,
+        token_type="bearer"
+    )
