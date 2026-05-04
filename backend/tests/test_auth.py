@@ -1,14 +1,22 @@
 from app.api.public.registration import register_patient_access
 
-from app.utils.cpf_utils import CPF_FOR_TESTS
+from tests.test_cpf_test_dataset import CPF_FOR_TESTS
 
 import random
 
-def build_test_data():
-    if not CPF_FOR_TESTS:
+import pytest
+
+
+@pytest.fixture
+def fresh_cpfs():
+    return CPF_FOR_TESTS.copy()
+
+
+def build_test_data(cpfs):
+    if not cpfs:
         raise RuntimeError("Acabaram os CPFs de teste! Atualize CPF_FOR_TESTS.")
     
-    cpf = CPF_FOR_TESTS.pop(0)
+    cpf = random.choice(cpfs)
     return {
             "person": {
                 "name": "FRANCISCO CABRAL SOARES",
@@ -36,9 +44,8 @@ def build_test_data():
         }
 
 
-def test_register_patient_access_route(client):
-    data = build_test_data()
-    data["person"]["cpf"] = "12345678062"
+def test_register_patient_access_route(client, fresh_cpfs):
+    data = build_test_data(fresh_cpfs)
     response = client.post("/registration/patient_access", json=data)
     assert response.status_code == 200
     json_data = response.json()
@@ -50,12 +57,60 @@ def test_register_patient_access_route(client):
 
 
 
-def test_duplicate_cpf_route(client):
-    data = build_test_data()
-    data["person"]["cpf"] = "11122233396"
+def test_duplicate_cpf_route(client, fresh_cpfs):
+    data = build_test_data(fresh_cpfs)
     response1 = client.post("/registration/patient_access", json=data)
     assert response1.status_code == 200
 
     response2 = client.post("/registration/patient_access", json=data)
     assert response2.status_code == 400
     assert "cpf já cadastrado" in response2.json()["detail"]["message"].lower()
+
+
+def test_login(client, fresh_cpfs):
+    data = build_test_data(fresh_cpfs)
+
+    response1 = client.post(
+        "/registration/patient_access",
+        json=data
+    )
+    print(response1.json())
+    assert response1.status_code == 200
+
+    login_data = data["access"]
+
+    response2 = client.post(
+        "/login/patient_access",
+        json=login_data
+    )
+    assert response2.status_code == 200
+
+    json_data = response2.json()
+
+    assert "access_token" in json_data
+    assert json_data["token_type"] == "bearer"
+
+def test_login_wrong_password(client, fresh_cpfs):
+    data = build_test_data(fresh_cpfs)
+
+    client.post("/registration/patient_access", json=data)
+
+    wrong_login = {
+        "email": data["access"]["email"],
+        "password": "senha_errada"
+    }
+
+    response = client.post("/login/patient_access", json=wrong_login)
+
+    assert response.status_code == 401
+
+def test_login_email_not_found(client, fresh_cpfs):
+    response = client.post(
+        "/login/patient_access",
+        json={
+            "email": "naoexiste@test.com",
+            "password": "hello N45it"
+        }
+    )
+
+    assert response.status_code in [400, 401, 404]

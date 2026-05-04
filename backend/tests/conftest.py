@@ -35,12 +35,21 @@ def engine():
 
 @pytest.fixture(scope="function")
 def db_session(engine):
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    SessionLocal = sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=engine
+    )
+
     session = SessionLocal()
+
+    for table in reversed(Base.metadata.sorted_tables):
+        session.execute(table.delete())
+
+    session.commit()
 
     yield session
 
-    session.rollback()
     session.close()
 
 @pytest.fixture
