@@ -1,0 +1,225 @@
+
+body {
+    background-color: #FAFAFA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container mais largo para acomodar o banner maior */
+.register-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 1100px; /* Aumentado de 900px */
+    width: 100%;
+    padding: 20px;
+}
+
+/* --- CARTÃO BRANCO MAIOR --- */
+.register-card {
+    background-color: #FFFFFF;
+    width: 480px; /* Aumentado de 400px */
+    padding: 60px 50px; /* Espaçamento interno maior */
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-box {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.logo-box img{
+    width: 100px; 
+    height: auto;
+}
+
+.brand-name {
+    color: #1c7566;
+    font-size: 20px; /* Fonte maior */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+/* Inputs maiores e mais confortáveis */
+.input-group input {
+    width: 100%;
+    padding: 16px 24px; 
+    border: 1px solid #E0E0E0;
+    border-radius: 40px; 
+    font-size: 16px; /* Fonte do input maior */
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #A0A0A0;
+}
+
+.input-group input:focus {
+    border-color: #1c7566;
+}
+
+/* Botão maior */
+.btn-register {
+    width: 100%;
+    padding: 16px;
+    background-color: #207567;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 40px;
+    font-size: 15px; /* Fonte maior */
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-register:hover {
+    background-color: #175a4f;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    color: #207567;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 45px;
+}
+
+.signup-footer {
+    text-align: center;
+    font-size: 15px; /* Fonte maior */
+    color: #555;
+    margin-top: auto;
+}
+
+.signup-footer a {
+    color: #207567;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- BANNER VERDE ESTICADO HORIZONTALMENTE --- */
+.promo-card {
+    background: linear-gradient(135deg, #0e4c41 0%, #22c7a7 100%);
+    color: #FFFFFF;
+    height: 460px; /* Acompanha o crescimento do cartão branco */
+    width: 650px; /* BEM MAIS LARGO (era 450px) */
+    padding: 50px 50px 50px 100px; /* Mais espaço para o texto respirar */
+    border-radius: 0 16px 16px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    margin-left: -60px; /* Puxa um pouco mais pra baixo do cartão branco */
+    z-index: 1;
+}
+
+/* Textos do banner maiores */
+.promo-card h2 {
+    font-size: 36px; /* Bem maior */
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.promo-card p {
+    font-size: 18px; /* Maior e mais legível */
+    font-weight: 400;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+/* --- INPUTS DA SEGUNDA ETAPA (DADOS DETALHADOS) --- */
+
+/* Linha que agrupa dois inputs lado a lado */
+.input-row {
+    display: flex;
+    gap: 15px; /* Espaço entre os campos */
+    margin-bottom: 5px; /* Ajuste para não esticar demais o card */
+}
+
+/* Garante que os grupos de input ocupem o mesmo espaço na linha */
+.input-row .input-group {
+    flex: 1;
+}
+
+/* Estilização específica para o Select de Sexo */
+.input-group select {
+    width: 100%;
+    padding: 16px 24px;
+    border: 1px solid #E0E0E0;
+    border-radius: 40px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    background-color: #fff;
+    appearance: none; /* Remove a seta padrão do navegador */
+    cursor: pointer;
+    /* Adiciona uma seta personalizada discreta */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A0A0A0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 15px;
+}
+
+/* Estilização do Checkbox de Termos e Condições */
+.terms-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 0 20px 5px;
+}
+
+.terms-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.terms-group label {
+    font-size: 12px;
+    color: #1c7566;
+    line-height: 1.4;
+}
+
+.terms-group a {
+    color: #1c7566;
+    font-weight: 700;
+    text-decoration: underline;
+}
+/* Responsividade */
+@media (max-width: 900px) {
+    .register-container {
+        flex-direction: column;
+    }
+    
+    .promo-card {
+        display: none;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 480px;
+    }
+}
+
