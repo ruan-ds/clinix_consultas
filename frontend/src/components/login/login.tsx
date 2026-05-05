@@ -19,10 +19,8 @@ function Login({changeAuth}:  Props) {
     async function sign_in() {
 
       const login = {
-        patient_access: {
            email: email,
            password: password
-        }
       };
       //linha pra fazer a requisicao, assim como no register
       const response = await getLogin(login);
