@@ -102,7 +102,7 @@ function Register({ changeAuth }: Props) {
       },
       phone: {
         phone:telefone,
-        type:"celular"
+        type:"CELL"
       },
       access: {
         email: email,
@@ -253,24 +253,24 @@ function Register({ changeAuth }: Props) {
                 </select>
               </div>
               <div className="input-group">
-                <input type="text" value={cidade} placeholder="Cidade" onChange={(e) => setCidade(e.target.value)} required />
+                <input type="text" value={cidade} placeholder="Cidade" maxLength={40} onChange={(e) => setCidade(e.target.value)} required />
               </div>
             </div>
             <div className="input-row">
               <div className="input-group">
-                <input type="text" value={bairro} placeholder="Bairro" onChange={ (e) => setBairro(e.target.value)} required />
+                <input type="text" value={bairro} placeholder="Bairro" maxLength={50} onChange={ (e) => setBairro(e.target.value)} required />
               </div>
               <div className="input-group">
-                <input type="text"  value={rua} placeholder="Rua" onChange={(e) => setRua(e.target.value)} required />
+                <input type="text"  value={rua} placeholder="Rua" maxLength={50} onChange={(e) => setRua(e.target.value)} required />
               </div>
             </div>
 
             <div className="input-row">
               <div className="input-group">
-                <input type="text" value={numero} placeholder="Número" onChange={(e) => setNumero(e.target.value)} required />
+                <input type="text" value={numero} placeholder="Número" maxLength={10} onChange={(e) => setNumero(e.target.value)} required />
               </div>
               <div className="input-group">
-                <input type="text" value={complemento} placeholder="Complemento" onChange={(e) => setComplemento(e.target.value)} required />
+                <input type="text" value={complemento} placeholder="Complemento" maxLength={10} onChange={(e) => setComplemento(e.target.value)} />
               </div>
             </div>
 

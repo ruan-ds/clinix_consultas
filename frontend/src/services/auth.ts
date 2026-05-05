@@ -23,7 +23,7 @@ type CreateAccountData = {
 
   phone:{
     phone:string;
-    type:string;
+    type: string;
   }
 
   access: {
