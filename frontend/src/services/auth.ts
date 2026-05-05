@@ -35,17 +35,16 @@ type CreateAccountData = {
 
 //requisicao do login(verificando por enquanto)
 type LoginData = {
-  
-  patient_access:{
-    email:string;
-    password:string;
-  }
+  email: string;
+  password: string;
 };
 
 export function getLogin(login: LoginData) {
+  console.log("Login enviado:", login);
   return api.post("/login/patient_access", login)
 }
 
 export function createAccount(data: CreateAccountData) {
+  console.log("Cadastro enviado:", data);
   return api.post("/registration/patient_access", data);
 }

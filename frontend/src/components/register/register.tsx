@@ -110,7 +110,18 @@ function Register({ changeAuth }: Props) {
       }
     };
     //a linha abaixo envia o data para fazer a requisição
-    const response = await createAccount(data);
+    try {
+  const response = await createAccount(data);
+      // LOG PARA CONFIRMAÇÃO DE SUCESSO
+  console.log("Sucesso:", response.data);
+
+} catch (error: any) {
+  console.log("Erro completo:", error);
+  console.log(
+  "Erro backend:",
+  JSON.stringify(error.response?.data, null, 2)
+);
+}
   }
 
 
