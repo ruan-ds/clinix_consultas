@@ -1,4 +1,4 @@
-from app.exceptions.registration_exceptions import cpf_already_exists, email_already_exists, invalid_cpf
+from app.exceptions.auth_exceptions import cpf_already_exists, email_already_exists, invalid_cpf
 
 from app.models.address import Address
 from app.models.patient_access import PatientAccess
