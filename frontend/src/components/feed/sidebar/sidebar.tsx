@@ -6,7 +6,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <nav className="menu">
-        <a href="#" className="menu-item active">
+        <a href="#" className="menu-item">
           <FiHome className="icon" /> <span>Dashboard</span>
         </a>
         <a href="#" className="menu-item">
