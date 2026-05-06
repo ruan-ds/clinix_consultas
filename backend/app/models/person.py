@@ -17,6 +17,8 @@ class Person(Entity):
     patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
     clinical_access = relationship("ClinicalAccess", back_populates="person")
     clinix_access = relationship("ClinixAccess", back_populates="person")
+    dependents_of = relationship("Dependent", foreign_keys="Dependent.person_id", back_populates="dependent_person")
+    guardians_of = relationship("Dependent", foreign_keys="Dependent.guardian_id", back_populates="guardian_person")
 
     __mapper_args__ = {"polymorphic_identity": "P"}
 
