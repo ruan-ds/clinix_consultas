@@ -2,20 +2,16 @@ import React from 'react';
 import './navbargeneral.css';
 import logo from '../../../assets/images/logo.png';
 import { FiUser } from "react-icons/fi";
+
 function NavbarGeneral() {
   return (
-    <nav className="navbar">
-      <div className="nav-logo">
-        <img src={logo} alt="logo Clinix" />
-      </div>
-      <div className="nav-links">
-        <a href="#">Minhas Consultas</a>
-        <a href="#">Histórico</a>
-      </div>
-      <div className="nav-profile">
-        <div className="profile-icon"><FiUser /></div>
-      </div>
-    </nav>
+            <header className="top-bar">
+              <img src={logo} alt="Logo do clinix" />
+              <p>CLINIX</p>
+                <div className="user-profile">
+                   <FiUser />
+                </div>
+            </header>
   );
 }
 
