@@ -1,0 +1,82 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Seção Superior (Cards de consulta e ações) */
+.top-section {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+/* Card Principal - Próxima Consulta */
+.appointment-card {
+    flex: 2;
+    background-color: #fff;
+    border: 2px solid #0084ff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.appointment-card .label {
+    display: block;
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.appointment-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.appointment-card .details {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.appointment-card .details p {
+    margin-bottom: 4px;
+}
+
+/* Botões do Card Principal */
+.card-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #1a8e82;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #147369;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #1a8e82;
+    border: 1px solid #1a8e82;
+}
+
+.btn-secondary:hover {
+    background-color: #f0f9f8;
+}
