@@ -14,3 +14,5 @@ class PatientAccess(Base):
 
     person = relationship("Person", back_populates="patient_access")
     medical_appointments = relationship("MedicalAppointment", back_populates="patient_access")
+    dependent_links = relationship("Dependent", foreign_keys="Dependent.guardian_patient_id", back_populates="guardian_patient")
+    guardian_links = relationship("Dependent", foreign_keys="Dependent.dependent_patient_id", back_populates="dependent_patient")
