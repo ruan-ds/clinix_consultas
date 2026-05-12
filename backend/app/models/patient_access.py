@@ -13,8 +13,4 @@ class PatientAccess(Base):
     is_active = Column(Boolean, default=True)
 
     person = relationship("Person", back_populates="patient_access")
-    medical_appointment = relationship("MedicalAppointment", back_populates="patient_access")
-
-    __table_args__ = (
-        UniqueConstraint("email", name="uq_patient_access_email"),
-    )
+    medical_appointments = relationship("MedicalAppointment", back_populates="patient_access")
