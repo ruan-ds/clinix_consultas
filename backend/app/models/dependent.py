@@ -13,13 +13,13 @@ class Dependent(Base):
     __tablename__ = "dependent"
 
     id = Column(Integer, primary_key=True)
-    person_id = Column(Integer, ForeignKey("person.id"), nullable=False, index=True)
-    guardian_id = Column(Integer, ForeignKey("person.id"), nullable=False, index=True)
+    dependent_patient_id = Column(Integer, ForeignKey("patient_access.id"), nullable=False, index=True)
+    guardian_patient_id = Column(Integer, ForeignKey("patient_access.id"), nullable=False, index=True)
     is_active = Column(Boolean, default=True)
 
-    dependent_person = relationship("Person", foreign_keys=[person_id], back_populates="dependent_of", overlaps="person")
-    guardian_person = relationship("Person", foreign_keys=[guardian_id], back_populates="guardian_of",overlaps="person")
+    dependent_patient = relationship("PatientAccess", foreign_keys=[dependent_patient_id], back_populates="guardian_links")
+    guardian_patient = relationship("PatientAccess", foreign_keys=[guardian_patient_id], back_populates="dependent_links")
 
     __table_args__ = (
-        UniqueConstraint("guardian_id", "person_id", name="uq_guardian_id_person_id"),
+        UniqueConstraint("guardian_patient_id", "dependent_patient_id", name="uq_guardian_dependent"),
     )
