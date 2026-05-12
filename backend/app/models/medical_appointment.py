@@ -2,6 +2,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import (
     Column,
     Integer,
+    String,
     Boolean,
     ForeignKey,
     func,
@@ -16,18 +17,17 @@ class MedicalAppointment(Base):
 
     id = Column(Integer, primary_key=True)
     clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False, index=True)
-    doctor_id = Column(Integer, ForeignKey("clinical_access.id"), nullable=False, index=True)
+    doctor_id = Column(Integer, ForeignKey("doctor.id"), nullable=False, index=True)
     patient_id = Column(Integer, ForeignKey("patient_access.id"), nullable=False, index=True)
     service_id = Column(Integer, ForeignKey("service.id"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("doctor_schedule_slot.id"), nullable=False, unique=True, index=True)
+    status = Column(String(20), nullable=False)
+    notes = Column(String(200), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
     is_active = Column(Boolean, default=True)
 
     clinic = relationship("Clinic", back_populates="medical_appointment")
-    clinical_access = relationship("ClinicalAccess", back_populates="medical_appointment")
+    doctor = relationship("Doctor", back_populates="medical_appointment")
     patient_access = relationship("PatientAccess", back_populates="medical_appointment")
     service = relationship("Service", back_populates="medical_appointment")
-
-
-    __table_args__ = (
-        UniqueConstraint("clinic_id", "doctor_id", "patient_id", name="uq_clinic_id_doctor_id_patient_id"),
-    )
