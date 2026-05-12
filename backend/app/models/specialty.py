@@ -7,10 +7,10 @@ from sqlalchemy import (
 from app.core.base_model import Base
 
 
-class Specialty(Base):
-    __tablename__ = "specialty"
+class MedicalSpecialty(Base):
+    __tablename__ = "medical_specialty"
 
     id = Column(Integer, primary_key=True)
-    role = Column(String(15), nullable=False)
+    name = Column(String(100), nullable=False, unique=True)
 
-    clinical_access = relationship("ClinicalAccess", back_populates="specialties")
+    doctors = relationship("Doctor", secondary="doctor_specialty", back_populates="specialties")
