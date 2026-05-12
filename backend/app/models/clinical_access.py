@@ -23,7 +23,8 @@ class ClinicalAccess(Base):
 
     clinic = relationship("Clinic", back_populates="clinical_access")
     person = relationship("Person", back_populates="clinical_access")
-    medical_appointment = relationship("MedicalAppointment", back_populates="clinical_access")
+    doctor = relationship("Doctor", back_populates="clinical_access", uselist=False)
+    medical_appointments = relationship("MedicalAppointment", back_populates="clinical_access")
 
 
     __table_args__ = (

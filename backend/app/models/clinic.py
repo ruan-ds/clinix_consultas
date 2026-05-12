@@ -20,7 +20,7 @@ class Clinic(Entity):
     is_active = Column(Boolean, default=True)
 
 
-    address = relationship("Address", back_populates="clinic")
+    address = relationship("Address", back_populates="clinics")
     clinical_access = relationship("ClinicalAccess", back_populates="clinic")
     medical_appointments = relationship("MedicalAppointment", back_populates="clinic")
     services = relationship("Service", back_populates="clinic")
