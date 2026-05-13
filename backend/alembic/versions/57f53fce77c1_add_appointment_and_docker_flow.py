@@ -1,4 +1,4 @@
-"""add appointment and docker flow
+"""add appointment and doctor flow
 
 Revision ID: 57f53fce77c1
 Revises: aad630c9aaeb
