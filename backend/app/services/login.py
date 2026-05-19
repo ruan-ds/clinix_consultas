@@ -82,8 +82,7 @@ def login_patient_access_service(
         db.commit()
 
     token = create_access_token({
-        "sub": str(user.id),
-        "person_id": user.person_id
+        "user_id": str(user.id)
     })
 
     return OutLoginPatientAccess(
