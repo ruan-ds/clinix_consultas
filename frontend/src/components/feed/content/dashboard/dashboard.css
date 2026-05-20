@@ -4,24 +4,107 @@
     padding: 0;
 }
 
-.container {
-    max-width: 900px;
-    margin: 40px auto;
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 1200px; /* Limita a largura para não esticar infinitamente em monitores grandes */
+    margin: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px; /* Afasta o cabeçalho do conteúdo abaixo */
 }
 
-/* Cabeçalho */
-header {
-    margin-bottom: 24px;
+/* Cabeçalho alinhado à esquerda */
+.dashboard-header h1 {
+    font-size: 28px; /* Ligeiramente maior para bater com o protótipo */
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #111;
 }
 
-header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-header p {
+.dashboard-header p {
     color: #555;
-    font-size: 15px;
+    font-size: 16px;
+}
+
+/* --- O SEGREDO DO LAYOUT: GRID --- */
+.dashboard-grid {
+    display: grid;
+    /* Divide a tela em duas colunas: a 1ª ocupa 2 partes (2fr) e a 2ª ocupa 1 parte (1fr) */
+    grid-template-columns: 2fr 1fr; 
+    gap: 24px;
+    align-items: start;
+}
+
+/* O card principal vai automaticamente respeitar o tamanho do pai (os 2fr) */
+.main-card-section {
+    width: 100%;
+}
+
+.action-cards-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Estilo base provisório para os botões da direita (para já ficar parecido com o Figma) */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: #00897b;
+    box-shadow: 0 4px 12px rgba(0,137,123,0.1);
+}
+.icon-placeholder{
+    color: #00897b;
+    font-size: 30px;
+    line-height: 0;
+}
+/* =========================================
+   RESPONSIVIDADE (SMARTPHONES E TABLETS)
+========================================= */
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        /* Reduz a margem superior/inferior para dar mais espaço na tela pequena */
+        margin: 24px auto; 
+        
+        /* Adiciona um respiro lateral para o conteúdo não colar na borda do telemóvel */
+        padding: 0 20px; 
+        gap: 24px;
+    }
+    .dashboard-header{
+        text-align: center;
+    }
+
+    .dashboard-header h1 {
+        /* Diminui levemente o título para caber melhor no mobile */
+        font-size: 24px; 
+    }
+
+    .dashboard-grid {
+        /* O SEGREDO: Muda de duas colunas (2fr 1fr) para apenas UMA coluna (1fr) */
+        grid-template-columns: 1fr; 
+        gap: 16px; /* Diminui o espaço entre o card principal e os botões */
+    }
+
+    .action-btn {
+        /* Ajuste fino para os botões no mobile ficarem um pouco mais compactos */
+        padding: 16px; 
+        font-size: 0.95rem;
+    }
 }
 
