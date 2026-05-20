@@ -83,7 +83,6 @@ function Register({ changeAuth }: Props) {
     const ruaFormatada = limparTexto(rua) 
     const complementoFormatado = limparTexto(complemento)
 
-
     const data = {
       person: {
         name: nomeFormatado,
@@ -114,6 +113,15 @@ function Register({ changeAuth }: Props) {
   const response = await createAccount(data);
       // LOG PARA CONFIRMAÇÃO DE SUCESSO
   console.log("Sucesso:", response.data);
+
+          if(response.status === 201){
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
+          window.location.href = "/login";
+        } else {
+          alert("Registro falhou.");
+        } 
+
 
 } catch (error: any) {
   console.log("Erro completo:", error);
