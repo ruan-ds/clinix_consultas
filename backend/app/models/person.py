@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from app.models.entity import Entity
 
@@ -16,10 +16,6 @@ class Person(Entity):
     address = relationship("Address", back_populates="persons")
     patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
     clinical_access = relationship("ClinicalAccess", back_populates="person")
-    clinix_access = relationship("ClinixAccess", back_populates="person")
+    clinix_access = relationship("ClinixAccess", back_populates="person", uselist=False)
 
     __mapper_args__ = {"polymorphic_identity": "P"}
-
-    __table_args__ = (
-        UniqueConstraint("cpf", name="uq_person_cpf"),
-    )

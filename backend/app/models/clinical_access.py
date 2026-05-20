@@ -23,6 +23,9 @@ class ClinicalAccess(Base):
 
     clinic = relationship("Clinic", back_populates="clinical_access")
     person = relationship("Person", back_populates="clinical_access")
+    doctor = relationship("Doctor", back_populates="clinical_access", uselist=False)
+    medical_appointments = relationship("MedicalAppointment", back_populates="clinical_access")
+
 
     __table_args__ = (
         UniqueConstraint("clinic_id", "person_id", name="uq_clinic_id_person_id"),
