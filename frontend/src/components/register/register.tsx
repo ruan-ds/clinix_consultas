@@ -114,10 +114,10 @@ function Register({ changeAuth }: Props) {
       // LOG PARA CONFIRMAÇÃO DE SUCESSO
   console.log("Sucesso:", response.data);
 
-          if(response.status === 201){
+          if(response.status === 200 || response.status === 201){
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("userId", response.data.userId);
-          window.location.href = "/login";
+          window.location.href = "/authenticantion.html?auth=1";
         } else {
           alert("Registro falhou.");
         } 
