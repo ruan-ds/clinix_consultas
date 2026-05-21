@@ -3,7 +3,7 @@ import './register.css';
 import logo from '../../assets/images/logoNome.png';
 import { useState } from "react";
 import { createAccount } from "../../services/auth";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";     
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
