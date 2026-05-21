@@ -1,0 +1,71 @@
+.history-section {
+    width: 100%;
+    margin-top: 28px;
+    font-family: sans-serif;
+}
+
+.history-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Caixa para o estado VAZIO (igual ao seu print) */
+.history-empty {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 48px;
+    text-align: center;
+    color: #000000;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* Card de quando houver consultas reais */
+.history-item-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.history-specialty {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.history-doctor {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.history-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #475569;
+    font-size: 14px;
+}
+
+.date-icon {
+    color: #00897b;
+}

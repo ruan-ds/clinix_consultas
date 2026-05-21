@@ -74,6 +74,33 @@
     font-size: 30px;
     line-height: 0;
 }
+/* --- ANIMAÇÃO DE DESTAQUE DO HISTÓRICO --- */
+.pulse-highlight {
+    animation: highlight-pulse-effect 1.5s ease-in-out;
+}
+.pulse-highlight .history-empty,
+.pulse-highlight .history-item-card {
+    animation: highlight-pulse-effect 1.5s ease-in-out;
+}
+@keyframes highlight-pulse-effect {
+    0% {
+        border-color: #e2e8f0; /* Borda cinza original */
+        transform: scale(1);
+    }
+    25% {
+        border-color: #00897b; /* Muda instantaneamente para o verde teal */
+        transform: scale(1.020); /* Movimento quase imperceptível */
+    }
+    70% {
+        border-color: #00897b;
+        transform: scale(1.020);
+    }
+    100% {
+        border-color: #e2e8f0; /* Volta para a borda original */
+        transform: scale(1);
+    }
+}
+
 /* =========================================
    RESPONSIVIDADE (SMARTPHONES E TABLETS)
 ========================================= */
