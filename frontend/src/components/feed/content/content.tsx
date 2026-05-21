@@ -1,12 +1,12 @@
 import React from 'react';
 import Dashboard from './dashboard/dashboard';
-import Consultation from './consultation/consultation';
+import Appointment from './appointment/appointment';
 import './content.css';
 
 function Content() { 
     return ( 
         <div className="content">
-            <Consultation />
+            <Appointment />
         </div>
     )
 

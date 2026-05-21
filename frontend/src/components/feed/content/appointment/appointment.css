@@ -1,12 +1,17 @@
-/* consultation.css */
+/* schedule-appointment.css */
+
+* {
+  font-family:  'Montserrat', sans-serif;;
+}
 
 .ac-container {
   width: 100%;
-  max-width: 960px;
+  max-width: 1500px;
   padding: 32px;
   background-color: #ffffff;
   font-family: system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
+  padding-top: 25px;
 }
 
 /* Cabeçalho e Progresso */
@@ -22,7 +27,7 @@
 }
 
 .ac-subtitle {
-  font-size: 14px;
+  font-size: 16px;
   color: #4b5563;
   margin: 0 0 12px 0;
 }

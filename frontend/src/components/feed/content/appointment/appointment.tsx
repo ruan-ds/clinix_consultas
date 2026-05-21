@@ -9,7 +9,7 @@ import {
   Bone, 
   ChevronRight 
 } from 'lucide-react';
-import './consultation.css';
+import './appointment.css';
 
 interface Especialidade {
   id: string;
@@ -26,7 +26,7 @@ const especialidadesPopulares: Especialidade[] = [
   { id: 'ortopedia', nome: 'Ortopedia', Icone: Bone },
 ];
 
-export const Consultation: React.FC = () => {
+export const Appointment = () => {
   return (
     <div className="ac-container">
       
@@ -41,7 +41,7 @@ export const Consultation: React.FC = () => {
       </div>
 
       {/* Grid de Especialidades Populares */}
-      <div>
+      <div className="especialidades-section">
         <h2 className="ac-section-title">Especialidades Populares</h2>
         
         <div className="ac-grid">
@@ -67,4 +67,4 @@ export const Consultation: React.FC = () => {
   );
 };  
 
-export default Consultation;
+export default Appointment;
