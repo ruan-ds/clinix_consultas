@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Search, 
   Stethoscope, 
@@ -27,6 +27,37 @@ const especialidadesPopulares: Especialidade[] = [
 ];
 
 export const Appointment = () => {
+  // Estado para controlar se a requisição está acontecendo (evita múltiplos cliques)
+  const [carregandoId, setCarregandoId] = useState<string | null>(null);
+
+  // Função que será disparada ao clicar no botão
+  const handleSelectEspecialidade = async (id: string) => {
+    setCarregandoId(id);
+    
+    try {
+      // Aqui você coloca a URL real da sua API
+      console.log(`Enviando requisição para: /api/medicos?especialidade=${id}`);
+      
+      /* EXEMPLO DE REQUISIÇÃO REAL:
+      const response = await fetch(`http://localhost:3000/api/medicos?especialidade=${id}`);
+      const data = await response.json();
+      
+      // Depois de receber os dados, você provavelmente vai querer 
+      // salvar isso num estado global ou passar para a próxima tela (Etapa 2)
+      console.log('Médicos retornados:', data);
+      */
+
+      // Simulando um delay de requisição apenas para teste (pode apagar depois)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+    } catch (error) {
+      console.error('Erro ao buscar médicos da especialidade:', error);
+      // Aqui você pode colocar um toast ou alerta de erro para o usuário
+    } finally {
+      setCarregandoId(null);
+    }
+  };
+
   return (
     <div className="ac-container">
       
@@ -47,14 +78,23 @@ export const Appointment = () => {
         <div className="ac-grid">
           {especialidadesPopulares.map((especialidade) => {
             const IconComponent = especialidade.Icone;
+            const isCarregando = carregandoId === especialidade.id;
             
             return (
-              <button key={especialidade.id} className="ac-card">
+              <button 
+                key={especialidade.id} 
+                className="ac-card"
+                onClick={() => handleSelectEspecialidade(especialidade.id)}
+                disabled={carregandoId !== null} // Desabilita todos os botões enquanto carrega
+                style={{ opacity: carregandoId !== null && !isCarregando ? 0.6 : 1 }}
+              >
                 <div className="ac-card-content">
                   <div className="ac-icon-container">
                     <IconComponent size={24} strokeWidth={1.5} />
                   </div>
-                  <span className="ac-card-title">{especialidade.nome}</span>
+                  <span className="ac-card-title">
+                    {isCarregando ? 'Buscando...' : especialidade.nome}
+                  </span>
                 </div>
                 <ChevronRight className="ac-arrow-icon" size={20} />
               </button>
