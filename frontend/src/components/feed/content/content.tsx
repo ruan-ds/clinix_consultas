@@ -8,7 +8,6 @@ import './content.css';
 function Content() { 
     return ( 
         <div className="content">
-            <Configs />
         </div>
     )
 
