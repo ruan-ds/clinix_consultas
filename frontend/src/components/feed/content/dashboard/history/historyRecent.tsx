@@ -1,11 +1,11 @@
 import React from 'react';
-import './history.css';
+import './historyRecent.css';
 import { FaCalendarCheck } from 'react-icons/fa'; // Reutilizando o ícone que você já usa!
 
-function History(props: { historico: any[] }) {
+function HistoryRecent(props: { historico: any[] }) {
 
     // Pega a lista enviada pelo Dashboard se o Dashboard não mandar, vira uma lista vazia []
-    const listaDeConsultas = props.historico || [];
+    const listaDeConsultas = (props.historico || []).slice(0, 3);
 
     return (
         <div className="history-section">
@@ -42,4 +42,4 @@ function History(props: { historico: any[] }) {
     );
 }
 
-export default History;
+export default HistoryRecent;

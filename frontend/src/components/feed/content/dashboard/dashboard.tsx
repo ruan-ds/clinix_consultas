@@ -1,11 +1,18 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './dashboard.css';
 import Card from './card/card';
-import History from './history/history'; 
+import HistoryRecent from './history/historyRecent';
 import { FaCalendarCheck } from "react-icons/fa";
 import { AiOutlineFieldTime } from "react-icons/ai"
+import imagem from '../../../../assets/images/imgdashboard.png';
 
-function Dashboard() {
+interface DashboardProps {
+    onVerHistorico: () => void;
+}
+
+function Dashboard({ onVerHistorico }: DashboardProps) {
+
+    const [estado, setEstado] = useState(0);
     
     // proxima consulta é lista com os dados da consulta que iremos receber do backend e passsar pro componente de card
     const proximaConsulta = null;
@@ -45,24 +52,29 @@ function Dashboard() {
     }
     ];
 
+    // Lógica para alternar o estado caso não haja consultas nem histórico
+    useEffect(() => {
+        if (proximaConsulta === null && (!Historico || Historico.length === 0)) {
+            setEstado(1);
+        } else {
+            setEstado(0);
+        }
+    }, [proximaConsulta, Historico]);
+
 
     //. Destaque do histórico, animação
     const historicoRef = useRef<HTMLDivElement>(null);
-    const [destacarHistorico, setDestacarHistorico] = useState(false);
 
     const lidarComVerHistorico = () => {
         // Faz a tela descer suavemente até o histórico e centralizá-lo
-        historicoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
         // Ativa a classe de animação de destaque
-        setDestacarHistorico(true);
-        
         // Remove o destaque após 1.5 segundos (tempo do efeito piscar)
-        setTimeout(() => {
-            setDestacarHistorico(false);
-        }, 1500);
+
+        // Avisa quem estiver controlando o Dashboard que o botão foi clicado
+        onVerHistorico();
     };
 
+    if (estado == 0){
     return (
         <div className="dashboard-wrapper">
             <header className="dashboard-header">
@@ -94,13 +106,25 @@ function Dashboard() {
                 {/* Container do Histórico com a Ref e a classe de Destaque condicional */}
                 <div 
                     ref={historicoRef} 
-                    className={`history-grid-section ${destacarHistorico ? 'pulse-highlight' : ''}`}
+                    className="history-grid-section"
                 >
-                    <History historico={Historico} />
+                    <HistoryRecent historico={Historico} />
                 </div>
 
             </div>
         </div>
     )
+}   else if (estado == 1) {
+    return (
+        <div className="dashboard-wrapper empty-state-container">
+            <div className="empty-state-content">
+                <img src={imagem} alt="Calendário Clinix" className="empty-state-img" />
+                <h2>Bem-vindo, Gabriel! Vamos agendar sua primeira consulta?</h2>
+                <p>Você ainda não tem agendamentos ou históricos. Comece agora!</p>
+                <button className="empty-state-btn">Agendar minha primeira consulta</button>
+            </div>
+        </div>
+    )
 }
+} 
 export default Dashboard;

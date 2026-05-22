@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .dashboard-wrapper {
@@ -74,31 +75,67 @@
     font-size: 30px;
     line-height: 0;
 }
+
 /* --- ANIMAÇÃO DE DESTAQUE DO HISTÓRICO --- */
-.pulse-highlight {
-    animation: highlight-pulse-effect 1.5s ease-in-out;
+/* Removido conforme solicitado */
+
+/* --- AJUSTE EQUILIBRADO DO EMPTY STATE (NEM GRANDE, NEM PEQUENO) --- */
+.empty-state-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 68vh;
+    text-align: center;
+    width: 100%;
 }
-.pulse-highlight .history-empty,
-.pulse-highlight .history-item-card {
-    animation: highlight-pulse-effect 1.5s ease-in-out;
+
+.empty-state-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 540px; /* Largura ideal para conter as quebras de linha do texto */
+    gap: 14px;
 }
-@keyframes highlight-pulse-effect {
-    0% {
-        border-color: #e2e8f0; /* Borda cinza original */
-        transform: scale(1);
-    }
-    25% {
-        border-color: #00897b; /* Muda instantaneamente para o verde teal */
-        transform: scale(1.020); /* Movimento quase imperceptível */
-    }
-    70% {
-        border-color: #00897b;
-        transform: scale(1.020);
-    }
-    100% {
-        border-color: #e2e8f0; /* Volta para a borda original */
-        transform: scale(1);
-    }
+
+.empty-state-img {
+    max-width: 290px; /* Meio termo perfeito entre os 320px e os 250px anteriores */
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.empty-state-content h2 {
+    font-size: 24px; /* Tamanho padrão de títulos internos do Figma */
+    font-weight: 700;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.3;
+}
+
+.empty-state-content p {
+    font-size: 15px; /* Altamente legível sem parecer gigante */
+    color: #444444;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.empty-state-btn {
+    background-color: #239e86;
+    color: #ffffff;
+    border: none;
+    padding: 12px 32px; /* Proporção ideal de clique para o botão principal */
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(35, 158, 134, 0.18);
+    transition: background-color 0.2s, transform 0.1s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.empty-state-btn:hover {
+    background-color: #1a7a67;
+    transform: scale(1.02);
 }
 
 /* =========================================
@@ -134,4 +171,3 @@
         font-size: 0.95rem;
     }
 }
-
