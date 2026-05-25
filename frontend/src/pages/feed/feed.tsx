@@ -11,7 +11,7 @@ function Feed() {
 
   return (
     <div className="feed-wrapper">
-        <NavbarGeneral />
+        <NavbarGeneral telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} />
         
         {/* O container Flexbox engloba APENAS a Sidebar e o Conteúdo */}
         <div className="page-container">

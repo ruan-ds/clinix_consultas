@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './historyComplete.css';
 
-interface HistoryCompleteProps {
-    onVoltar?: () => void;
-}
 
-function HistoryComplete({ onVoltar }: HistoryCompleteProps) {
+
+function HistoryComplete() {
     const [pesquisa, setPesquisa] = useState('');
 
     // Array baseado no seu JSON original, acrescido apenas de 'id' e 'location' para compor o layout
@@ -49,7 +47,6 @@ function HistoryComplete({ onVoltar }: HistoryCompleteProps) {
         <div className="history-complete-container">
             <header className="history-complete-header">
                 <div className="title-section">
-                    <button className="btn-voltar-seta" onClick={onVoltar}>←</button>
                     <h2>Histórico de Consultas</h2>
                 </div>
                 <div className="search-box">

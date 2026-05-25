@@ -1,6 +1,9 @@
 import React from 'react';
 import Dashboard from './dashboard/dashboard';
 import HistoryComplete from './history/historyComplete';
+import Appointment from './appointment/appointment';
+import Doctors from './doctors/doctors';
+import Configs from './configs/configs';
 
 // Definimos o que o Content vai receber do Feed
 interface ContentProps {
@@ -17,19 +20,18 @@ function Content({ telaAtiva, setTelaAtiva }: ContentProps) {
                 switch (telaAtiva) {
                     case 0:
                         // Dashboard renderizado. Se clicar no botão interno de ver histórico, vira tela 4
-                        return <Dashboard onVerHistorico={() => setTelaAtiva(4)} />;
+                        return <Dashboard onVerHistorico={() => setTelaAtiva(3)} />;
                     case 1:
-                        return <div><h2>Agendar Consulta</h2><p>(Página em construção)</p></div>;
+                        return <Appointment/>
                     case 2:
-                        return <div><h2>Meus Médicos</h2><p>(Página em construção)</p></div>;
+                        return <Doctors/>
                     case 3:
-                        return <div><h2>Pagamentos</h2><p>(Página em construção)</p></div>;
+                        return <HistoryComplete/>
                     case 4:
-                        // Histórico Completo. Se clicar na setinha de voltar, retorna para a tela 0
-                        return <HistoryComplete onVoltar={() => setTelaAtiva(0)} />;
+                        return <Configs/>
                     default:
                         // Por segurança, se der algum número errado, mostra sempre o Dashboard
-                        return <Dashboard onVerHistorico={() => setTelaAtiva(4)} />;
+                        return <Dashboard onVerHistorico={() => setTelaAtiva(0)} />;
                 }
             })()}
         </div>
