@@ -27,6 +27,14 @@ function Login({changeAuth}:  Props) {
       };
       //linha pra fazer a requisicao, assim como no register
       const response = await getLogin(login);
+
+        if(response.status === 200){
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
+          window.location.href = "/feed";
+        } else {
+          alert("Login falhou. Verifique suas credenciais.");
+        } 
     }
 
   
@@ -49,7 +57,7 @@ function Login({changeAuth}:  Props) {
             <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button> 
           </div>
 
-          <button type="submit" className="btn-login">Criar Conta</button>
+          <button type="submit" className="btn-login">Entrar na Conta</button>
           
         </form>
 
