@@ -1,27 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from 'lucide-react';
 import './configs.css';
 
+// 1. Definimos a interface (formato do JSON) que o backend vai nos enviar
+interface UserProfile {
+  nome: string;
+  perfil: string;
+  email: string;
+  telefone: string;
+}
+
 export const Configs = () => {
-  // Estados para o formulário de Senha
+  // 2. Estado principal do usuário começa "vazio" (null)
+  const [usuario, setUsuario] = useState<UserProfile | null>(null);
+
+  // Estados para o formulário de Senha (iniciam vazios)
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
-  // Estados para o formulário de Contato
-  const [email, setEmail] = useState('exemplo@gamil.com');
-  const [telefone, setTelefone] = useState('(00) 9 9999-9999');
+  // Estados para o formulário de Contato (iniciam vazios)
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+
+  // 3. useEffect para buscar os dados assim que a tela carregar
+  useEffect(() => {
+    // AQUI ENTRARÁ SUA REQUISIÇÃO REAL:
+    // fetch('https://sua-api.com/usuario/perfil')
+    //   .then(res => res.json())
+    //   .then((data: UserProfile) => {
+    //      setUsuario(data);
+    //      setEmail(data.email);
+    //      setTelefone(data.telefone);
+    //   });
+
+    // Simulando a chegada do JSON do backend para você ver funcionando:
+    const mockJsonBackend: UserProfile = {
+      nome: "Sr. João Silva",
+      perfil: "Paciente",
+      email: "exemplo@gmail.com",
+      telefone: "(00) 9 9999-9999"
+    };
+
+    // Preenchemos os estados com as informações que vieram da "API"
+    setUsuario(mockJsonBackend);
+    setEmail(mockJsonBackend.email);
+    setTelefone(mockJsonBackend.telefone);
+  }, []);
 
   const handleSalvarSenha = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar nova senha clicado");
-    // Lógica da API aqui
+    // JSON que será enviado no POST/PUT de alteração de senha
+    const payloadSenha = {
+      senhaAtual,
+      novaSenha,
+      confirmarSenha
+    };
+    console.log("Enviando JSON de nova senha:", payloadSenha);
   };
 
   const handleSalvarContato = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar contato clicado");
-    // Lógica da API aqui
+    // JSON que será enviado no POST/PUT de alteração de contato
+    const payloadContato = {
+      email,
+      telefone
+    };
+    console.log("Enviando JSON de contato:", payloadContato);
   };
 
   return (
@@ -36,8 +81,9 @@ export const Configs = () => {
             <User size={36} color="#ffffff" strokeWidth={2} />
           </div>
           <div className="set-profile-info">
-            <h2 className="set-profile-name">Sr. João Silva</h2>
-            <p className="set-profile-role">Paciente</p>
+            {/* Renderiza o nome se o JSON já chegou, senão mostra "Carregando..." */}
+            <h2 className="set-profile-name">{usuario ? usuario.nome : 'Carregando...'}</h2>
+            <p className="set-profile-role">{usuario ? usuario.perfil : '...'}</p>
           </div>
         </div>
       </div>
@@ -57,6 +103,7 @@ export const Configs = () => {
                 placeholder="Digite sua senha atual" 
                 value={senhaAtual}
                 onChange={(e) => setSenhaAtual(e.target.value)}
+                required
               />
             </div>
             
@@ -67,6 +114,7 @@ export const Configs = () => {
                 placeholder="Digite nova senha forte" 
                 value={novaSenha}
                 onChange={(e) => setNovaSenha(e.target.value)}
+                required
               />
             </div>
             
@@ -77,6 +125,7 @@ export const Configs = () => {
                 placeholder="Repita nova senha" 
                 value={confirmarSenha}
                 onChange={(e) => setConfirmarSenha(e.target.value)}
+                required
               />
             </div>
 
@@ -98,6 +147,7 @@ export const Configs = () => {
                 placeholder="exemplo@email.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             
@@ -108,6 +158,7 @@ export const Configs = () => {
                 placeholder="(00) 9 9999-9999" 
                 value={telefone}
                 onChange={(e) => setTelefone(e.target.value)}
+                required
               />
             </div>
 
