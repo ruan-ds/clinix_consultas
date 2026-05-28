@@ -15,6 +15,7 @@ class Person(Entity):
 
     address = relationship("Address", back_populates="persons")
     patient_access = relationship("PatientAccess", back_populates="person", uselist=False)
+    patient = relationship("Patient", back_populates="person", uselist=False)
     clinical_access = relationship("ClinicalAccess", back_populates="person")
     clinix_access = relationship("ClinixAccess", back_populates="person", uselist=False)
 
