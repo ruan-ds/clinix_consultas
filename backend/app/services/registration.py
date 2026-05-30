@@ -1,6 +1,7 @@
 from app.exceptions.auth_exceptions import cpf_already_exists, email_already_exists, invalid_cpf
 
 from app.models.address import Address
+from app.models.patient import Patient
 from app.models.patient_access import PatientAccess
 from app.models.person import Person
 from app.models.phone import Phone
@@ -80,6 +81,16 @@ def create_patient_access(db: Session, data: CreatePatientAccess, person_id: int
     return new_patient_access
 
 
+def create_patient(db: Session, person_id: int) -> Patient:
+    new_patient = Patient(person_id=person_id)
+
+    db.add(new_patient)
+    db.flush()
+    db.refresh(new_patient)
+
+    return new_patient
+
+
 def register_patient_access_service(db: Session, data: FullPatientAccessRegistration):
     try:
         with db.begin():
@@ -108,6 +119,11 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
                 db=db,
                 data=data.phone,
                 entity_id=person.id
+            )
+
+            patient = create_patient(
+                db=db,
+                person_id=person.id
             )
 
             patient_access = create_patient_access(
