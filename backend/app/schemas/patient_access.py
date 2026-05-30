@@ -50,5 +50,6 @@ class FullPatientAccessRegistration(BaseModel):
     access: CreatePatientAccess
 
 
-class LoginPatientAccess(CreatePatientAccess):
-    pass
+class LoginPatientAccess(BaseModel):
+    email: str
+    password: str

@@ -1,0 +1,164 @@
+/* doctors.css */
+
+.dr-container {
+  width: 100%;
+  max-width: 1500px;
+  padding: 32px;
+  background-color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+/* Cabeçalho: Título e Busca na mesma linha */
+.dr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.dr-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* Barra de Pesquisa */
+.dr-search-container {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #111827; /* Borda preta conforme print */
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.dr-search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  color: #374151;
+}
+
+.dr-search-icon {
+  color: #111827;
+  margin-left: 10px;
+}
+
+/* Grid de Cards */
+.dr-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .dr-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas no desktop */
+  }
+}
+
+/* O Card do Médico */
+.dr-card {
+  display: flex;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* Borda cinza suave */
+  border-radius: 12px;
+  padding: 20px;
+  gap: 20px;
+  transition: box-shadow 0.2s;
+}
+
+.dr-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Avatar Placeholder (Substituindo a imagem) */
+.dr-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dr-avatar-placeholder {
+  width: 110px;
+  height: 110px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+}
+
+/* Conteúdo do Card */
+.dr-info-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dr-medico-nome {
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.dr-medico-local {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Botões do Card */
+.dr-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dr-btn-perfil {
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.dr-btn-perfil:hover {
+  opacity: 0.9;
+}
+
+.dr-btn-servicos {
+  background-color: #ffffff;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.dr-btn-servicos:hover {
+  background-color: #f9fafb;
+}
+
+.dr-vazio {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6b7280;
+  padding: 40px;
+}
