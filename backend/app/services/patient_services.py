@@ -15,7 +15,7 @@ def get_appointment_history_service(db: Session, patient_id: int):
         if appt.doctor and appt.doctor.clinical_access and appt.doctor.clinical_access.person:
             doctor_name = appt.doctor.clinical_access.person.name
 
-        clinic_name = appt.clinic.name if appt.clinic else "Clínica não identificada"
+        clinic_name = appt.clinic.trade_name if appt.clinic else "Clínica não identificada"
 
         address_str = "Endereço não disponível"
         if appt.clinic and appt.clinic.address:
