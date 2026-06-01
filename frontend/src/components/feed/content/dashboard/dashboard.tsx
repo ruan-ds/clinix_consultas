@@ -15,8 +15,8 @@ function Dashboard({ onVerHistorico }: DashboardProps) {
     const [estado, setEstado] = useState(0);
     
     // proxima consulta é lista com os dados da consulta que iremos receber do backend e passsar pro componente de card
-    const proximaConsulta = null;
-    /*
+    //const proximaConsulta = null;
+    
     const proximaConsulta = {
         doctorName: "Dr. Marcos Paulo",
         specialty: "Cardiologia",
@@ -24,7 +24,7 @@ function Dashboard({ onVerHistorico }: DashboardProps) {
         time: "14:30",
         location: "Consultório 3, Bloco B"
     };
-    */
+
 
     // aqui sao as informações do historico de consultas do paciente, que será passado pelo back
     //const Historico: any[] = [];
