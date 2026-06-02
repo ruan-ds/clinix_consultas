@@ -19,9 +19,15 @@ class CreatePatientAccess(BaseModel):
     password: Annotated[str, StringConstraints(min_length=8)]
 
 
-class UpdatePatientAccess(BaseModel):
+class UpdatePatientPassword(BaseModel):
+    current_password: str
+    new_password: Annotated[str, StringConstraints(min_length=8)]
+    confirm_password: Annotated[str, StringConstraints(min_length=8)]
+
+
+class UpdatePatientContact(BaseModel):
     email: Optional[Annotated[str, StringConstraints(max_length=300)]] = None
-    password: Optional[Annotated[str, StringConstraints(min_length=8)]] = None
+    phone: Optional[Annotated[str, StringConstraints(min_length=11, max_length=11)]] = None
 
 
 class OutPatientAccess(BasePatientAccess):
