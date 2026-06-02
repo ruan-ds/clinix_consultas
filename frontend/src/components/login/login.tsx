@@ -4,6 +4,7 @@ import logo from '../../assets/images/logoNome.png';
 import { useState } from "react"
 import { getLogin } from "../../services/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { saveToken } from "../../services/tokenService";
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
@@ -28,11 +29,10 @@ function Login({changeAuth}:  Props) {
       //linha pra fazer a requisicao, assim como no register
       const response = await getLogin(login);
 
-        if(response.status === 200){
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          window.location.href = "/feed";
-        } else {
+      if (response.status === 200) {
+    saveToken(response.data.access_token);
+    window.location.href = "/feed";
+    }else {
           alert("Login falhou. Verifique suas credenciais.");
         } 
     }

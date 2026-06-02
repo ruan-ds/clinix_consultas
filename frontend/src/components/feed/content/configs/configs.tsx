@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { User } from 'lucide-react';
+import { User, LogOut } from 'lucide-react'; // Importado o ícone LogOut
 import './configs.css';
+import { removeToken } from '../../../../services/tokenService';
 
-export const Configs = () => {
+interface ConfigsProps {
+    userName: string; 
+}
+
+export const Configs = ({ userName }: ConfigsProps) => {
   // Estados para o formulário de Senha
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
@@ -24,6 +29,12 @@ export const Configs = () => {
     // Lógica da API aqui
   };
 
+  // Função para gerenciar o clique de logout
+  const handleLogout = () => {
+    removeToken();                                    // apaga o token do localStorage
+    window.location.href = "/authenticantion.html";
+  };
+
   return (
     <div className="set-container">
       
@@ -32,13 +43,21 @@ export const Configs = () => {
         <h1 className="set-title">Configurações</h1>
         
         <div className="set-profile-card">
-          <div className="set-avatar-placeholder">
-            <User size={36} color="#ffffff" strokeWidth={2} />
+          <div className="set-profile-left">
+            <div className="set-avatar-placeholder">
+              <User size={36} color="#ffffff" strokeWidth={2} />
+            </div>
+            <div className="set-profile-info">
+              <h2 className="set-profile-name">{userName.split(" ")[0]}!</h2>
+              <p className="set-profile-role">Paciente</p>
+            </div>
           </div>
-          <div className="set-profile-info">
-            <h2 className="set-profile-name">Sr. João Silva</h2>
-            <p className="set-profile-role">Paciente</p>
-          </div>
+
+          {/* Novo Botão de Logout */}
+          <button className="set-logout-btn" onClick={handleLogout} title="Sair do sistema">
+            <LogOut size={18} />
+            <span>Sair</span>
+          </button>
         </div>
       </div>
 

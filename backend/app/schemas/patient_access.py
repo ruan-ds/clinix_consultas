@@ -36,6 +36,11 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OutPatientAccessWithName(OutPatientAccess):
+    person_name: str
+    model_config = ConfigDict(from_attributes=True)
+
+    
 class OutLoginPatientAccess(BaseModel):
     access_token: str
     token_type: str

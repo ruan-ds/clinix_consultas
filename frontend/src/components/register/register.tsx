@@ -153,7 +153,7 @@ function Register({ changeAuth }: Props) {
             </div>
 
             <div className="input-group">
-                          <input type={showPassword ? "text" : "password"} id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
+                          <input type={showPassword ? "text" : "password"} id="password" minLength={8} placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
                           <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button>             </div>
 
             <button type="submit" className="btn-register">Prosseguir</button>

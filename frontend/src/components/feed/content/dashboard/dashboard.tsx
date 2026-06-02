@@ -8,9 +8,10 @@ import imagem from '../../../../assets/images/imgdashboard.png';
 
 interface DashboardProps {
     onVerHistorico: () => void;
+    userName: string;
 }
 
-function Dashboard({ onVerHistorico }: DashboardProps) {
+function Dashboard({ onVerHistorico, userName }: DashboardProps) {
 
     const [estado, setEstado] = useState(0);
     
@@ -78,7 +79,7 @@ function Dashboard({ onVerHistorico }: DashboardProps) {
     return (
         <div className="dashboard-wrapper">
             <header className="dashboard-header">
-                <h1>Bem-vindo de volta, user!</h1>
+                <h1>Bem-vindo de volta, {userName.split(" ")[0]}</h1>
                 <p>Sua saúde em dia.</p>
             </header>
 
@@ -119,7 +120,7 @@ function Dashboard({ onVerHistorico }: DashboardProps) {
         <div className="dashboard-wrapper empty-state-container">
             <div className="empty-state-content">
                 <img src={imagem} alt="Calendário Clinix" className="empty-state-img" />
-                <h2>Bem-vindo, Gabriel! Vamos agendar sua primeira consulta?</h2>
+                 <h2>Bem-vindo, {userName.split(" ")[0]}! Vamos agendar sua primeira consulta?</h2>
                 <p>Você ainda não tem agendamentos ou históricos. Comece agora!</p>
                 <button className="empty-state-btn">Agendar minha primeira consulta</button>
             </div>

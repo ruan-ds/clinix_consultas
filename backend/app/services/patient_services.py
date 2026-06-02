@@ -12,7 +12,7 @@ from app.models.patient_access import PatientAccess
 from app.models.phone import Phone
 from app.models.service import Service
 from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation
-from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword
+from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword, OutPatientAccessWithName
 from app.utils.security import hash_password, verify_password
 
 
@@ -38,8 +38,17 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
         .first()
     )
 
+
+    patient_out = OutPatientAccessWithName(
+        id=patient.id,
+        person_id=patient.person_id,
+        email=patient.email,
+        is_active=patient.is_active,
+        person_name=patient.person.name,
+    )
+
     return FeedValidation(
-        patient=patient,
+        patient=patient_out,
         has_upcoming_appointments=bool(next_appointment),
         next_appointment=next_appointment,
     )

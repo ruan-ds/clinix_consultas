@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.patient_access import OutPatientAccess
+from app.schemas.patient_access import OutPatientAccessWithName
 
 
 class CreatePatientAppointment(BaseModel):
@@ -31,7 +31,7 @@ class OutMedicalAppointment(BaseModel):
 
 
 class FeedValidation(BaseModel):
-    patient: OutPatientAccess
+    patient: OutPatientAccessWithName
     has_upcoming_appointments: bool
     next_appointment: Optional[OutMedicalAppointment] = None
     model_config = ConfigDict(from_attributes=True)
