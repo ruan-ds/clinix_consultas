@@ -37,7 +37,7 @@ class FeedValidation(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class AppointmentHistoryOut(BaseModel):
+class OutAppointmentHistory(BaseModel):
     id: int
     doctor_name: str
     clinic_name: str
