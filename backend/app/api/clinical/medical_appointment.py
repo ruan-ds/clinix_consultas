@@ -10,7 +10,7 @@ from app.models.patient import Patient
 
 router = APIRouter(prefix="/medical-appointments", tags=["Medical Appointments"])
 
-@router.get("/history", response_model=List[AppointmentHistoryOut])
+@router.get("/history", response_model=List[OutAppointmentHistory])
 def get_history(
     db: Session = Depends(get_db),
     current_user: PatientAccess = Depends(get_current_patient)
