@@ -9,9 +9,10 @@ import imagem from '../../../../assets/images/imgdashboard.png';
 interface DashboardProps {
     onVerHistorico: () => void;
     userName: string;
+    onAgendar: () => void;
 }
 
-function Dashboard({ onVerHistorico, userName }: DashboardProps) {
+function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
 
     const [estado, setEstado] = useState(0);
     
@@ -92,7 +93,7 @@ function Dashboard({ onVerHistorico, userName }: DashboardProps) {
 
                 {/* Lado Direito - Botões de Ação */}
                 <div className="action-cards-section">
-                    <button className="action-btn">
+                    <button className="action-btn" onClick={onAgendar}>
                         <span className="icon-placeholder"><FaCalendarCheck /></span> 
                         Agendar Nova Consulta
                     </button>

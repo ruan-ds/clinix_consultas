@@ -18,7 +18,7 @@ function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
             {(() => {
                 switch (telaAtiva) {
                     case 0:
-                        return <Dashboard onVerHistorico={() => setTelaAtiva(3)} userName={userName} />; // ← repassa
+                        return <Dashboard onVerHistorico={() => setTelaAtiva(3)} onAgendar={() => setTelaAtiva(1)} userName={userName} />; // ← repassa
                     case 1:
                         return <Appointment/>
                     case 2:
@@ -28,7 +28,7 @@ function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
                     case 4:
                         return <Configs userName={userName} />
                     default:
-                        return <Dashboard onVerHistorico={() => setTelaAtiva(0)} userName={userName} />;
+                        return <Dashboard onVerHistorico={() => setTelaAtiva(0)} onAgendar={() => setTelaAtiva(1)} userName={userName} />;
                 }
             })()}
         </div>
