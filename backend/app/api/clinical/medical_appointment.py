@@ -2,14 +2,19 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app.core.database import get_db
-from app.schemas.medical_appointment import AppointmentHistoryOut
+from app.schemas.medical_appointment import OutAppointmentHistory
 from app.services.patient_services import get_appointment_history_service
+from app.api.public.patient import get_current_patient
+from app.models.patient_access import PatientAccess
+from app.models.patient import Patient
 
 router = APIRouter(prefix="/medical-appointments", tags=["Medical Appointments"])
 
 @router.get("/history", response_model=List[AppointmentHistoryOut])
 def get_history(
-    patient_id: int, 
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: PatientAccess = Depends(get_current_patient)
 ):
-    return get_appointment_history_service(db, patient_id)
+    patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
+    
+    return get_appointment_history_service(db, patient.id)
