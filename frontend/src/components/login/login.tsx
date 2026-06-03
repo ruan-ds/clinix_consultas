@@ -6,11 +6,11 @@ import { getLogin } from "../../services/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { saveToken } from "../../services/tokenService";
 
+
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
   changeAuth: (valor: number) => void;//defino que o parâmetro changeAuth deve receber somente numeros, é void pois nao retorna nada
 };
-
 function Login({changeAuth}:  Props) {
 
   // variavel pra alterar a visibilidade da senha
@@ -19,24 +19,21 @@ function Login({changeAuth}:  Props) {
   //vai chamar os dados 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [erro, setErro] = useState("");
+  async function sign_in() {
+  try {
+    const login = { email, password };
+    const response = await getLogin(login);
 
-    async function sign_in() {
-
-      const login = {
-           email: email,
-           password: password
-      };
-      //linha pra fazer a requisicao, assim como no register
-      const response = await getLogin(login);
-
-      if (response.status === 200) {
-    saveToken(response.data.access_token);
-    window.location.href = "/feed";
-    }else {
-          alert("Login falhou. Verifique suas credenciais.");
-        } 
+    if (response.status === 200) {
+      saveToken(response.data.access_token);
+      window.location.href = "/feed.html";
     }
-
+  } catch (error: any) {
+    const mensagem = error.response?.data?.detail;
+    setErro(mensagem || "E-mail ou senha incorretos.");
+  }
+  }
   
   return (
      <main className="login-container">
@@ -57,7 +54,7 @@ function Login({changeAuth}:  Props) {
             <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button> 
           </div>
 
-          <button type="submit" className="btn-login">Entrar na Conta</button>
+          <button type="submit" className="btn-login">Entrar na Conta</button>{erro && <p className="erro-msg">{erro}</p>}
           
         </form>
 

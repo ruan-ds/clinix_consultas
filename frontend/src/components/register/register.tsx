@@ -39,6 +39,9 @@ function Register({ changeAuth }: Props) {
   //requisicao do telefone 
   const [telefone, setTelefone] = useState("");
 
+  //armazenar erro
+  const [erro, setErro] = useState("");
+
   function renderEstados() {
     const estados: { nome: string; sigla: string }[] = [
       { nome: "Acre", sigla: "AC" },
@@ -126,14 +129,11 @@ function Register({ changeAuth }: Props) {
         } 
 
 
-} catch (error: any) {
-  console.log("Erro completo:", error);
-  console.log(
-  "Erro backend:",
-  JSON.stringify(error.response?.data, null, 2)
-);
-}
-  }
+        } catch (error: any) {
+          const mensagem = error.response?.data?.detail;
+          setErro(mensagem || "Erro ao criar conta. Verifique os dados.");
+          }
+        }
 
 
   if (estado === 0) {
@@ -297,6 +297,7 @@ function Register({ changeAuth }: Props) {
             </div>
 
             <button type="submit" className="btn-register">Criar Conta</button>
+            {erro && <p className="erro-msg">{erro}</p>}
           </form>
 
           <div className="signup-footer">
