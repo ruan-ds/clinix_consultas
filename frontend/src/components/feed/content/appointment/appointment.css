@@ -1,0 +1,770 @@
+/* appointment.css */
+
+/* =========================================
+   BASE E ETAPA 1 (Mantido do seu original)
+   ========================================= */
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ac-container {
+  width: 100%;
+  max-width: 1500px;
+  padding: 32px;
+  background-color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  padding-top: 25px;
+}
+
+/* Cabeçalho e Progresso */
+.ac-header {
+  margin-bottom: 40px;
+}
+
+.ac-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.ac-subtitle {
+  font-size: 16px;
+  color: #4b5563;
+  margin: 0 0 12px 0;
+}
+
+.ac-progress-track {
+  width: 100%;
+  height: 10px;
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ac-progress-fill {
+  height: 100%;
+  background-color: #149488;
+  border-radius: 999px;
+  transition: width 0.4s ease-in-out;
+}
+
+/* Especialidades (GRID) */
+.ac-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px 0;
+}
+
+.ac-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .ac-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .ac-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ac-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.ac-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(20, 148, 136, 0.3);
+}
+
+.ac-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ac-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.ac-card:hover .ac-icon-container {
+  background-color: #99f6e4;
+}
+
+.ac-card-title {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.ac-arrow-icon {
+  color: #0f766e;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.ac-card:hover .ac-arrow-icon {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* =========================================
+   NOVAS CLASSES: ETAPAS 1.5, 2 e 3
+   ========================================= */
+
+/* Botão Voltar (Geral) */
+.ac-btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border: none;
+  color: #4b5563;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+  font-weight: 600;
+}
+
+.ac-btn-voltar:hover {
+  background-color: #e5e7eb;
+}
+
+/* =========================================
+   ETAPA 1.5: CLÍNICAS (LISTA VERTICAL)
+   ========================================= */
+.ac-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ac-card-clinica {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.ac-card-clinica:hover {
+  border-color: #149488;
+  box-shadow: 0 4px 12px rgba(20, 148, 136, 0.15);
+}
+
+.ac-clinica-nome {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.ac-clinica-endereco {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================================
+   ETAPA 2: MÉDICOS E HORÁRIOS
+   ========================================= */
+.ac-medico-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  gap: 20px; /* Espaçamento interno mobile */
+}
+
+@media (min-width: 768px) {
+  .ac-medico-card {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+.ac-medico-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ac-medico-nome {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.ac-medico-esp {
+  color: #4b5563;
+  margin: 0;
+  font-size: 15px;
+}
+
+.ac-medico-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #eab308; /* Amarelo da estrela */
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.ac-medico-local {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.ac-medico-agenda {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .ac-medico-agenda {
+    align-items: flex-end; /* Alinha à direita no Desktop */
+  }
+}
+
+.ac-agenda-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.ac-horarios-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ac-horario-badge {
+  background-color: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ac-horario-badge:hover {
+  background-color: #99f6e4;
+  border-color: #0f766e;
+}
+
+.ac-btn-agendar {
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ac-btn-agendar {
+    width: auto;
+  }
+}
+
+.ac-btn-agendar:hover {
+  background-color: #0f766e;
+}
+
+/* =========================================
+   ETAPA 3: CONFIRMAÇÃO (REPLICANDO IMAGEM)
+   ========================================= */
+.ac-confirmacao-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: #f9fafb;
+  gap: 20px;
+}
+
+.ac-confirmacao-detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.ac-conf-secao {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ac-conf-icon {
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.ac-conf-info-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.ac-conf-medico-foto {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ac-conf-info {
+  margin-top: 2px;
+}
+
+.ac-conf-nome {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.ac-conf-sub {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 2px 0;
+}
+
+.ac-conf-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #eab308;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Card Visual da Clínica (Canto direito com borda verde) */
+.ac-clinica-visual-card {
+  border: 2px solid #149488; /* Borda verde característica */
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ac-clinica-visual-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.ac-clinica-visual-card p {
+  font-weight: 600;
+  color: #111827;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.ac-estrelas {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* Botões */
+.ac-btn-principal {
+  width: 100%;
+  background-color: #149488; /* Verde/Teal */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background-color 0.2s;
+}
+
+.ac-btn-principal:hover {
+  background-color: #0f766e;
+}
+
+.ac-btn-secundario {
+  width: 100%;
+  background-color: #6b7280; /* Cinza escuro da imagem */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ac-btn-secundario:hover {
+  background-color: #4b5563;
+}
+
+/* =========================================
+   ETAPA 4: SUCESSO (Adicionada)
+   ========================================= */
+.ac-sucesso-container {
+  text-align: center;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.ac-sucesso-circulo {
+  width: 100px;
+  height: 100px;
+  background-color: #149488;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.ac-sucesso-box {
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
+}
+
+.ac-sucesso-box p {
+  margin: 8px 0;
+  color: #4b5563;
+}
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 3 (CONFIRMAÇÃO)
+   ========================================= */
+
+/* A CAIXA GRANDE (Essa fará a borda igual ao print aparecer) */
+.ac-confirmacao-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #d1d5db; /* Borda cinza clara visível */
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra suave para destacar */
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+/* O Grid interno 2x2 para alinhar Médico, Data, Paciente e Local */
+.ac-conf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 24px;
+  flex: 1;
+}
+
+.ac-conf-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #111827;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Estilos do Boneco/Médico */
+.ac-conf-medico {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ac-avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ac-texto-nome { margin: 0; font-weight: 700; color: #111827; font-size: 16px; }
+.ac-texto-sub { margin: 2px 0; color: #4b5563; font-size: 14px; }
+.ac-texto-rating { margin: 4px 0 0 0; color: #4b5563; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+
+/* Textos padrões (Data, Paciente, Local) */
+.ac-texto-destaque {
+  margin: 0;
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Lado Direito: Card da Clínica com borda verde */
+.ac-clinica-card {
+  border: 2px solid #149488;
+  border-radius: 12px;
+  padding: 12px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ac-clinica-foto {
+  width: 100%;
+  height: 90px;
+  background-color: #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.ac-clinica-nome-card {
+  margin: 4px 0 8px 0;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+}
+
+.ac-estrelas {
+  display: flex;
+  gap: 2px;
+}
+
+/* =========================================
+   BOTÕES GIGANTES DA ETAPA 3
+   ========================================= */
+.ac-botoes-finais {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ac-btn-verde {
+  width: 100%;
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(20, 148, 136, 0.2);
+  transition: opacity 0.2s;
+}
+
+.ac-btn-verde:hover { opacity: 0.9; }
+
+.ac-btn-cinza {
+  width: 100%;
+  background-color: #8c8c8c; /* Cor cinza do seu print */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s;
+}
+
+.ac-btn-cinza:hover { opacity: 0.9; }
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 4 (SUCESSO)
+   ========================================= */
+.ac-sucesso-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.ac-icone-sucesso {
+  width: 90px;
+  height: 90px;
+  background-color: #149488;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 4 (SUCESSO)
+   ========================================= */
+
+/* Centraliza o card na tela */
+.ac-container-centralizado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh; /* Faz o container ocupar a altura da tela para centralizar verticalmente */
+}
+
+/* O Quadrado de Notificação (Card branco com sombra) */
+.ac-sucesso-box-notificacao {
+  background-color: #ffffff;
+  padding: 48px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Sombra mais destacada parecendo notificação */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 500px; /* Impede que o quadrado fique muito largo */
+  border: 1px solid #f3f4f6; /* Borda bem suave */
+}
+
+.ac-icone-sucesso {
+  width: 72px;
+  height: 72px;
+  background-color: #149488; /* Verde/Teal */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(20, 148, 136, 0.3); /* Sombreado leve no próprio ícone */
+}
+
+.ac-title-sucesso {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.ac-subtitle-sucesso {
+  font-size: 15px;
+  color: #4b5563;
+  margin: 0 0 32px 0;
+}
+
+/* Ajuste específico para o botão da tela de sucesso */
+.ac-btn-sucesso {
+  width: auto;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* =========================================
+   BARRA DE PESQUISA (ETAPA 1 E OUTRAS)
+   ========================================= */
+
+.ac-search-container {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* Borda cinza clara */
+  border-radius: 999px; /* Formato de pílula arredondada */
+  padding: 12px 20px;
+  margin-bottom: 32px; /* Espaço entre a barra e o título "Clínicas Disponíveis" */
+  transition: all 0.2s ease;
+}
+
+.ac-search-container:focus-within {
+  border-color: #149488; /* Fica verde ao clicar */
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.1);
+}
+
+.ac-search-icon {
+  color: #9ca3af;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.ac-search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  color: #374151;
+  background: transparent;
+}
+
+.ac-search-input::placeholder {
+  color: #9ca3af;
+}

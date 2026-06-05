@@ -1,0 +1,151 @@
+/* settings.css */
+
+.set-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 40px;
+  background-color: #ffffff; /* Fundo levemente cinza/azulado do projeto */
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+/* ================================
+   CABEÇALHO E PERFIL
+   ================================ */
+.set-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.set-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* Card do Paciente no topo direito */
+.set-profile-card {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #20857c; /* Borda verde/teal do print */
+  border-radius: 8px;
+  padding: 12px 24px 12px 12px;
+  gap: 16px;
+  min-width: 300px;
+}
+
+.set-avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #20857c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-profile-name {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.set-profile-role {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* ================================
+   GRID DE FORMULÁRIOS
+   ================================ */
+.set-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 900px) {
+  .set-grid {
+    grid-template-columns: 1fr 1fr; /* Duas colunas em telas maiores */
+  }
+}
+
+.set-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombreado suave */
+  display: flex;
+  flex-direction: column;
+}
+
+.set-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px 0;
+}
+
+/* ================================
+   INPUTS E BOTÕES
+   ================================ */
+.set-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Faz o form preencher o card para empurrar o botão pra baixo */
+}
+
+.set-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.set-input-group label {
+  font-size: 16px;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.set-input-group input {
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #20857c; /* Borda verde/teal igual ao print */
+  border-radius: 8px;
+  outline: none;
+  color: #111827;
+  transition: box-shadow 0.2s;
+}
+
+.set-input-group input::placeholder {
+  color: #9ca3af;
+}
+
+.set-input-group input:focus {
+  box-shadow: 0 0 0 2px rgba(32, 133, 124, 0.2);
+}
+
+.set-btn {
+  background-color: #20857c; /* Verde padrão do projeto */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: opacity 0.2s;
+}
+
+.set-btn:hover {
+  opacity: 0.9;
+}
