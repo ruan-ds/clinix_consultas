@@ -10,7 +10,7 @@ from typing import Optional, Annotated
 
 
 class BasePatientAccess(BaseModel):
-    person_id: int
+    patient_id: int
     email: Annotated[str, StringConstraints(max_length=300)]
 
 

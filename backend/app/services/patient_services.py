@@ -16,14 +16,14 @@ from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPasswo
 from app.utils.security import hash_password, verify_password
 
 
-def get_patient_access_by_id(db: Session, patient_id: int) -> Optional[PatientAccess]:
-    return db.query(PatientAccess).filter(PatientAccess.id == patient_id).first()
+def get_patient_access_by_patient_id(db: Session, patient_id: int) -> Optional[PatientAccess]:
+    return db.query(PatientAccess).filter(PatientAccess.patient_id == patient_id).first()
 
 
 def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
-    patient = get_patient_access_by_id(db, patient_id)
+    patient_access = get_patient_access_by_patient_id(db, patient_id)
 
-    if not patient or not patient.is_active:
+    if not patient_access or not patient_access.is_active:
         raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
 
     next_appointment = (
@@ -31,7 +31,7 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
         .join(DoctorScheduleSlot, MedicalAppointment.slot_id == DoctorScheduleSlot.id)
         .filter(
             MedicalAppointment.patient_id == patient_id,
-            MedicalAppointment.is_active == True,
+            MedicalAppointment.is_active,
             DoctorScheduleSlot.start_datetime >= datetime.now(timezone.utc),
         )
         .order_by(DoctorScheduleSlot.start_datetime)
@@ -40,11 +40,11 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
 
 
     patient_out = OutPatientAccessWithName(
-        id=patient.id,
-        person_id=patient.person_id,
-        email=patient.email,
-        is_active=patient.is_active,
-        person_name=patient.person.name,
+        id=patient_access.id,
+        patient_id=patient_access.patient_id,
+        email=patient_access.email,
+        is_active=patient_access.is_active,
+        person_name=patient_access.patient.name,
     )
 
     return FeedValidation(
@@ -55,22 +55,22 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
 
 
 def update_patient_contact_service(db: Session, patient_id: int, data: UpdatePatientContact) -> PatientAccess:
-    patient = get_patient_access_by_id(db, patient_id)
+    patient_access = get_patient_access_by_patient_id(db, patient_id)
 
-    if not patient or not patient.is_active:
+    if not patient_access or not patient_access.is_active:
         raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
 
-    if data.email and data.email != patient.email:
-        existing = db.query(PatientAccess).filter(PatientAccess.email == data.email, PatientAccess.id != patient_id).first()
+    if data.email and data.email != patient_access.email:
+        existing = db.query(PatientAccess).filter(PatientAccess.email == data.email, PatientAccess.patient_id != patient_id).first()
         if existing:
             raise HTTPException(status_code=400, detail="E-mail já em uso")
-        patient.email = data.email
+        patient_access.email = data.email
 
     phone_entry = None
     if data.phone:
         phone_entry = (
             db.query(Phone)
-            .filter(Phone.entity_id == patient.person_id)
+            .filter(Phone.entity_id == patient_id)
             .order_by(Phone.id)
             .first()
         )
@@ -79,51 +79,50 @@ def update_patient_contact_service(db: Session, patient_id: int, data: UpdatePat
             phone_entry.phone = data.phone
         else:
             phone_entry = Phone(
-                entity_id=patient.person_id,
+                entity_id=patient_id,
                 phone=data.phone,
                 type="mobile"
             )
             db.add(phone_entry)
 
     try:
-        with db.begin():
-            db.add(patient)
-            if phone_entry and phone_entry.id is None:
-                db.add(phone_entry)
-            db.flush()
-            db.refresh(patient)
+        db.add(patient_access)
+        if phone_entry and phone_entry.id is None:
+            db.add(phone_entry)
+        db.commit()
+        db.refresh(patient_access)
     except IntegrityError:
+        db.rollback()
         raise HTTPException(status_code=400, detail="Erro ao atualizar configurações de conta")
 
-    return patient
+    return patient_access
 
 
 def update_patient_password_service(db: Session, patient_id: int, data: UpdatePatientPassword) -> PatientAccess:
-    patient = get_patient_access_by_id(db, patient_id)
+    patient_access = get_patient_access_by_patient_id(db, patient_id)
 
-    if not patient or not patient.is_active:
+    if not patient_access or not patient_access.is_active:
         raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
 
     if data.new_password != data.confirm_password:
         raise HTTPException(status_code=400, detail="A nova senha e a confirmação não coincidem")
 
-    if not verify_password(data.current_password, patient.password_hash):
+    if not verify_password(data.current_password, patient_access.password_hash):
         raise HTTPException(status_code=401, detail="Senha atual incorreta")
 
-    patient.password_hash = hash_password(data.new_password)
+    patient_access.password_hash = hash_password(data.new_password)
 
-    with db.begin():
-        db.add(patient)
-        db.flush()
-        db.refresh(patient)
+    db.add(patient_access)
+    db.commit()
+    db.refresh(patient_access)
 
-    return patient
+    return patient_access
 
 
 def create_medical_appointment_service(db: Session, patient_id: int, data: CreatePatientAppointment) -> MedicalAppointment:
-    patient = get_patient_access_by_id(db, patient_id)
+    patient_access = get_patient_access_by_patient_id(db, patient_id)
 
-    if not patient or not patient.is_active:
+    if not patient_access or not patient_access.is_active:
         raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
 
     slot = db.query(DoctorScheduleSlot).filter(DoctorScheduleSlot.id == data.slot_id).first()
@@ -133,12 +132,18 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     if slot.start_datetime < datetime.now(timezone.utc):
         raise HTTPException(status_code=400, detail="Horário já expirado")
 
+    if slot.status != "available":
+        raise HTTPException(status_code=400, detail="Horário indisponível")
+
     if db.query(MedicalAppointment).filter(MedicalAppointment.slot_id == slot.id).first():
         raise HTTPException(status_code=400, detail="Horário já reservado")
 
-    doctor = db.query(Doctor).filter(Doctor.id == data.doctor_id, Doctor.is_active == True).first()
+    doctor = db.query(Doctor).filter(Doctor.id == data.doctor_id, Doctor.is_active).first()
     if not doctor:
         raise HTTPException(status_code=400, detail="Médico inválido")
+
+    if data.clinical_access_id and data.clinical_access_id != doctor.clinical_access_id:
+        raise HTTPException(status_code=400, detail="Profissional clínico inválido para o médico informado")
 
     clinical_access_id = data.clinical_access_id or doctor.clinical_access_id
     service_id = data.service_id
@@ -146,7 +151,7 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     if service_id is None:
         service = (
             db.query(Service)
-            .filter(Service.clinic_id == data.clinic_id, Service.is_active == True)
+            .filter(Service.clinic_id == data.clinic_id, Service.is_active)
             .order_by(Service.id)
             .first()
         )
@@ -159,7 +164,7 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
             .filter(
                 Service.id == service_id,
                 Service.clinic_id == data.clinic_id,
-                Service.is_active == True,
+                Service.is_active,
             )
             .first()
         )
@@ -177,11 +182,10 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
         notes=data.notes,
     )
 
-    with db.begin():
-        db.add(appointment)
-        slot.status = "booked"
-        db.add(slot)
-        db.flush()
-        db.refresh(appointment)
+    db.add(appointment)
+    slot.status = "booked"
+    db.add(slot)
+    db.commit()
+    db.refresh(appointment)
 
     return appointment

@@ -33,7 +33,7 @@ def get_current_patient(
     except (ValueError, TypeError):
         raise HTTPException(status_code=401, detail="Token inválido ou expirado")
 
-    patient = db.query(PatientAccess).filter(PatientAccess.id == patient_id).first()
+    patient = db.query(PatientAccess).filter(PatientAccess.patient_id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=401, detail="Paciente não encontrado")
 
@@ -45,7 +45,7 @@ def validate_feed(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
 ) -> FeedValidation:
-    return validate_feed_service(db=db, patient_id=current_user.id)
+    return validate_feed_service(db=db, patient_id=current_user.patient_id)
 
 
 @router.put("/account/password", response_model=OutPatientAccess)
@@ -54,7 +54,7 @@ def update_password(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
 ) -> OutPatientAccess:
-    return update_patient_password_service(db=db, patient_id=current_user.id, data=data)
+    return update_patient_password_service(db=db, patient_id=current_user.patient_id, data=data)
 
 
 @router.put("/account/contact", response_model=OutPatientAccess)
@@ -63,7 +63,7 @@ def update_contact(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
 ) -> OutPatientAccess:
-    return update_patient_contact_service(db=db, patient_id=current_user.id, data=data)
+    return update_patient_contact_service(db=db, patient_id=current_user.patient_id, data=data)
 
 
 @router.post("/appointments", response_model=OutMedicalAppointment)
@@ -72,4 +72,4 @@ def create_appointment(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
 ) -> OutMedicalAppointment:
-    return create_medical_appointment_service(db=db, patient_id=current_user.id, data=data)
+    return create_medical_appointment_service(db=db, patient_id=current_user.patient_id, data=data)
