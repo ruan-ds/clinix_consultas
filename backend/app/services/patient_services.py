@@ -189,3 +189,75 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     db.refresh(appointment)
 
     return appointment
+
+def get_appointment_history_service(db: Session, patient_id: int):
+    appointments = (
+        db.query(MedicalAppointment)
+        .filter(MedicalAppointment.patient_id == patient_id)
+        .order_by(MedicalAppointment.created_at.desc())
+        .all()
+    )
+
+    history = []
+    for appt in appointments:
+        doctor_name = "Médico não identificado"
+        if appt.doctor and appt.doctor.clinical_access and appt.doctor.clinical_access.person:
+            doctor_name = appt.doctor.clinical_access.person.name
+
+        clinic_name = appt.clinic.trade_name if appt.clinic else "Clínica não identificada"
+
+        address_str = "Endereço não disponível"
+        if appt.clinic and appt.clinic.address:
+            addr = appt.clinic.address
+            address_str = f"{addr.street}, {addr.number} - {addr.neighborhood}"
+
+        specialty = appt.service.name if appt.service else "Consulta Geral"
+
+        history.append({
+            "id": appt.id,
+            "doctor_name": doctor_name,
+            "clinic_name": clinic_name,
+            "address": address_str,
+            "status": appt.status,
+            "date": appt.created_at,
+            "specialty": specialty
+        })
+    
+    return history
+
+def get_my_doctors_service(db: Session, patient_id: int):
+    results = (
+        db.query(Doctor)
+        .join(MedicalAppointment, Doctor.id == MedicalAppointment.doctor_id)
+        .filter(MedicalAppointment.patient_id == patient_id)
+        .group_by(Doctor.id)
+        .all()
+    )
+
+    my_doctors = []
+    for doctor in results:
+        specialty_name = doctor.specialties[0].name if doctor.specialties else "Médico"
+        
+        last_appt = (
+            db.query(MedicalAppointment)
+            .filter(MedicalAppointment.doctor_id == doctor.id, MedicalAppointment.patient_id == patient_id)
+            .order_by(MedicalAppointment.created_at.desc())
+            .first()
+        )
+        
+        clinic_name = last_appt.clinic.trade_name if last_appt and last_appt.clinic else "Clínica"
+        
+        location_str = "Local não informado"
+        if last_appt and last_appt.clinic and last_appt.clinic.address:
+            addr = last_appt.clinic.address
+            location_str = f"{addr.city}/{addr.state}"
+
+        my_doctors.append({
+            "id": doctor.id,
+            "name": doctor.clinical_access.person.name,
+            "specialty": specialty_name,
+            "clinic": clinic_name,
+            "location": location_str
+        })
+    
+    return my_doctors
