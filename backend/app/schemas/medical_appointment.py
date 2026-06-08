@@ -35,3 +35,15 @@ class FeedValidation(BaseModel):
     has_upcoming_appointments: bool
     next_appointment: Optional[OutMedicalAppointment] = None
     model_config = ConfigDict(from_attributes=True)
+
+
+class AppointmentHistoryItem(BaseModel):
+    id: int
+    doctor_name: str
+    clinic_name: str
+    address: str
+    status: str
+    date: datetime
+    specialty: str
+
+    model_config = ConfigDict(from_attributes=True)

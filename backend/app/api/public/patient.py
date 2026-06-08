@@ -1,15 +1,17 @@
 from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 
 from app.core.database import get_db
 from app.models.patient_access import PatientAccess
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment
+from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment, AppointmentHistoryItem
 from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.services.patient_services import (
     create_medical_appointment_service,
     update_patient_contact_service,
     update_patient_password_service,
     validate_feed_service,
+    get_appointment_history_service,
 )
 from app.utils.jwt import decode_access_token
 
@@ -73,3 +75,11 @@ def create_appointment(
     db: Session = Depends(get_db),
 ) -> OutMedicalAppointment:
     return create_medical_appointment_service(db=db, patient_id=current_user.patient_id, data=data)
+
+
+@router.get("/appointments/history", response_model=List[AppointmentHistoryItem])
+def get_appointment_history(
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[AppointmentHistoryItem]:
+    return get_appointment_history_service(db=db, patient_id=current_user.patient_id)

@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Optional, List, Dict
 
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
+from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_schedule_slot import DoctorScheduleSlot
 from app.models.medical_appointment import MedicalAppointment
@@ -189,3 +190,66 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     db.refresh(appointment)
 
     return appointment
+
+
+def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
+    appointments = (
+        db.query(MedicalAppointment)
+        .options(
+            joinedload(MedicalAppointment.doctor).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.clinic).joinedload(Clinic.address),
+            joinedload(MedicalAppointment.slot),
+            joinedload(MedicalAppointment.service),
+        )
+        .filter(MedicalAppointment.patient_id == patient_id)
+        .order_by(MedicalAppointment.created_at.desc())
+        .all()
+    )
+
+    history = []
+    for appt in appointments:
+        # doctor name
+        doctor_name = "Médico não identificado"
+        if getattr(appt, "doctor", None):
+            ca = getattr(appt.doctor, "clinical_access", None)
+            person = getattr(ca, "person", None) if ca else None
+            if person and getattr(person, "name", None):
+                doctor_name = person.name
+
+        # clinic name
+        clinic_name = "Clínica não identificada"
+        if getattr(appt, "clinic", None) and getattr(appt.clinic, "trade_name", None):
+            clinic_name = appt.clinic.trade_name
+
+        # address string
+        address_str = "Endereço não disponível"
+        if getattr(appt, "clinic", None) and getattr(appt.clinic, "address", None):
+            addr = appt.clinic.address
+            street = getattr(addr, "street", "")
+            number = getattr(addr, "number", "")
+            neighborhood = getattr(addr, "neighborhood", "")
+            address_str = f"{street}, {number} - {neighborhood}".strip(", - ")
+
+        # specialty
+        specialty = "Consulta Geral"
+        if getattr(appt, "service", None) and getattr(appt.service, "name", None):
+            specialty = appt.service.name
+
+        # date: prefer slot.start_datetime, fallback para created_at
+        date = None
+        if getattr(appt, "slot", None) and getattr(appt.slot, "start_datetime", None):
+            date = appt.slot.start_datetime
+        else:
+            date = appt.created_at if getattr(appt, "created_at", None) else datetime.utcnow()
+
+        history.append({
+            "id": appt.id,
+            "doctor_name": doctor_name,
+            "clinic_name": clinic_name,
+            "address": address_str,
+            "status": appt.status,
+            "date": date,
+            "specialty": specialty
+        })
+
+    return history
