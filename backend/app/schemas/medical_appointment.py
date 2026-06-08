@@ -35,3 +35,24 @@ class FeedValidation(BaseModel):
     has_upcoming_appointments: bool
     next_appointment: Optional[OutMedicalAppointment] = None
     model_config = ConfigDict(from_attributes=True)
+
+class OutAppointmentHistory(BaseModel):
+    id: int
+    doctor_name: str
+    clinic_name: str
+    address: str
+    status: str
+    date: datetime
+    specialty: str
+
+    class Config:# Isso aí habilita a compatibilidade com objetos do SQLAlchemy 
+        from_attributes = True
+
+class OutMyDoctor(BaseModel):
+    id: int
+    name: str
+    specialty: str
+    clinic: str
+    location: str
+    
+    model_config = ConfigDict(from_attributes=True)
