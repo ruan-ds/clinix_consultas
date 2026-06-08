@@ -3,15 +3,19 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.models.patient_access import PatientAccess
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment
+from app.models.patient import Patient
+from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment, OutAppointmentHistory, OutMyDoctor
 from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.services.patient_services import (
     create_medical_appointment_service,
     update_patient_contact_service,
     update_patient_password_service,
     validate_feed_service,
+    get_appointment_history_service,
+    get_my_doctors_service,
 )
 from app.utils.jwt import decode_access_token
+from typing import List
 
 router = APIRouter(prefix="/patient", tags=["Patient"])
 
@@ -73,3 +77,21 @@ def create_appointment(
     db: Session = Depends(get_db),
 ) -> OutMedicalAppointment:
     return create_medical_appointment_service(db=db, patient_id=current_user.patient_id, data=data)
+
+@router.get("/history", response_model=List[OutAppointmentHistory])
+def get_history(
+    db: Session = Depends(get_db),
+    current_user: PatientAccess = Depends(get_current_patient)
+):
+    patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
+    
+    return get_appointment_history_service(db, patient.id)
+
+@router.get("/my-doctors", response_model=List[OutMyDoctor])
+def get_my_doctors(
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+):
+    # Busca o ID clínico do paciente usando o person_id do token
+    patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
+    return get_my_doctors_service(db, patient.id)
