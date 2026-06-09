@@ -4,6 +4,7 @@ import HistoryComplete from './history/historyComplete';
 import Appointment from './appointment/appointment';
 import Doctors from './doctors/doctors';
 import Configs from './configs/configs';
+import ActiveAppointments from './activeAppointments/activeAppointments';
 
 interface ContentProps {
     telaAtiva: number;
@@ -27,6 +28,8 @@ function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
                         return <HistoryComplete/>
                     case 4:
                         return <Configs userName={userName} />
+                    case 5:
+                        return <ActiveAppointments />;
                     default:
                         return <Dashboard onVerHistorico={() => setTelaAtiva(0)} onAgendar={() => setTelaAtiva(1)} userName={userName} />;
                 }

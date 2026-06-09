@@ -380,3 +380,88 @@ def get_my_doctors_service(db: Session, patient_id: int):
         })
     
     return my_doctors
+def get_active_appointments_service(db: Session, patient_id: int) -> List[Dict]:
+    now = datetime.now(timezone.utc)
+    appointments = (
+        db.query(MedicalAppointment)
+        .options(
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.clinical_access).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.clinic).joinedload(Clinic.address),
+            joinedload(MedicalAppointment.slot),
+            joinedload(MedicalAppointment.service),
+        )
+        .join(DoctorScheduleSlot, MedicalAppointment.slot_id == DoctorScheduleSlot.id)
+        .filter(
+            MedicalAppointment.patient_id == patient_id,
+            MedicalAppointment.is_active == True,
+            MedicalAppointment.status == "scheduled",
+            DoctorScheduleSlot.start_datetime >= now,
+        )
+        .order_by(DoctorScheduleSlot.start_datetime)
+        .all()
+    )
+
+    result = []
+    for appt in appointments:
+        doctor_name = "Médico não identificado"
+        if getattr(appt, "doctor", None):
+            ca = getattr(appt.doctor, "clinical_access", None)
+            person = getattr(ca, "person", None) if ca else None
+            if person and getattr(person, "name", None):
+                doctor_name = person.name
+
+        clinic_name = "Clínica não identificada"
+        if getattr(appt, "clinic", None) and getattr(appt.clinic, "trade_name", None):
+            clinic_name = appt.clinic.trade_name
+
+        address_str = "Endereço não disponível"
+        if getattr(appt, "clinic", None) and getattr(appt.clinic, "address", None):
+            addr = appt.clinic.address
+            parts = [getattr(addr, "street", ""), getattr(addr, "number", ""), getattr(addr, "neighborhood", "")]
+            address_str = ", ".join(p for p in parts if p)
+
+        specialty = "Consulta Geral"
+        if getattr(appt, "service", None) and getattr(appt.service, "name", None):
+            specialty = appt.service.name
+
+        date = appt.slot.start_datetime if getattr(appt, "slot", None) else appt.created_at
+
+        result.append({
+            "id": appt.id,
+            "doctor_name": doctor_name,
+            "clinic_name": clinic_name,
+            "address": address_str,
+            "status": appt.status,
+            "date": date,
+            "specialty": specialty,
+        })
+
+    return result
+
+
+def cancel_appointment_service(db: Session, patient_id: int, appointment_id: int) -> None:
+    appointment = (
+        db.query(MedicalAppointment)
+        .filter(
+            MedicalAppointment.id == appointment_id,
+            MedicalAppointment.patient_id == patient_id,
+            MedicalAppointment.is_active == True,
+        )
+        .first()
+    )
+
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Consulta não encontrada")
+
+    if appointment.status != "scheduled":
+        raise HTTPException(status_code=400, detail="Apenas consultas agendadas podem ser canceladas")
+
+    slot = db.query(DoctorScheduleSlot).filter(DoctorScheduleSlot.id == appointment.slot_id).first()
+    if slot:
+        slot.status = "available"
+        db.add(slot)
+
+    appointment.status = "cancelled"
+    appointment.is_active = False
+    db.add(appointment)
+    db.commit()
