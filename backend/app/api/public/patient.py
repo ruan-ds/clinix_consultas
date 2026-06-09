@@ -4,7 +4,7 @@ from typing import List
 
 from app.core.database import get_db
 from app.models.patient_access import PatientAccess
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment, AppointmentHistoryItem
+from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment, AppointmentHistoryItem, OutClinic, OutDoctor, OutSlotDay
 from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.services.patient_services import (
     create_medical_appointment_service,
@@ -12,6 +12,9 @@ from app.services.patient_services import (
     update_patient_password_service,
     validate_feed_service,
     get_appointment_history_service,
+    list_clinics_service,
+    list_doctors_by_clinic_service,
+    list_slots_by_doctor_service
 )
 from app.utils.jwt import decode_access_token
 
@@ -83,3 +86,30 @@ def get_appointment_history(
     db: Session = Depends(get_db),
 ) -> List[AppointmentHistoryItem]:
     return get_appointment_history_service(db=db, patient_id=current_user.patient_id)
+
+@router.get("/clinics", response_model=List[OutClinic])
+def list_clinics(
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutClinic]:
+    return list_clinics_service(db=db)
+ 
+ 
+@router.get("/clinics/{clinic_id}/doctors", response_model=List[OutDoctor])
+def list_doctors(
+    clinic_id: int,
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutDoctor]:
+    return list_doctors_by_clinic_service(db=db, clinic_id=clinic_id)
+ 
+ 
+@router.get("/doctors/{doctor_id}/slots", response_model=List[OutSlotDay])
+def list_slots(
+    doctor_id: int,
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutSlotDay]:
+    return list_slots_by_doctor_service(db=db, doctor_id=doctor_id)
+ 
+

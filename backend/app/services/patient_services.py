@@ -1,10 +1,12 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date, timedelta
 from typing import Optional, List, Dict
 
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 
+from app.models.clinical_access import ClinicalAccess
+from app.models.medical_specialty import MedicalSpecialty
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_schedule_slot import DoctorScheduleSlot
@@ -12,7 +14,7 @@ from app.models.medical_appointment import MedicalAppointment
 from app.models.patient_access import PatientAccess
 from app.models.phone import Phone
 from app.models.service import Service
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation
+from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutClinic, OutDoctor, OutSlot, OutSlotDay
 from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword, OutPatientAccessWithName
 from app.utils.security import hash_password, verify_password
 
@@ -253,3 +255,90 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
         })
 
     return history
+
+    
+def list_clinics_service(db: Session) -> List[OutClinic]:
+    clinics = db.query(Clinic).filter(Clinic.is_active == True).all()
+    result = []
+    for c in clinics:
+        addr = c.address
+        address_str = ""
+        if addr:
+            parts = [addr.street, addr.number, addr.neighborhood, addr.city]
+            address_str = ", ".join(p for p in parts if p)
+        result.append(OutClinic(id=c.id, trade_name=c.trade_name, address=address_str))
+    return result
+ 
+ 
+def list_doctors_by_clinic_service(db: Session, clinic_id: int) -> List[OutDoctor]:
+    clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active == True).first()
+    if not clinic:
+        raise HTTPException(status_code=404, detail="Clínica não encontrada")
+ 
+    doctors = (
+        db.query(Doctor)
+        .join(ClinicalAccess, Doctor.clinical_access_id == ClinicalAccess.id)
+        .filter(ClinicalAccess.clinic_id == clinic_id, Doctor.is_active == True)
+        .all()
+    )
+ 
+    result = []
+    for doc in doctors:
+        name = doc.clinical_access.person.name if doc.clinical_access and doc.clinical_access.person else "Médico"
+        specialties = [s.name for s in doc.specialties] if doc.specialties else []
+        specialty_str = ", ".join(specialties) if specialties else "Clínica Geral"
+        result.append(OutDoctor(
+            id=doc.id,
+            name=name,
+            specialty=specialty_str,
+            clinic_name=clinic.trade_name,
+            clinical_access_id=doc.clinical_access_id,
+        ))
+    return result
+ 
+ 
+def list_slots_by_doctor_service(db: Session, doctor_id: int) -> List[OutSlotDay]:
+    doctor = db.query(Doctor).filter(Doctor.id == doctor_id, Doctor.is_active == True).first()
+    if not doctor:
+        raise HTTPException(status_code=404, detail="Médico não encontrado")
+ 
+    now = datetime.now(timezone.utc)
+    slots = (
+        db.query(DoctorScheduleSlot)
+        .filter(
+            DoctorScheduleSlot.doctor_id == doctor_id,
+            DoctorScheduleSlot.status == "available",
+            DoctorScheduleSlot.start_datetime >= now,
+        )
+        .order_by(DoctorScheduleSlot.start_datetime)
+        .all()
+    )
+ 
+    # Agrupa por dia
+    days_map: Dict[str, List[DoctorScheduleSlot]] = {}
+    for slot in slots:
+        day_key = slot.start_datetime.strftime("%Y-%m-%d")
+        days_map.setdefault(day_key, []).append(slot)
+ 
+    today = datetime.now(timezone.utc).date()
+    result = []
+    for day_key, day_slots in days_map.items():
+        day_date = date.fromisoformat(day_key)
+        delta = (day_date - today).days
+        if delta == 1:
+            label = "Amanhã"
+        else:
+            label = day_date.strftime("%a, %d/%m")
+ 
+        result.append(OutSlotDay(
+            date=day_key,
+            label=label,
+            slots=[OutSlot(
+                id=s.id,
+                start_datetime=s.start_datetime,
+                end_datetime=s.end_datetime,
+                status=s.status,
+            ) for s in day_slots],
+        ))
+ 
+    return result

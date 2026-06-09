@@ -1,9 +1,37 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, ConfigDict
 
 from app.schemas.patient_access import OutPatientAccessWithName
 
+
+class OutClinic(BaseModel):
+    id: int
+    trade_name: str
+    address: str
+    model_config = ConfigDict(from_attributes=True)
+
+class OutDoctor(BaseModel):
+    id: int
+    name: str
+    specialty: str
+    clinic_name: str
+    clinical_access_id: int
+    model_config = ConfigDict(from_attributes=True)
+
+class OutSlotDay(BaseModel):
+    date: str        
+    label: str       
+    slots: List["OutSlot"]
+
+class OutSlot(BaseModel):
+    id: int
+    start_datetime: datetime
+    end_datetime: datetime
+    status: str
+    model_config = ConfigDict(from_attributes=True)
+
+OutSlotDay.model_rebuild()
 
 class CreatePatientAppointment(BaseModel):
     clinic_id: int
