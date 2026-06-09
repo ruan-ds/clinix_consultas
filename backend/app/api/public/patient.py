@@ -113,3 +113,11 @@ def list_slots(
     return list_slots_by_doctor_service(db=db, doctor_id=doctor_id)
  
 
+@router.get("/my-doctors", response_model=List[OutMyDoctor])
+def get_my_doctors(
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+):
+    # Busca o ID clínico do paciente usando o person_id do token
+    patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
+    return get_my_doctors_service(db, patient.id)

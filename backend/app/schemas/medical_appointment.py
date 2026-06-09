@@ -75,3 +75,13 @@ class AppointmentHistoryItem(BaseModel):
     specialty: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OutMyDoctor(BaseModel):
+    id: int
+    name: str
+    specialty: str
+    clinic: str
+    location: str
+    
+    model_config = ConfigDict(from_attributes=True)

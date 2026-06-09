@@ -342,3 +342,41 @@ def list_slots_by_doctor_service(db: Session, doctor_id: int) -> List[OutSlotDay
         ))
  
     return result
+
+
+def get_my_doctors_service(db: Session, patient_id: int):
+    results = (
+        db.query(Doctor)
+        .join(MedicalAppointment, Doctor.id == MedicalAppointment.doctor_id)
+        .filter(MedicalAppointment.patient_id == patient_id)
+        .group_by(Doctor.id)
+        .all()
+    )
+
+    my_doctors = []
+    for doctor in results:
+        specialty_name = doctor.specialties[0].name if doctor.specialties else "Médico"
+        
+        last_appt = (
+            db.query(MedicalAppointment)
+            .filter(MedicalAppointment.doctor_id == doctor.id, MedicalAppointment.patient_id == patient_id)
+            .order_by(MedicalAppointment.created_at.desc())
+            .first()
+        )
+        
+        clinic_name = last_appt.clinic.trade_name if last_appt and last_appt.clinic else "Clínica"
+        
+        location_str = "Local não informado"
+        if last_appt and last_appt.clinic and last_appt.clinic.address:
+            addr = last_appt.clinic.address
+            location_str = f"{addr.city}/{addr.state}"
+
+        my_doctors.append({
+            "id": doctor.id,
+            "name": doctor.clinical_access.person.name,
+            "specialty": specialty_name,
+            "clinic": clinic_name,
+            "location": location_str
+        })
+    
+    return my_doctors
