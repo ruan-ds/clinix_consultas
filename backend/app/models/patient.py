@@ -21,3 +21,5 @@ class Patient(Person):
         foreign_keys="Dependent.dependent_patient_id",
         back_populates="dependent_patient",
     )
+
+    __mapper_args__ = {"polymorphic_identity": "P"}

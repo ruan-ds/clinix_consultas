@@ -10,3 +10,5 @@ class Entity(Base):
     type = Column(String(1), nullable=False)
 
     phones = relationship("Phone", back_populates="entity")
+
+    __mapper_args__ = {"polymorphic_identity": "E", "polymorphic_on": type}
