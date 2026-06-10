@@ -113,7 +113,7 @@ def list_slots(
     return list_slots_by_doctor_service(db=db, doctor_id=doctor_id)
  
 
-@router.get("/my-doctors", response_model=List[OutMyDoctor])
+@router.get("/my-doctors", response_model=List[OutDoctor])
 def get_my_doctors(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
