@@ -5,15 +5,20 @@ from app.models.entity import Entity
 from app.schemas.clinic import FullClinicRegistration, OutFullClinicRegistration
 from app.services.registration import register_address, register_phone
 from app.utils.cnpj_utils import cnpj_validator
+from app.exceptions.clinic_exceptions import cnpj_already_exists, invalid_cnpj, legal_name_already_exists
+from sqlalchemy.exc import IntegrityError
 
 def create_full_clinic_service(db: Session, data: FullClinicRegistration) -> OutFullClinicRegistration:
     try:
         with db.begin():
             if not cnpj_validator(data.clinic.cnpj):
-                raise HTTPException(status_code=400, detail="CNPJ inválido")
-
+                invalid_cnpj()
+            
             if db.query(Clinic).filter(Clinic.cnpj == data.clinic.cnpj).first():
-                raise HTTPException(status_code=400, detail="CNPJ já cadastrado")
+                cnpj_already_exists()
+
+            if db.query(Clinic).filter(Clinic.legal_name == data.clinic.legal_name).first():
+                legal_name_already_exists()
 
             entity = Entity(type="C")
             db.add(entity)
@@ -40,5 +45,11 @@ def create_full_clinic_service(db: Session, data: FullClinicRegistration) -> Out
             
     except HTTPException as e:
         raise e
+    except IntegrityError as e:
+        print("ERRO DE INTEGRIDADE:", e.orig)
+        raise HTTPException(
+            status_code=400,
+            detail="Erro ao cadastrar clínica: violação de integridade de dados."
+        )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Erro ao processar cadastro: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Erro inesperado ao processar cadastro: {str(e)}")
