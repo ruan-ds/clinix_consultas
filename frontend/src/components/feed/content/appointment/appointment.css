@@ -834,7 +834,57 @@
   color: #374151;
   margin-bottom: 10px;
 }
+/* =========================================
+   ESTILOS DO SELETOR DE CALENDÁRIO MODERNO
+   ========================================= */
 
+.ac-calendario-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.ac-calendario-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ac-calendario-input {
+  width: 100%;
+  max-width: 210px; /* Borda bem mais ajustada perto da data */
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e1; /* Borda nítida e moderna */
+  border-radius: 12px;       /* Bordas suavizadas identicas ao print */
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ac-calendario-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.15);
+}
+
+/* Alinhamento responsivo da seção da agenda */
+@media (min-width: 900px) {
+  .ac-calendario-container {
+    align-items: flex-end; /* Joga o seletor para a direita no desktop */
+  }
+  .ac-calendario-input {
+    text-align: center;
+  }
+}
 /* Médico card vira coluna no mobile, row no desktop */
 @media (min-width: 900px) {
   .ac-medico-card {
