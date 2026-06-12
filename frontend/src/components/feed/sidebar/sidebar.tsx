@@ -2,6 +2,7 @@ import React from 'react';
 import './sidebar.css';
 import { FiHome, FiCalendar, FiUsers, FiCreditCard, FiSettings } from "react-icons/fi";
 import { LuClock11 } from "react-icons/lu";
+import { BsCalendarCheck } from 'react-icons/bs';
 
 // Definimos o que a Sidebar vai receber do Feed
 interface SidebarProps {
@@ -30,6 +31,14 @@ function Sidebar({ telaAtiva, setTelaAtiva }: SidebarProps) {
           <FiCalendar className="icon" /> <span>Agendar Consulta</span>
         </div>
 
+        <div
+          className={`menu-item ${telaAtiva === 5 ? 'active' : ''}`}
+          onClick={() => setTelaAtiva(5)}
+          style={{ cursor: 'pointer' }}
+        >
+          <BsCalendarCheck className="icon" /> <span>Consultas Ativas</span>
+        </div>
+        
         <div 
           className={`menu-item ${telaAtiva === 2 ? 'active' : ''}`} 
           onClick={() => setTelaAtiva(2)}
@@ -45,6 +54,7 @@ function Sidebar({ telaAtiva, setTelaAtiva }: SidebarProps) {
         >
           <LuClock11  className="icon" /> <span>Histórico</span>
         </div>
+
       </nav>
     </aside>
   );

@@ -50,6 +50,15 @@ export type CreateAppointmentData = {
   notes?: string;
 };
 
+export type AppointmentHistoryItem = {
+  id: number;
+  doctor_name: string;
+  clinic_name: string;
+  address: string;
+  status: string;
+  date: string;
+  specialty: string;
+};
 // ─── Funções existentes ─────────────────────────────────────────────
 export async function validateFeed(): Promise<FeedValidation> {
   const response = await api.get("/patient/feed/validate");
@@ -74,4 +83,12 @@ export async function listSlots(doctorId: number): Promise<SlotDay[]> {
 
 export async function createAppointment(data: CreateAppointmentData): Promise<void> {
   await api.post("/patient/appointments", data);
+}
+export async function getActiveAppointments(): Promise<AppointmentHistoryItem[]> {
+  const response = await api.get("/patient/appointments/active");
+  return response.data;
+}
+
+export async function cancelAppointment(appointmentId: number): Promise<void> {
+  await api.patch(`/patient/appointments/${appointmentId}/cancel`);
 }

@@ -4,7 +4,16 @@ from typing import List
 
 from app.core.database import get_db
 from app.models.patient_access import PatientAccess
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutMedicalAppointment, AppointmentHistoryItem, OutClinic, OutDoctor, OutSlotDay
+from app.schemas.medical_appointment import ( 
+    CreatePatientAppointment,
+    FeedValidation,
+    OutMedicalAppointment,
+    AppointmentHistoryItem,
+    OutClinic,
+    OutDoctor,
+    OutMyDoctor,
+    OutSlotDay 
+)
 from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.services.patient_services import (
     create_medical_appointment_service,
@@ -14,7 +23,9 @@ from app.services.patient_services import (
     get_appointment_history_service,
     list_clinics_service,
     list_doctors_by_clinic_service,
-    list_slots_by_doctor_service
+    list_slots_by_doctor_service,
+    get_active_appointments_service,
+    cancel_appointment_service,
 )
 from app.utils.jwt import decode_access_token
 
@@ -121,3 +132,19 @@ def get_my_doctors(
     # Busca o ID clínico do paciente usando o person_id do token
     patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
     return get_my_doctors_service(db, patient.id)
+
+@router.get("/appointments/active", response_model=List[AppointmentHistoryItem])
+def get_active_appointments(
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[AppointmentHistoryItem]:
+    return get_active_appointments_service(db=db, patient_id=current_user.patient_id)
+
+
+@router.patch("/appointments/{appointment_id}/cancel", status_code=204)
+def cancel_appointment(
+    appointment_id: int,
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> None:
+    cancel_appointment_service(db=db, patient_id=current_user.patient_id, appointment_id=appointment_id)
