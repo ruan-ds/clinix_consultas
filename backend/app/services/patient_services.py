@@ -152,14 +152,44 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     service_id = data.service_id
 
     if service_id is None:
-        service = (
-            db.query(Service)
-            .filter(Service.clinic_id == data.clinic_id, Service.is_active)
-            .order_by(Service.id)
-            .first()
-        )
+        # Lógica de Inteligência Temporal: Busca o serviço correto baseando-se no que o médico é
+        service = None
+        if doctor.specialties:
+            mapping = {
+                "Cardiologia": "Cardiologista",
+                "Dermatologia": "Dermatologista",
+                "Ortopedia": "Ortopedista",
+                "Pediatria": "Pediatra",
+                "Neurologia": "Neurologista"
+            }
+            
+            for spec in doctor.specialties:
+                keyword = mapping.get(spec.name)
+                if keyword:
+                    service = (
+                        db.query(Service)
+                        .filter(
+                            Service.clinic_id == data.clinic_id,
+                            Service.is_active,
+                            Service.name.ilike(f"%{keyword}%")
+                        )
+                        .first()
+                    )
+                    if service:
+                        break
+
+        # Fallback: Se não achar correspondência direta, pega o primeiro serviço ativo da clínica
+        if not service:
+            service = (
+                db.query(Service)
+                .filter(Service.clinic_id == data.clinic_id, Service.is_active)
+                .order_by(Service.id)
+                .first()
+            )
+        
         if not service:
             raise HTTPException(status_code=400, detail="Nenhum serviço ativo encontrado para a clínica selecionada")
+        
         service_id = service.id
     else:
         service = (
@@ -198,7 +228,8 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
     appointments = (
         db.query(MedicalAppointment)
         .options(
-            joinedload(MedicalAppointment.doctor).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.clinical_access).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.specialties),
             joinedload(MedicalAppointment.clinic).joinedload(Clinic.address),
             joinedload(MedicalAppointment.slot),
             joinedload(MedicalAppointment.service),
@@ -210,7 +241,6 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
 
     history = []
     for appt in appointments:
-        # doctor name
         doctor_name = "Médico não identificado"
         if getattr(appt, "doctor", None):
             ca = getattr(appt.doctor, "clinical_access", None)
@@ -218,12 +248,10 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
             if person and getattr(person, "name", None):
                 doctor_name = person.name
 
-        # clinic name
         clinic_name = "Clínica não identificada"
         if getattr(appt, "clinic", None) and getattr(appt.clinic, "trade_name", None):
             clinic_name = appt.clinic.trade_name
 
-        # address string
         address_str = "Endereço não disponível"
         if getattr(appt, "clinic", None) and getattr(appt.clinic, "address", None):
             addr = appt.clinic.address
@@ -232,12 +260,13 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
             neighborhood = getattr(addr, "neighborhood", "")
             address_str = f"{street}, {number} - {neighborhood}".strip(", - ")
 
-        # specialty
-        specialty = "Consulta Geral"
-        if getattr(appt, "service", None) and getattr(appt.service, "name", None):
+        # Resgata a especialidade real cadastrada no banco de dados para o médico
+        specialty = "Clínica Geral"
+        if getattr(appt, "doctor", None) and appt.doctor.specialties:
+            specialty = ", ".join([s.name for s in appt.doctor.specialties])
+        elif getattr(appt, "service", None) and getattr(appt.service, "name", None):
             specialty = appt.service.name
 
-        # date: prefer slot.start_datetime, fallback para created_at
         date = None
         if getattr(appt, "slot", None) and getattr(appt.slot, "start_datetime", None):
             date = appt.slot.start_datetime
@@ -386,6 +415,7 @@ def get_active_appointments_service(db: Session, patient_id: int) -> List[Dict]:
         db.query(MedicalAppointment)
         .options(
             joinedload(MedicalAppointment.doctor).joinedload(Doctor.clinical_access).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.specialties),
             joinedload(MedicalAppointment.clinic).joinedload(Clinic.address),
             joinedload(MedicalAppointment.slot),
             joinedload(MedicalAppointment.service),
@@ -420,8 +450,11 @@ def get_active_appointments_service(db: Session, patient_id: int) -> List[Dict]:
             parts = [getattr(addr, "street", ""), getattr(addr, "number", ""), getattr(addr, "neighborhood", "")]
             address_str = ", ".join(p for p in parts if p)
 
-        specialty = "Consulta Geral"
-        if getattr(appt, "service", None) and getattr(appt.service, "name", None):
+        # Resgata a especialidade real cadastrada no banco de dados para o médico
+        specialty = "Clínica Geral"
+        if getattr(appt, "doctor", None) and appt.doctor.specialties:
+            specialty = ", ".join([s.name for s in appt.doctor.specialties])
+        elif getattr(appt, "service", None) and getattr(appt.service, "name", None):
             specialty = appt.service.name
 
         date = appt.slot.start_datetime if getattr(appt, "slot", None) else appt.created_at
