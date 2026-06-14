@@ -10,7 +10,7 @@ export type FeedValidation = {
     person_name: string;
   };
   has_upcoming_appointments: boolean;
-  next_appointment: object | null;
+  next_appointment: AppointmentHistoryItem | null;
 };
 
 // ─── Tipos novos ────────────────────────────────────────────────────

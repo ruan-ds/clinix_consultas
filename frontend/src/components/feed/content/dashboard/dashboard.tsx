@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './dashboard.css';
 import Card from './card/card';
+import { validateFeed } from '../../../../services/patientService';
 import HistoryRecent from './history/historyRecent';
 import { FaCalendarCheck } from "react-icons/fa";
 import { AiOutlineFieldTime } from "react-icons/ai"
@@ -16,16 +17,8 @@ function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
 
     const [estado, setEstado] = useState(0);
     
-    // proxima consulta é lista com os dados da consulta que iremos receber do backend e passsar pro componente de card
-    //const proximaConsulta = null;
-    
-    const proximaConsulta = {
-        doctorName: "Dr. Marcos Paulo",
-        specialty: "Cardiologia",
-        date: "25/05/2026",
-        time: "14:30",
-        location: "Consultório 3, Bloco B"
-    };
+    // proxima consulta será buscada no backend e mapeada para o componente Card
+    const [proximaConsulta, setProximaConsulta] = useState<{doctorName:string; specialty:string; date:string; time:string; location:string} | null>(null);
 
 
     // aqui sao as informações do historico de consultas do paciente, que será passado pelo back
@@ -53,6 +46,32 @@ function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
         date: "05 de Novembro, 11:00" 
     }
     ];
+
+    // Busca a validação do feed (inclui próxima consulta) e atualiza o estado local
+    useEffect(() => {
+        let mounted = true;
+        validateFeed().then(res => {
+            if (!mounted) return;
+            const next = res.next_appointment;
+            if (next) {
+                const d = new Date(next.date);
+                const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const timeStr = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                setProximaConsulta({
+                    doctorName: next.doctor_name,
+                    specialty: next.specialty,
+                    date: dateStr,
+                    time: timeStr,
+                    location: next.address,
+                });
+            } else {
+                setProximaConsulta(null);
+            }
+        }).catch(() => {
+            setProximaConsulta(null);
+        });
+        return () => { mounted = false };
+    }, []);
 
     // Lógica para alternar o estado caso não haja consultas nem histórico
     useEffect(() => {
