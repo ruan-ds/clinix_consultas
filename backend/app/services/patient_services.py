@@ -28,19 +28,68 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
 
     if not patient_access or not patient_access.is_active:
         raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
-
-    next_appointment = (
+    now = datetime.now(timezone.utc)
+    next_appt = (
         db.query(MedicalAppointment)
+        .options(
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.clinical_access).joinedload(ClinicalAccess.person),
+            joinedload(MedicalAppointment.doctor).joinedload(Doctor.specialties),
+            joinedload(MedicalAppointment.clinic).joinedload(Clinic.address),
+            joinedload(MedicalAppointment.slot),
+            joinedload(MedicalAppointment.service),
+        )
         .join(DoctorScheduleSlot, MedicalAppointment.slot_id == DoctorScheduleSlot.id)
         .filter(
             MedicalAppointment.patient_id == patient_id,
-            MedicalAppointment.is_active,
-            DoctorScheduleSlot.start_datetime >= datetime.now(timezone.utc),
+            MedicalAppointment.is_active == True,
+            DoctorScheduleSlot.start_datetime >= now,
         )
         .order_by(DoctorScheduleSlot.start_datetime)
         .first()
     )
 
+    next_appointment_obj = None
+    if next_appt:
+        doctor_name = "Médico não identificado"
+        if getattr(next_appt, "doctor", None):
+            ca = getattr(next_appt.doctor, "clinical_access", None)
+            person = getattr(ca, "person", None) if ca else None
+            if person and getattr(person, "name", None):
+                doctor_name = person.name
+
+        clinic_name = "Clínica não identificada"
+        if getattr(next_appt, "clinic", None) and getattr(next_appt.clinic, "trade_name", None):
+            clinic_name = next_appt.clinic.trade_name
+
+        address_str = "Endereço não disponível"
+        if getattr(next_appt, "clinic", None) and getattr(next_appt.clinic, "address", None):
+            addr = next_appt.clinic.address
+            street = getattr(addr, "street", "")
+            number = getattr(addr, "number", "")
+            neighborhood = getattr(addr, "neighborhood", "")
+            address_str = f"{street}, {number} - {neighborhood}".strip(", - ")
+
+        specialty = "Clínica Geral"
+        if getattr(next_appt, "doctor", None) and next_appt.doctor.specialties:
+            specialty = ", ".join([s.name for s in next_appt.doctor.specialties])
+        elif getattr(next_appt, "service", None) and getattr(next_appt.service, "name", None):
+            specialty = next_appt.service.name
+
+        date = None
+        if getattr(next_appt, "slot", None) and getattr(next_appt.slot, "start_datetime", None):
+            date = next_appt.slot.start_datetime
+        else:
+            date = next_appt.created_at if getattr(next_appt, "created_at", None) else datetime.utcnow()
+
+        next_appointment_obj = {
+            "id": next_appt.id,
+            "doctor_name": doctor_name,
+            "clinic_name": clinic_name,
+            "address": address_str,
+            "status": next_appt.status,
+            "date": date,
+            "specialty": specialty,
+        }
 
     patient_out = OutPatientAccessWithName(
         id=patient_access.id,
@@ -52,8 +101,8 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
 
     return FeedValidation(
         patient=patient_out,
-        has_upcoming_appointments=bool(next_appointment),
-        next_appointment=next_appointment,
+        has_upcoming_appointments=bool(next_appointment_obj),
+        next_appointment=next_appointment_obj,
     )
 
 

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './dashboard.css';
 import Card from './card/card';
-import { validateFeed } from '../../../../services/patientService';
+import { validateFeed, listHistoryAppointments} from '../../../../services/patientService';
 import HistoryRecent from './history/historyRecent';
 import { FaCalendarCheck } from "react-icons/fa";
 import { AiOutlineFieldTime } from "react-icons/ai"
@@ -19,12 +19,12 @@ function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
     
     // proxima consulta será buscada no backend e mapeada para o componente Card
     const [proximaConsulta, setProximaConsulta] = useState<{doctorName:string; specialty:string; date:string; time:string; location:string} | null>(null);
-
+    const [Historico, setHistorico] = useState<any[]>([]);
 
     // aqui sao as informações do historico de consultas do paciente, que será passado pelo back
     //const Historico: any[] = [];
     
-    const Historico = [
+    /*const Historico = [
     { 
         specialty: "Cardiologia", 
         doctorName: "Dr. Marcos Paulo", 
@@ -46,32 +46,46 @@ function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
         date: "05 de Novembro, 11:00" 
     }
     ];
+    */
 
     // Busca a validação do feed (inclui próxima consulta) e atualiza o estado local
-    useEffect(() => {
-        let mounted = true;
-        validateFeed().then(res => {
+useEffect(() => {
+    let mounted = true;
+
+    Promise.all([validateFeed(), listHistoryAppointments()])
+        .then(([feedRes, historyRes]) => {
             if (!mounted) return;
-            const next = res.next_appointment;
+
+            // 🔹 Próxima consulta
+            const next = feedRes.next_appointment;
+
             if (next) {
                 const d = new Date(next.date);
-                const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                const timeStr = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
                 setProximaConsulta({
                     doctorName: next.doctor_name,
                     specialty: next.specialty,
-                    date: dateStr,
-                    time: timeStr,
+                    date: d.toLocaleDateString('pt-BR'),
+                    time: d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
                     location: next.address,
                 });
             } else {
                 setProximaConsulta(null);
             }
-        }).catch(() => {
+
+            // 🔹 Histórico (ajusta conforme sua API)
+            setHistorico(historyRes);
+        })
+        .catch(() => {
+            if (!mounted) return;
             setProximaConsulta(null);
+            setHistorico([]);
         });
-        return () => { mounted = false };
-    }, []);
+
+    return () => {
+        mounted = false;
+    };
+}, []);
 
     // Lógica para alternar o estado caso não haja consultas nem histórico
     useEffect(() => {
@@ -142,7 +156,9 @@ function Dashboard({ onVerHistorico, userName, onAgendar }: DashboardProps) {
                 <img src={imagem} alt="Calendário Clinix" className="empty-state-img" />
                  <h2>Bem-vindo, {userName.split(" ")[0]}! Vamos agendar sua primeira consulta?</h2>
                 <p>Você ainda não tem agendamentos ou históricos. Comece agora!</p>
-                <button className="empty-state-btn">Agendar minha primeira consulta</button>
+                <button className="empty-state-btn" onClick={onAgendar}>
+                    Agendar minha primeira consulta
+                </button>
             </div>
         </div>
     )

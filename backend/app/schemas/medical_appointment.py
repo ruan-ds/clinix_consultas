@@ -61,7 +61,7 @@ class OutMedicalAppointment(BaseModel):
 class FeedValidation(BaseModel):
     patient: OutPatientAccessWithName
     has_upcoming_appointments: bool
-    next_appointment: Optional[OutMedicalAppointment] = None
+    next_appointment: Optional["AppointmentHistoryItem"] = None 
     model_config = ConfigDict(from_attributes=True)
 
 
