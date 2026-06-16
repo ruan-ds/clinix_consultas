@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, date, timedelta
+from datetime import datetime, timezone, date
 from typing import Optional, List, Dict
 
 from fastapi import HTTPException
@@ -10,11 +10,12 @@ from app.models.medical_specialty import MedicalSpecialty
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_schedule_slot import DoctorScheduleSlot
+from app.models.doctor_service import DoctorService
 from app.models.medical_appointment import MedicalAppointment
 from app.models.patient_access import PatientAccess
 from app.models.phone import Phone
 from app.models.service import Service
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutClinic, OutDoctor, OutSlot, OutSlotDay
+from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutClinic, OutDoctor, OutService, OutSlot, OutSlotDay
 from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword, OutPatientAccessWithName
 from app.utils.security import hash_password, verify_password
 
@@ -194,71 +195,40 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     if not doctor:
         raise HTTPException(status_code=400, detail="Médico inválido")
 
+    if slot.doctor_id != doctor.id:
+        raise HTTPException(status_code=400, detail="Horário inválido para o médico informado")
+
+    doctor_clinic_id = doctor.clinical_access.clinic_id if doctor.clinical_access else None
+    if doctor_clinic_id != data.clinic_id:
+        raise HTTPException(status_code=400, detail="Médico inválido para a clínica selecionada")
+
     if data.clinical_access_id and data.clinical_access_id != doctor.clinical_access_id:
         raise HTTPException(status_code=400, detail="Profissional clínico inválido para o médico informado")
 
     clinical_access_id = data.clinical_access_id or doctor.clinical_access_id
-    service_id = data.service_id
-
-    if service_id is None:
-        # Lógica de Inteligência Temporal: Busca o serviço correto baseando-se no que o médico é
-        service = None
-        if doctor.specialties:
-            mapping = {
-                "Cardiologia": "Cardiologista",
-                "Dermatologia": "Dermatologista",
-                "Ortopedia": "Ortopedista",
-                "Pediatria": "Pediatra",
-                "Neurologia": "Neurologista"
-            }
-            
-            for spec in doctor.specialties:
-                keyword = mapping.get(spec.name)
-                if keyword:
-                    service = (
-                        db.query(Service)
-                        .filter(
-                            Service.clinic_id == data.clinic_id,
-                            Service.is_active,
-                            Service.name.ilike(f"%{keyword}%")
-                        )
-                        .first()
-                    )
-                    if service:
-                        break
-
-        # Fallback: Se não achar correspondência direta, pega o primeiro serviço ativo da clínica
-        if not service:
-            service = (
-                db.query(Service)
-                .filter(Service.clinic_id == data.clinic_id, Service.is_active)
-                .order_by(Service.id)
-                .first()
-            )
-        
-        if not service:
-            raise HTTPException(status_code=400, detail="Nenhum serviço ativo encontrado para a clínica selecionada")
-        
-        service_id = service.id
-    else:
-        service = (
-            db.query(Service)
-            .filter(
-                Service.id == service_id,
-                Service.clinic_id == data.clinic_id,
-                Service.is_active,
-            )
-            .first()
+    service = (
+        db.query(Service)
+        .outerjoin(
+            DoctorService,
+            (DoctorService.service_id == Service.id) & (DoctorService.doctor_id == doctor.id),
         )
-        if not service:
-            raise HTTPException(status_code=400, detail="Serviço inválido para a clínica selecionada")
+        .filter(
+            Service.id == data.service_id,
+            Service.clinic_id == data.clinic_id,
+            Service.is_active,
+            (DoctorService.doctor_id == doctor.id) | (~Service.doctor_services.any() & Service.medical_specialty.has(MedicalSpecialty.doctors.any(Doctor.id == doctor.id))),
+        )
+        .first()
+    )
+    if not service:
+        raise HTTPException(status_code=400, detail="Serviço inválido para o médico, clínica ou especialidade selecionados")
 
     appointment = MedicalAppointment(
         clinic_id=data.clinic_id,
         doctor_id=data.doctor_id,
         patient_id=patient_id,
         clinical_access_id=clinical_access_id,
-        service_id=service_id,
+        service_id=service.id,
         slot_id=slot.id,
         status="scheduled",
         notes=data.notes,
@@ -346,10 +316,56 @@ def list_clinics_service(db: Session) -> List[OutClinic]:
             address_str = ", ".join(p for p in parts if p)
         result.append(OutClinic(id=c.id, trade_name=c.trade_name, address=address_str))
     return result
+
+def list_available_services_by_specialty_service(db: Session, clinic_id: int, specialty_id: int) -> List[OutService]:
+    clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active).first()
+    if not clinic:
+        raise HTTPException(status_code=404, detail="Clínica não encontrada")
+
+    specialty = db.query(MedicalSpecialty).filter(MedicalSpecialty.id == specialty_id).first()
+    if not specialty:
+        raise HTTPException(status_code=404, detail="Especialidade não encontrada")
+
+    now = datetime.now(timezone.utc)
+    services = (
+        db.query(Service)
+        .join(MedicalSpecialty, Service.specialty_id == MedicalSpecialty.id)
+        .join(MedicalSpecialty.doctors)
+        .join(ClinicalAccess, Doctor.clinical_access_id == ClinicalAccess.id)
+        .join(DoctorScheduleSlot, DoctorScheduleSlot.doctor_id == Doctor.id)
+        .outerjoin(
+            DoctorService,
+            (DoctorService.service_id == Service.id) & (DoctorService.doctor_id == Doctor.id),
+        )
+        .filter(
+            Service.clinic_id == clinic_id,
+            Service.specialty_id == specialty_id,
+            Service.is_active,
+            Doctor.is_active,
+            ClinicalAccess.clinic_id == clinic_id,
+            DoctorScheduleSlot.status == "available",
+            DoctorScheduleSlot.start_datetime >= now,
+            (DoctorService.doctor_id == Doctor.id) | ~Service.doctor_services.any(),
+        )
+        .distinct()
+        .order_by(Service.name)
+        .all()
+    )
+
+    return [
+        OutService(
+            id=service.id,
+            clinic_id=service.clinic_id,
+            specialty_id=service.specialty_id,
+            name=service.name,
+            price=float(service.price),
+        )
+        for service in services
+    ]
  
  
 def list_doctors_by_clinic_service(db: Session, clinic_id: int) -> List[OutDoctor]:
-    clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active == True).first()
+    clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active).first()
     if not clinic:
         raise HTTPException(status_code=404, detail="Clínica não encontrada")
  

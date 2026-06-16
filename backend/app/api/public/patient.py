@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.core.database import get_db
+from app.models.patient import Patient
 from app.models.patient_access import PatientAccess
 from app.schemas.medical_appointment import ( 
     CreatePatientAppointment,
@@ -12,6 +13,7 @@ from app.schemas.medical_appointment import (
     OutClinic,
     OutDoctor,
     OutMyDoctor,
+    OutService,
     OutSlotDay 
 )
 from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
@@ -22,8 +24,10 @@ from app.services.patient_services import (
     validate_feed_service,
     get_appointment_history_service,
     list_clinics_service,
+    list_available_services_by_specialty_service,
     list_doctors_by_clinic_service,
     list_slots_by_doctor_service,
+    get_my_doctors_service,
     get_active_appointments_service,
     cancel_appointment_service,
 )
@@ -104,6 +108,16 @@ def list_clinics(
     db: Session = Depends(get_db),
 ) -> List[OutClinic]:
     return list_clinics_service(db=db)
+ 
+ 
+@router.get("/clinics/{clinic_id}/specialties/{specialty_id}/services", response_model=List[OutService])
+def list_available_services_by_specialty(
+    clinic_id: int,
+    specialty_id: int,
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutService]:
+    return list_available_services_by_specialty_service(db=db, clinic_id=clinic_id, specialty_id=specialty_id)
  
  
 @router.get("/clinics/{clinic_id}/doctors", response_model=List[OutDoctor])

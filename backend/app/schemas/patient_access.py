@@ -4,7 +4,8 @@ from app.schemas.phone import CreatePhone, OutPhone
 
 from pydantic import (BaseModel,
                       StringConstraints,
-                      ConfigDict
+                      ConfigDict,
+                      EmailStr
                       )
 from typing import Optional, Annotated
 
@@ -62,5 +63,5 @@ class FullPatientAccessRegistration(BaseModel):
 
 
 class LoginPatientAccess(BaseModel):
-    email: str
-    password: str
+    email: EmailStr
+    password: Annotated[str, StringConstraints(min_length=8)]
