@@ -58,6 +58,8 @@ export type AppointmentHistoryItem = {
   status: string;
   date: string;
   specialty: string;
+  service_name?: string;
+  price?: number;
 };
 
 export type HistoryAppointment = {

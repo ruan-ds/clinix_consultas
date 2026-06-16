@@ -83,6 +83,8 @@ class AppointmentHistoryItem(BaseModel):
     status: str
     date: datetime
     specialty: str
+    service_name: Optional[str] = None
+    price: Optional[float] = None
 
     model_config = ConfigDict(from_attributes=True)
 

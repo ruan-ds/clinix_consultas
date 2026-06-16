@@ -535,6 +535,12 @@ def get_active_appointments_service(db: Session, patient_id: int) -> List[Dict]:
 
         date = appt.slot.start_datetime if getattr(appt, "slot", None) else appt.created_at
 
+        service_name = None
+        service_price = None
+        if getattr(appt, "service", None):
+            service_name = getattr(appt.service, "name", None)
+            service_price = float(appt.service.price) if getattr(appt.service, "price", None) is not None else None
+
         result.append({
             "id": appt.id,
             "doctor_name": doctor_name,
@@ -543,6 +549,8 @@ def get_active_appointments_service(db: Session, patient_id: int) -> List[Dict]:
             "status": appt.status,
             "date": date,
             "specialty": specialty,
+            "service_name": service_name,
+            "price": service_price,
         })
 
     return result

@@ -121,6 +121,16 @@ function ActiveAppointments() {
                                     </p>
                                     <p>
                                         <Stethoscope size={14} className="active-icon-inline" />
+                                        <strong>Serviço:</strong> {item.service_name ?? item.specialty}
+                                    </p>
+                                    <p>
+                                        <Stethoscope size={14} className="active-icon-inline" />
+                                        <strong>Valor:</strong> {typeof item.price === 'number'
+                                            ? item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                            : 'R$ 0,00'}
+                                    </p>
+                                    <p>
+                                        <Stethoscope size={14} className="active-icon-inline" />
                                         <strong>Clínica:</strong> {item.clinic_name}
                                     </p>
                                     <p>
