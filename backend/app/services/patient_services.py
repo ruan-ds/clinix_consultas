@@ -18,6 +18,27 @@ from app.models.service import Service
 from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutClinic, OutDoctor, OutService, OutSlot, OutSlotDay
 from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword, OutPatientAccessWithName
 from app.utils.security import hash_password, verify_password
+from app.exceptions.patient_exceptions import (
+    patient_not_found_or_inactive,
+    email_already_in_use,
+    account_update_error,
+    passwords_do_not_match,
+    incorrect_current_password,
+    invalid_appointment_time,
+    appointment_time_expired,
+    appointment_time_unavailable,
+    appointment_time_already_booked,
+    invalid_doctor,
+    invalid_time_for_doctor,
+    invalid_doctor_for_clinic,
+    invalid_clinical_professional_for_doctor,
+    invalid_service_for_doctor_clinic_specialty,
+    clinic_not_found,
+    specialty_not_found,
+    doctor_not_found,
+    appointment_not_found,
+    only_scheduled_appointments_can_be_cancelled
+)
 
 
 def get_patient_access_by_patient_id(db: Session, patient_id: int) -> Optional[PatientAccess]:
@@ -28,7 +49,7 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
     patient_access = get_patient_access_by_patient_id(db, patient_id)
 
     if not patient_access or not patient_access.is_active:
-        raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
+        patient_not_found_or_inactive()
     now = datetime.now(timezone.utc)
     next_appt = (
         db.query(MedicalAppointment)
@@ -111,12 +132,12 @@ def update_patient_contact_service(db: Session, patient_id: int, data: UpdatePat
     patient_access = get_patient_access_by_patient_id(db, patient_id)
 
     if not patient_access or not patient_access.is_active:
-        raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
+        patient_not_found_or_inactive()
 
     if data.email and data.email != patient_access.email:
         existing = db.query(PatientAccess).filter(PatientAccess.email == data.email, PatientAccess.patient_id != patient_id).first()
         if existing:
-            raise HTTPException(status_code=400, detail="E-mail já em uso")
+            email_already_in_use()
         patient_access.email = data.email
 
     phone_entry = None
@@ -146,7 +167,7 @@ def update_patient_contact_service(db: Session, patient_id: int, data: UpdatePat
         db.refresh(patient_access)
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=400, detail="Erro ao atualizar configurações de conta")
+        account_update_error()
 
     return patient_access
 
@@ -155,13 +176,13 @@ def update_patient_password_service(db: Session, patient_id: int, data: UpdatePa
     patient_access = get_patient_access_by_patient_id(db, patient_id)
 
     if not patient_access or not patient_access.is_active:
-        raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
+        patient_not_found_or_inactive()
 
     if data.new_password != data.confirm_password:
-        raise HTTPException(status_code=400, detail="A nova senha e a confirmação não coincidem")
+        passwords_do_not_match()
 
     if not verify_password(data.current_password, patient_access.password_hash):
-        raise HTTPException(status_code=401, detail="Senha atual incorreta")
+        incorrect_current_password()
 
     patient_access.password_hash = hash_password(data.new_password)
 
@@ -176,34 +197,34 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
     patient_access = get_patient_access_by_patient_id(db, patient_id)
 
     if not patient_access or not patient_access.is_active:
-        raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
+        patient_not_found_or_inactive()
 
     slot = db.query(DoctorScheduleSlot).filter(DoctorScheduleSlot.id == data.slot_id).first()
     if not slot:
-        raise HTTPException(status_code=400, detail="Horário de consulta inválido")
+        invalid_appointment_time()
 
     if slot.start_datetime < datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="Horário já expirado")
+        appointment_time_expired()
 
     if slot.status != "available":
-        raise HTTPException(status_code=400, detail="Horário indisponível")
+        appointment_time_unavailable()
 
     if db.query(MedicalAppointment).filter(MedicalAppointment.slot_id == slot.id).first():
-        raise HTTPException(status_code=400, detail="Horário já reservado")
+        appointment_time_already_booked()
 
     doctor = db.query(Doctor).filter(Doctor.id == data.doctor_id, Doctor.is_active).first()
     if not doctor:
-        raise HTTPException(status_code=400, detail="Médico inválido")
+        invalid_doctor()
 
     if slot.doctor_id != doctor.id:
-        raise HTTPException(status_code=400, detail="Horário inválido para o médico informado")
+        invalid_time_for_doctor()
 
     doctor_clinic_id = doctor.clinical_access.clinic_id if doctor.clinical_access else None
     if doctor_clinic_id != data.clinic_id:
-        raise HTTPException(status_code=400, detail="Médico inválido para a clínica selecionada")
+        invalid_doctor_for_clinic()
 
     if data.clinical_access_id and data.clinical_access_id != doctor.clinical_access_id:
-        raise HTTPException(status_code=400, detail="Profissional clínico inválido para o médico informado")
+        invalid_clinical_professional_for_doctor()
 
     clinical_access_id = data.clinical_access_id or doctor.clinical_access_id
     service = (
@@ -221,7 +242,7 @@ def create_medical_appointment_service(db: Session, patient_id: int, data: Creat
         .first()
     )
     if not service:
-        raise HTTPException(status_code=400, detail="Serviço inválido para o médico, clínica ou especialidade selecionados")
+        invalid_service_for_doctor_clinic_specialty()
 
     appointment = MedicalAppointment(
         clinic_id=data.clinic_id,
@@ -304,7 +325,7 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
 
     return history
 
-    
+
 def list_clinics_service(db: Session) -> List[OutClinic]:
     clinics = db.query(Clinic).filter(Clinic.is_active == True).all()
     result = []
@@ -320,11 +341,11 @@ def list_clinics_service(db: Session) -> List[OutClinic]:
 def list_available_services_by_specialty_service(db: Session, clinic_id: int, specialty_id: int) -> List[OutService]:
     clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active).first()
     if not clinic:
-        raise HTTPException(status_code=404, detail="Clínica não encontrada")
+        clinic_not_found()
 
     specialty = db.query(MedicalSpecialty).filter(MedicalSpecialty.id == specialty_id).first()
     if not specialty:
-        raise HTTPException(status_code=404, detail="Especialidade não encontrada")
+        specialty_not_found()
 
     now = datetime.now(timezone.utc)
     services = (
@@ -362,12 +383,12 @@ def list_available_services_by_specialty_service(db: Session, clinic_id: int, sp
         )
         for service in services
     ]
- 
- 
+
+
 def list_doctors_by_clinic_service(db: Session, clinic_id: int) -> List[OutDoctor]:
     clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active).first()
     if not clinic:
-        raise HTTPException(status_code=404, detail="Clínica não encontrada")
+        clinic_not_found()
  
     doctors = (
         db.query(Doctor)
@@ -394,7 +415,7 @@ def list_doctors_by_clinic_service(db: Session, clinic_id: int) -> List[OutDocto
 def list_slots_by_doctor_service(db: Session, doctor_id: int) -> List[OutSlotDay]:
     doctor = db.query(Doctor).filter(Doctor.id == doctor_id, Doctor.is_active == True).first()
     if not doctor:
-        raise HTTPException(status_code=404, detail="Médico não encontrado")
+        doctor_not_found()
  
     now = datetime.now(timezone.utc)
     slots = (
@@ -549,10 +570,10 @@ def cancel_appointment_service(db: Session, patient_id: int, appointment_id: int
     )
 
     if not appointment:
-        raise HTTPException(status_code=404, detail="Consulta não encontrada")
+        appointment_not_found()
 
     if appointment.status != "scheduled":
-        raise HTTPException(status_code=400, detail="Apenas consultas agendadas podem ser canceladas")
+        only_scheduled_appointments_can_be_cancelled()
 
     slot = db.query(DoctorScheduleSlot).filter(DoctorScheduleSlot.id == appointment.slot_id).first()
     if slot:

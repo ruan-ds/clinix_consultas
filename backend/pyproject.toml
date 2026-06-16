@@ -22,7 +22,7 @@ python-multipart = "^0.0.22"
 cryptography = "^46.0.5"
 pytest = "^9.0.2"
 alembic = "^1.18.4"
-pydantic = "^2.12.5"
+pydantic = {extras = ["email"], version = "^2.13.4"}
 psycopg = {extras = ["binary"], version = "^3.3.3"}
 argon2-cffi = "^25.1.0"
 
