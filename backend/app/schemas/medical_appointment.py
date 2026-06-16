@@ -95,3 +95,26 @@ class OutMyDoctor(BaseModel):
     location: str
     
     model_config = ConfigDict(from_attributes=True)
+
+
+class OutSpecialty(BaseModel):
+    id: int
+    name: str
+    model_config = ConfigDict(from_attributes=True)
+
+
+class OutServiceCatalogItem(BaseModel):
+    name: str
+    specialty_id: int
+    min_price: float
+    max_price: float
+    clinics_count: int
+
+
+class OutClinicWithService(BaseModel):
+    id: int
+    trade_name: str
+    address: str
+    service_id: int
+    price: float
+    model_config = ConfigDict(from_attributes=True)

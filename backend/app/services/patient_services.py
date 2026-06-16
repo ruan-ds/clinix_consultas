@@ -15,7 +15,18 @@ from app.models.medical_appointment import MedicalAppointment
 from app.models.patient_access import PatientAccess
 from app.models.phone import Phone
 from app.models.service import Service
-from app.schemas.medical_appointment import CreatePatientAppointment, FeedValidation, OutClinic, OutDoctor, OutService, OutSlot, OutSlotDay
+from app.schemas.medical_appointment import (
+    CreatePatientAppointment,
+    FeedValidation,
+    OutClinic,
+    OutClinicWithService,
+    OutDoctor,
+    OutService,
+    OutServiceCatalogItem,
+    OutSlot,
+    OutSlotDay,
+    OutSpecialty,
+)
 from app.schemas.patient_access import UpdatePatientContact, UpdatePatientPassword, OutPatientAccessWithName
 from app.utils.security import hash_password, verify_password
 
@@ -563,3 +574,163 @@ def cancel_appointment_service(db: Session, patient_id: int, appointment_id: int
     appointment.is_active = False
     db.add(appointment)
     db.commit()
+
+
+def list_specialties_service(db: Session) -> List[OutSpecialty]:
+    specialties = db.query(MedicalSpecialty).order_by(MedicalSpecialty.name).all()
+    return [OutSpecialty(id=s.id, name=s.name) for s in specialties]
+
+
+def list_services_by_specialty_service(db: Session, specialty_id: int) -> List[OutServiceCatalogItem]:
+    specialty = db.query(MedicalSpecialty).filter(MedicalSpecialty.id == specialty_id).first()
+    if not specialty:
+        raise HTTPException(status_code=404, detail="Especialidade não encontrada")
+
+    now = datetime.now(timezone.utc)
+    services = (
+        db.query(Service)
+        .join(MedicalSpecialty, Service.specialty_id == MedicalSpecialty.id)
+        .join(MedicalSpecialty.doctors)
+        .join(ClinicalAccess, Doctor.clinical_access_id == ClinicalAccess.id)
+        .join(DoctorScheduleSlot, DoctorScheduleSlot.doctor_id == Doctor.id)
+        .outerjoin(
+            DoctorService,
+            (DoctorService.service_id == Service.id) & (DoctorService.doctor_id == Doctor.id),
+        )
+        .filter(
+            Service.specialty_id == specialty_id,
+            Service.is_active,
+            Doctor.is_active,
+            ClinicalAccess.clinic_id == Service.clinic_id,
+            DoctorScheduleSlot.status == "available",
+            DoctorScheduleSlot.start_datetime >= now,
+            (DoctorService.doctor_id == Doctor.id) | ~Service.doctor_services.any(),
+        )
+        .distinct()
+        .all()
+    )
+
+    grouped: Dict[str, Dict] = {}
+    for service in services:
+        price = float(service.price)
+        entry = grouped.setdefault(service.name, {"min_price": price, "max_price": price, "clinic_ids": set()})
+        entry["min_price"] = min(entry["min_price"], price)
+        entry["max_price"] = max(entry["max_price"], price)
+        entry["clinic_ids"].add(service.clinic_id)
+
+    return [
+        OutServiceCatalogItem(
+            name=name,
+            specialty_id=specialty_id,
+            min_price=data["min_price"],
+            max_price=data["max_price"],
+            clinics_count=len(data["clinic_ids"]),
+        )
+        for name, data in sorted(grouped.items())
+    ]
+
+
+def list_clinics_by_service_service(db: Session, specialty_id: int, service_name: str) -> List[OutClinicWithService]:
+    specialty = db.query(MedicalSpecialty).filter(MedicalSpecialty.id == specialty_id).first()
+    if not specialty:
+        raise HTTPException(status_code=404, detail="Especialidade não encontrada")
+
+    now = datetime.now(timezone.utc)
+    services = (
+        db.query(Service)
+        .join(Clinic, Service.clinic_id == Clinic.id)
+        .join(MedicalSpecialty, Service.specialty_id == MedicalSpecialty.id)
+        .join(MedicalSpecialty.doctors)
+        .join(ClinicalAccess, Doctor.clinical_access_id == ClinicalAccess.id)
+        .join(DoctorScheduleSlot, DoctorScheduleSlot.doctor_id == Doctor.id)
+        .outerjoin(
+            DoctorService,
+            (DoctorService.service_id == Service.id) & (DoctorService.doctor_id == Doctor.id),
+        )
+        .filter(
+            Service.specialty_id == specialty_id,
+            Service.name == service_name,
+            Service.is_active,
+            Clinic.is_active,
+            Doctor.is_active,
+            ClinicalAccess.clinic_id == Service.clinic_id,
+            DoctorScheduleSlot.status == "available",
+            DoctorScheduleSlot.start_datetime >= now,
+            (DoctorService.doctor_id == Doctor.id) | ~Service.doctor_services.any(),
+        )
+        .distinct()
+        .all()
+    )
+
+    result = []
+    seen_clinic_ids = set()
+    for service in services:
+        if service.clinic_id in seen_clinic_ids:
+            continue
+        seen_clinic_ids.add(service.clinic_id)
+
+        clinic = service.clinic
+        addr = clinic.address
+        address_str = ""
+        if addr:
+            parts = [addr.street, addr.number, addr.neighborhood, addr.city]
+            address_str = ", ".join(p for p in parts if p)
+
+        result.append(OutClinicWithService(
+            id=clinic.id,
+            trade_name=clinic.trade_name,
+            address=address_str,
+            service_id=service.id,
+            price=float(service.price),
+        ))
+
+    return result
+
+
+def list_doctors_by_clinic_and_service_service(db: Session, clinic_id: int, service_id: int) -> List[OutDoctor]:
+    clinic = db.query(Clinic).filter(Clinic.id == clinic_id, Clinic.is_active).first()
+    if not clinic:
+        raise HTTPException(status_code=404, detail="Clínica não encontrada")
+
+    service = (
+        db.query(Service)
+        .filter(Service.id == service_id, Service.clinic_id == clinic_id, Service.is_active)
+        .first()
+    )
+    if not service:
+        raise HTTPException(status_code=404, detail="Serviço não encontrado para esta clínica")
+
+    # Se o serviço tiver vínculos explícitos em doctor_service, só esses médicos
+    # podem atendê-lo. Caso contrário, qualquer médico ativo da clínica com a
+    # especialidade do serviço pode atendê-lo (mesma regra usada na criação do agendamento).
+    restricted_doctor_ids = [ds.doctor_id for ds in service.doctor_services]
+
+    query = (
+        db.query(Doctor)
+        .join(ClinicalAccess, Doctor.clinical_access_id == ClinicalAccess.id)
+        .filter(
+            ClinicalAccess.clinic_id == clinic_id,
+            Doctor.is_active == True,
+        )
+    )
+
+    if restricted_doctor_ids:
+        query = query.filter(Doctor.id.in_(restricted_doctor_ids))
+    else:
+        query = query.filter(Doctor.specialties.any(MedicalSpecialty.id == service.specialty_id))
+
+    doctors = query.distinct().all()
+
+    result = []
+    for doc in doctors:
+        name = doc.clinical_access.person.name if doc.clinical_access and doc.clinical_access.person else "Médico"
+        specialties = [s.name for s in doc.specialties] if doc.specialties else []
+        specialty_str = ", ".join(specialties) if specialties else "Clínica Geral"
+        result.append(OutDoctor(
+            id=doc.id,
+            name=name,
+            specialty=specialty_str,
+            clinic_name=clinic.trade_name,
+            clinical_access_id=doc.clinical_access_id,
+        ))
+    return result

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -11,12 +11,14 @@ from app.schemas.medical_appointment import (
     OutMedicalAppointment,
     AppointmentHistoryItem,
     OutClinic,
+    OutClinicWithService,
     OutDoctor,
     OutMyDoctor,
     OutService,
-    OutSlotDay 
+    OutServiceCatalogItem,
+    OutSlotDay,
+    OutSpecialty,
 )
-from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.services.patient_services import (
     create_medical_appointment_service,
     update_patient_contact_service,
@@ -24,6 +26,10 @@ from app.services.patient_services import (
     validate_feed_service,
     get_appointment_history_service,
     list_clinics_service,
+    list_specialties_service,
+    list_services_by_specialty_service,
+    list_clinics_by_service_service,
+    list_doctors_by_clinic_and_service_service,
     list_available_services_by_specialty_service,
     list_doctors_by_clinic_service,
     list_slots_by_doctor_service,
@@ -31,6 +37,7 @@ from app.services.patient_services import (
     get_active_appointments_service,
     cancel_appointment_service,
 )
+from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
 from app.utils.jwt import decode_access_token
 
 router = APIRouter(prefix="/patient", tags=["Patient"])
@@ -162,3 +169,40 @@ def cancel_appointment(
     db: Session = Depends(get_db),
 ) -> None:
     cancel_appointment_service(db=db, patient_id=current_user.patient_id, appointment_id=appointment_id)
+
+
+@router.get("/specialties", response_model=List[OutSpecialty])
+def list_specialties(
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutSpecialty]:
+    return list_specialties_service(db=db)
+
+
+@router.get("/specialties/{specialty_id}/services", response_model=List[OutServiceCatalogItem])
+def list_services_by_specialty(
+    specialty_id: int,
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutServiceCatalogItem]:
+    return list_services_by_specialty_service(db=db, specialty_id=specialty_id)
+
+
+@router.get("/specialties/{specialty_id}/clinics", response_model=List[OutClinicWithService])
+def list_clinics_by_service(
+    specialty_id: int,
+    service_name: str = Query(..., description="Nome do serviço selecionado na etapa anterior"),
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutClinicWithService]:
+    return list_clinics_by_service_service(db=db, specialty_id=specialty_id, service_name=service_name)
+
+
+@router.get("/clinics/{clinic_id}/services/{service_id}/doctors", response_model=List[OutDoctor])
+def list_doctors_by_clinic_and_service(
+    clinic_id: int,
+    service_id: int,
+    _: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> List[OutDoctor]:
+    return list_doctors_by_clinic_and_service_service(db=db, clinic_id=clinic_id, service_id=service_id)
