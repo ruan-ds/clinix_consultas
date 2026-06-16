@@ -10,7 +10,7 @@ export type FeedValidation = {
     person_name: string;
   };
   has_upcoming_appointments: boolean;
-  next_appointment: object | null;
+  next_appointment: AppointmentHistoryItem | null;
 };
 
 // ─── Tipos novos ────────────────────────────────────────────────────
@@ -59,6 +59,16 @@ export type AppointmentHistoryItem = {
   date: string;
   specialty: string;
 };
+
+export type HistoryAppointment = {
+  id: number;
+  doctor_name: string;
+  clinic_name: string;
+  address: string;
+  status: string;
+  date: string;
+  specialty: string;
+};
 // ─── Funções existentes ─────────────────────────────────────────────
 export async function validateFeed(): Promise<FeedValidation> {
   const response = await api.get("/patient/feed/validate");
@@ -91,4 +101,8 @@ export async function getActiveAppointments(): Promise<AppointmentHistoryItem[]>
 
 export async function cancelAppointment(appointmentId: number): Promise<void> {
   await api.patch(`/patient/appointments/${appointmentId}/cancel`);
+}
+export async function listHistoryAppointments(): Promise<HistoryAppointment[]> {
+  const response = await api.get("/patient/appointments/history");
+  return response.data;
 }

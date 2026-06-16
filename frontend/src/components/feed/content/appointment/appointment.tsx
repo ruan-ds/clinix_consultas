@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   Search, Stethoscope, Heart, Sparkles, Venus, Baby, Bone, ChevronRight,
-  ArrowLeft, MapPin, Star, Calendar, User, Check, Clock, Loader2
+  ArrowLeft, MapPin, Star, Calendar, User, Clock, Loader2
 } from 'lucide-react';
 import './appointment.css';
 import {
   listClinics,
   listDoctors,
   listSlots,
-  createAppointment,
   type Clinic,
   type Doctor,
   type SlotDay,
+  createAppointment, // Importado de volta caso precise
 } from '../../../../services/patientService';
 
 const especialidadesMock = [
@@ -26,7 +26,9 @@ const especialidadesMock = [
 export const Appointment = () => {
   const [etapa, setEtapa] = useState(0);
   const [buscaClinica, setBuscaClinica] = useState('');
-  const [diaAtivo, setDiaAtivo] = useState(0);
+  
+  // Guardamos agora a data no formato YYYY-MM-DD
+  const [dataSelecionada, setDataSelecionada] = useState(''); 
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -72,6 +74,11 @@ export const Appointment = () => {
         if (!slots[doc.id]) {
           listSlots(doc.id).then((dias) => {
             setSlots((prev) => ({ ...prev, [doc.id]: dias }));
+            
+            // Define a primeira data disponível como padrão global caso não tenha nenhuma definida
+            if (!dataSelecionada && dias.length > 0) {
+              setDataSelecionada(dias[0].date);
+            }
           });
         }
       });
@@ -87,7 +94,7 @@ export const Appointment = () => {
     setClinicaSelecionada(clinica);
     setMedicos([]);
     setSlots({});
-    setDiaAtivo(0);
+    setDataSelecionada('');
     setEtapa(2);
   };
 
@@ -120,7 +127,7 @@ export const Appointment = () => {
 
   const reiniciar = () => {
     setEtapa(0);
-    setDiaAtivo(0);
+    setDataSelecionada('');
     setClinicaSelecionada(null);
     setMedicoSelecionado(null);
     setSlotSelecionado(null);
@@ -218,9 +225,35 @@ export const Appointment = () => {
     );
   }
 
-  // ETAPA 2: Médicos e Horários
+  // ETAPA 2: Médicos e Horários (Com Calendário)
+// ETAPA 2: Médicos e Horários
   if (etapa === 2) {
     const espSelecionada = especialidadesMock.find(e => e.id === especialidadeId)?.nome;
+
+    // Função auxiliar para traduzir o label recebido da API para Português
+    const formatarDiaSemana = (labelOriginal: string) => {
+      if (!labelOriginal) return '';
+      
+      // Mapeamento de termos em inglês para português
+      const traducoes: Record<string, string> = {
+        'mon': 'Segunda', 'tue': 'Terça', 'wed': 'Quarta', 'thu': 'Quinta', 
+        'fri': 'Sexta', 'sat': 'Sábado', 'sun': 'Domingo',
+        'monday': 'Segunda', 'tuesday': 'Terça', 'wednesday': 'Quarta', 
+        'thursday': 'Quinta', 'friday': 'Sexta', 'saturday': 'Sábado', 'sunday': 'Domingo'
+      };
+
+      // Divide o rótulo (Ex: "Tue, 30/06" vira ["Tue", "30/06"])
+      const partes = labelOriginal.split(',');
+      if (partes.length === 2) {
+        const diaSemanaIngles = partes[0].trim().toLowerCase();
+        const dataParte = partes[1].trim();
+        const diaSemanaPt = traducoes[diaSemanaIngles] || partes[0].trim();
+        return `${diaSemanaPt}, ${dataParte}`;
+      }
+      
+      return labelOriginal;
+    };
+
     return (
       <div className="ac-container">
         {renderHeader('Etapa 3 de 4: Médico e Horário', '75%')}
@@ -235,7 +268,15 @@ export const Appointment = () => {
             )}
             {medicos.map((medico) => {
               const diasMedico = slots[medico.id] ?? [];
-              const diaAtualMedico = diasMedico[diaAtivo] ?? diasMedico[0];
+              
+              // Define limites do calendário com base nas datas da API
+              const datasDisponiveis = diasMedico.map(d => d.date);
+              const minData = datasDisponiveis.length > 0 ? datasDisponiveis[0] : '';
+              const maxData = datasDisponiveis.length > 0 ? datasDisponiveis[datasDisponiveis.length - 1] : '';
+
+              // Filtra o dia ativo com base na string de data selecionada
+              const diaAtualMedico = diasMedico.find(d => d.date === dataSelecionada) || diasMedico[0];
+
               return (
                 <div key={medico.id} className="ac-medico-card">
                   <div className="ac-medico-info">
@@ -248,22 +289,34 @@ export const Appointment = () => {
                       <p style={{ color: '#6b7280', fontSize: 14 }}>Sem horários disponíveis</p>
                     ) : (
                       <>
-                        <div className="ac-dias-nav">
-                          {diasMedico.map((dia, idx) => (
-                            <button
-                              key={idx}
-                              className={`ac-dia-btn ${diaAtivo === idx ? 'ac-dia-btn--ativo' : ''}`}
-                              onClick={() => setDiaAtivo(idx)}
-                            >
-                              <span className="ac-dia-label">{dia.label}</span>
-                              <span className="ac-dia-data">{dia.date.slice(5).replace('-', '/')}</span>
-                            </button>
-                          ))}
+                        {/* Seletor de Calendário Alinhado */}
+                        <div className="ac-calendario-container">
+                          <label className="ac-calendario-label" htmlFor={`cal-${medico.id}`}>
+                            <Calendar size={16} /> Selecione o Dia da Consulta:
+                          </label>
+                          <input
+                            type="date"
+                            id={`cal-${medico.id}`}
+                            className="ac-calendario-input"
+                            min={minData}
+                            max={maxData}
+                            value={dataSelecionada || minData}
+                            onChange={(e) => {
+                              const valor = e.target.value;
+                              if (datasDisponiveis.includes(valor)) {
+                                setDataSelecionada(valor);
+                                setErro(null);
+                              } else {
+                                setErro('A data selecionada não possui horários com este médico.');
+                              }
+                            }}
+                          />
                         </div>
+
                         {diaAtualMedico && (
                           <div className="ac-horarios-wrap">
                             <p className="ac-agenda-titulo">
-                              <Clock size={14} /> Horários disponíveis
+                              <Clock size={14} /> Horários disponíveis para {formatarDiaSemana(diaAtualMedico.label)}
                             </p>
                             <div className="ac-horarios-grid">
                               {diaAtualMedico.slots.map((slot) => {
@@ -274,7 +327,10 @@ export const Appointment = () => {
                                   <span
                                     key={slot.id}
                                     className="ac-horario-badge"
-                                    onClick={() => selecionarSlot(medico, `${diaAtualMedico.label}, ${hora}`, slot.id, hora)}
+                                    onClick={() => {
+                                      const labelTraduzido = formatarDiaSemana(diaAtualMedico.label);
+                                      selecionarSlot(medico, `${labelTraduzido}, às ${hora}`, slot.id, hora);
+                                    }}
                                   >
                                     {hora}
                                   </span>
@@ -352,7 +408,7 @@ export const Appointment = () => {
     <div className="ac-container ac-container-centralizado">
       <div className="ac-sucesso-box-notificacao">
         <div className="ac-icone-sucesso">
-          <Check size={40} color="white" strokeWidth={4} />
+          <span style={{ color: 'white', fontSize: '32px', fontWeight: 'bold' }}>✓</span>
         </div>
         <h1 className="ac-title-sucesso">Agendamento Confirmado!</h1>
         <p className="ac-subtitle-sucesso">Sua consulta foi reservada com sucesso.</p>

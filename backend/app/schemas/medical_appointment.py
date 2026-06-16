@@ -31,13 +31,23 @@ class OutSlot(BaseModel):
     status: str
     model_config = ConfigDict(from_attributes=True)
 
+
+class OutService(BaseModel):
+    id: int
+    clinic_id: int
+    specialty_id: int
+    name: str
+    price: float
+    model_config = ConfigDict(from_attributes=True)
+
+
 OutSlotDay.model_rebuild()
 
 class CreatePatientAppointment(BaseModel):
     clinic_id: int
     doctor_id: int
     slot_id: int
-    service_id: Optional[int] = None
+    service_id: int
     clinical_access_id: Optional[int] = None
     notes: Optional[str] = None
 
@@ -61,7 +71,7 @@ class OutMedicalAppointment(BaseModel):
 class FeedValidation(BaseModel):
     patient: OutPatientAccessWithName
     has_upcoming_appointments: bool
-    next_appointment: Optional[OutMedicalAppointment] = None
+    next_appointment: Optional["AppointmentHistoryItem"] = None 
     model_config = ConfigDict(from_attributes=True)
 
 

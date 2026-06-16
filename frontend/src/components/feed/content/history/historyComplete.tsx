@@ -1,46 +1,21 @@
 import React, { useState } from 'react';
 import './historyComplete.css';
-
-
+import { listHistoryAppointments } from '../../../../services/patientService';
 
 function HistoryComplete() {
     const [pesquisa, setPesquisa] = useState('');
+    const [Historico, setHistorico] = useState<any[]>([]);
 
-    // Array baseado no seu JSON original, acrescido apenas de 'id' e 'location' para compor o layout
-    const Historico = [
-        { 
-            id: 1,
-            specialty: "Cardiologia", 
-            doctorName: "Dr. Marcos Paulo", 
-            date: "10 de Março, 14:00",
-            location: "Clínica Pró Saúde - Betim/MG"
-        },
-        { 
-            id: 2,
-            specialty: "Ortopedia", 
-            doctorName: "Dra. Aline Silva", 
-            date: "22 de Janeiro, 09:30",
-            location: "Clínica Centro - Betim/MG"
-        },
-        { 
-            id: 3,
-            specialty: "Dermatologia", 
-            doctorName: "Dr. Carlos Eduardo", 
-            date: "15 de Dezembro, 16:15",
-            location: "Hospital Alfa - Betim/MG"
-        },
-        { 
-            id: 4,
-            specialty: "Clínico Geral", 
-            doctorName: "Dra. Fernanda Souza", 
-            date: "05 de Novembro, 11:00",
-            location: "Clínica Vida - Betim/MG"
-        }
-    ];
+    // Busca o histórico completo de consultas
+    React.useEffect(() => {
+        listHistoryAppointments()
+            .then((data) => setHistorico(data))
+            .catch(() => setHistorico([]));
+    }, []);
 
     const filtrados = Historico.filter(item => 
         item.specialty.toLowerCase().includes(pesquisa.toLowerCase()) ||
-        item.doctorName.toLowerCase().includes(pesquisa.toLowerCase())
+        item.doctor_name.toLowerCase().includes(pesquisa.toLowerCase())
     );
 
     return (
@@ -60,19 +35,36 @@ function HistoryComplete() {
             </header>
 
             <div className="history-cards-list">
-                {filtrados.map((item) => (
-                    <div key={item.id} className="complete-card-item">
-                        <div className="card-info-side">
-                            <div className="card-main-line">
-                                <span className="doctor-spec-txt">{item.doctorName} - {item.specialty}</span>
-                            </div>
-                            <div className="card-details-block">
-                                <p><strong>Data e Hora:</strong> {item.date}</p>
-                                <p><strong>Local:</strong> {item.location}</p>
+                {filtrados.map((item) => {
+                    // 🔹 Formatação da data
+                    const d = new Date(item.date);
+
+                    const dateStr = d.toLocaleDateString('pt-BR');
+                    const timeStr = d.toLocaleTimeString('pt-BR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    return (
+                        <div key={item.id} className="complete-card-item">
+                            <div className="card-info-side">
+                                <div className="card-main-line">
+                                    <span className="doctor-spec-txt">
+                                        {item.doctor_name} - {item.specialty}
+                                    </span>
+                                </div>
+                                <div className="card-details-block">
+                                    <p>
+                                        <strong>Data e Hora:</strong> {dateStr} às {timeStr}
+                                    </p>
+                                    <p>
+                                        <strong>Local:</strong> {item.location}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
