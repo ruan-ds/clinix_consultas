@@ -29,13 +29,24 @@ function HistoryRecent(props: { historico: any[] }) {
 
                         return (
                             <div key={index} className="history-item-card">
-                                <div className="history-info">
-                                    <span className="history-specialty">{item.specialty}</span>
-                                    <span className="history-doctor">{item.doctor_name}</span>
+                                <div className="history-left-column">
+                                    <div className="history-info">
+                                        <span className="history-specialty">{item.service_name ?? item.specialty}</span>
+                                        <span className="history-doctor">{item.doctor_name}</span>
+                                        <span className="history-location">{item.location ?? item.clinic_name}</span>
+                                    </div>
                                 </div>
-                                <div className="history-date">
-                                    <FaCalendarCheck className="date-icon" />
-                                    <span>{dateStr} às {timeStr}</span>
+                                <div className="history-right-column">
+                                    <div className="history-date">
+                                        <FaCalendarCheck className="date-icon" />
+                                        <span>{dateStr} às {timeStr}</span>
+                                    </div>
+                                    {typeof item.price === 'number' && (
+                                        <div className="history-price-line">
+                                            <span className="history-price-label">Valor:</span>
+                                            <span className="history-price">{item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         );

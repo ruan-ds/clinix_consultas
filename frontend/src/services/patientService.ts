@@ -67,9 +67,12 @@ export type HistoryAppointment = {
   doctor_name: string;
   clinic_name: string;
   address: string;
+  location?: string;
   status: string;
   date: string;
   specialty: string;
+  service_name?: string;
+  price?: number;
 };
 export type Specialty = {
   id: number;

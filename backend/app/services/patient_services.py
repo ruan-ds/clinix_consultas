@@ -283,6 +283,16 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
             clinic_name = appt.clinic.trade_name
 
         address_str = "Endereço não disponível"
+        location_str = "Local não informado"
+        if getattr(appt, "clinic", None):
+            clinic_address = getattr(appt.clinic, "address", None)
+            if clinic_address:
+                city = getattr(clinic_address, "city", "")
+                state = getattr(clinic_address, "state", "")
+                location_str = ", ".join(p for p in [city, state] if p) or location_str
+            elif getattr(appt.clinic, "trade_name", None):
+                location_str = appt.clinic.trade_name
+
         if getattr(appt, "clinic", None) and getattr(appt.clinic, "address", None):
             addr = appt.clinic.address
             street = getattr(addr, "street", "")
@@ -303,14 +313,23 @@ def get_appointment_history_service(db: Session, patient_id: int) -> List[Dict]:
         else:
             date = appt.created_at if getattr(appt, "created_at", None) else datetime.utcnow()
 
+        service_name = None
+        service_price = None
+        if getattr(appt, "service", None):
+            service_name = getattr(appt.service, "name", None)
+            service_price = float(appt.service.price) if getattr(appt.service, "price", None) is not None else None
+
         history.append({
             "id": appt.id,
             "doctor_name": doctor_name,
             "clinic_name": clinic_name,
             "address": address_str,
+            "location": location_str,
             "status": appt.status,
             "date": date,
-            "specialty": specialty
+            "specialty": specialty,
+            "service_name": service_name,
+            "price": service_price,
         })
 
     return history
