@@ -58,7 +58,15 @@ function HistoryComplete() {
                                         <strong>Data e Hora:</strong> {dateStr} às {timeStr}
                                     </p>
                                     <p>
-                                        <strong>Local:</strong> {item.location}
+                                        <strong>Serviço:</strong> {item.service_name ?? item.specialty}
+                                    </p>
+                                    {typeof item.price === 'number' && (
+                                        <p>
+                                            <strong>Valor:</strong> {item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                        </p>
+                                    )}
+                                    <p>
+                                        <strong>Local:</strong> {item.location ?? item.clinic_name}
                                     </p>
                                 </div>
                             </div>

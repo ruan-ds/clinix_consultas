@@ -34,28 +34,65 @@
 .history-item-card {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 16px 20px;
+    border-radius: 16px;
+    padding: 20px 22px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.history-left-column,
+.history-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-left-column {
+    flex: 1;
+    min-width: 0;
 }
 
 .history-info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
 }
 
 .history-specialty {
     font-size: 15px;
-    font-weight: 600;
-    color: #1e293b;
+    font-weight: 700;
+    color: #0f172a;
 }
 
 .history-doctor {
+    font-size: 14px;
+    color: #334155;
+}
+
+.history-location {
     font-size: 13px;
     color: #64748b;
+}
+
+.history-price-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.history-price-label {
+    color: #64748b;
+    font-weight: 600;
+}
+
+.history-price {
+    color: #0f172a;
 }
 
 .history-date {

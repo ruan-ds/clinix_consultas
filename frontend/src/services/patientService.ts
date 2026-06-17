@@ -45,8 +45,8 @@ export type CreateAppointmentData = {
   clinic_id: number;
   doctor_id: number;
   slot_id: number;
+  service_id: number; // antes era opcional e nem era enviado — agora obrigatório, igual ao schema do back
   clinical_access_id?: number;
-  service_id?: number;
   notes?: string;
 };
 
@@ -58,6 +58,8 @@ export type AppointmentHistoryItem = {
   status: string;
   date: string;
   specialty: string;
+  service_name?: string;
+  price?: number;
 };
 
 export type HistoryAppointment = {
@@ -65,10 +67,34 @@ export type HistoryAppointment = {
   doctor_name: string;
   clinic_name: string;
   address: string;
+  location?: string;
   status: string;
   date: string;
   specialty: string;
+  service_name?: string;
+  price?: number;
 };
+export type Specialty = {
+  id: number;
+  name: string;
+};
+
+export type ServiceCatalogItem = {
+  name: string;
+  specialty_id: number;
+  min_price: number;
+  max_price: number;
+  clinics_count: number;
+};
+
+export type ClinicWithService = {
+  id: number;
+  trade_name: string;
+  address: string;
+  service_id: number;
+  price: number;
+};
+
 // ─── Funções existentes ─────────────────────────────────────────────
 export async function validateFeed(): Promise<FeedValidation> {
   const response = await api.get("/patient/feed/validate");
@@ -104,5 +130,26 @@ export async function cancelAppointment(appointmentId: number): Promise<void> {
 }
 export async function listHistoryAppointments(): Promise<HistoryAppointment[]> {
   const response = await api.get("/patient/appointments/history");
+  return response.data;
+}
+export async function listSpecialties(): Promise<Specialty[]> {
+  const response = await api.get("/patient/specialties");
+  return response.data;
+}
+
+export async function listServicesBySpecialty(specialtyId: number): Promise<ServiceCatalogItem[]> {
+  const response = await api.get(`/patient/specialties/${specialtyId}/services`);
+  return response.data;
+}
+
+export async function listClinicsByService(specialtyId: number, serviceName: string): Promise<ClinicWithService[]> {
+  const response = await api.get(`/patient/specialties/${specialtyId}/clinics`, {
+    params: { service_name: serviceName },
+  });
+  return response.data;
+}
+
+export async function listDoctorsByClinicAndService(clinicId: number, serviceId: number): Promise<Doctor[]> {
+  const response = await api.get(`/patient/clinics/${clinicId}/services/${serviceId}/doctors`);
   return response.data;
 }

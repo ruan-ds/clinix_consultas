@@ -834,6 +834,31 @@
   color: #374151;
   margin-bottom: 10px;
 }
+.ac-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ac-card-header-row .ac-clinica-nome {
+  margin-bottom: 0;
+}
+
+.ac-servico-preco {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ecfdf5;
+  color: #149488;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 /* =========================================
    ESTILOS DO SELETOR DE CALENDÁRIO MODERNO
    ========================================= */
