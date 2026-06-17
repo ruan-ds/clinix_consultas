@@ -37,6 +37,12 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OutPatientContact(BaseModel):
+    email: str
+    phone: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+
 class OutPatientAccessWithName(OutPatientAccess):
     person_name: str
     model_config = ConfigDict(from_attributes=True)

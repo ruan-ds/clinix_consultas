@@ -162,6 +162,25 @@ def update_patient_contact_service(db: Session, patient_id: int, data: UpdatePat
     return patient_access
 
 
+def get_patient_contact_service(db: Session, patient_id: int) -> dict:
+    patient_access = get_patient_access_by_patient_id(db, patient_id)
+
+    if not patient_access or not patient_access.is_active:
+        raise HTTPException(status_code=404, detail="Paciente não encontrado ou inativo")
+
+    phone_entry = (
+        db.query(Phone)
+        .filter(Phone.entity_id == patient_id)
+        .order_by(Phone.id)
+        .first()
+    )
+
+    return {
+        "email": patient_access.email,
+        "phone": phone_entry.phone if phone_entry else None,
+    }
+
+
 def update_patient_password_service(db: Session, patient_id: int, data: UpdatePatientPassword) -> PatientAccess:
     patient_access = get_patient_access_by_patient_id(db, patient_id)
 

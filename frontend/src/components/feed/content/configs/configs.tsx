@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
-import { User, LogOut } from 'lucide-react'; // Importado o ícone LogOut
+import React, { useState, useEffect } from 'react';
+import { User, LogOut, Eye, EyeOff } from 'lucide-react';
 import './configs.css';
 import { removeToken } from '../../../../services/tokenService';
+import {
+  getPatientContact,
+  updatePatientContact,
+  updatePatientPassword,
+} from '../../../../services/patientService';
 
 interface ConfigsProps {
     userName: string; 
@@ -12,21 +17,71 @@ export const Configs = ({ userName }: ConfigsProps) => {
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [showSenhaAtual, setShowSenhaAtual] = useState(false);
+  const [showNovaSenha, setShowNovaSenha] = useState(false);
+  const [showConfirmarSenha, setShowConfirmarSenha] = useState(false);
 
   // Estados para o formulário de Contato
-  const [email, setEmail] = useState('exemplo@gamil.com');
-  const [telefone, setTelefone] = useState('(00) 9 9999-9999');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [loadingContato, setLoadingContato] = useState(false);
+  const [loadingSenha, setLoadingSenha] = useState(false);
+  const [mensagem, setMensagem] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
 
-  const handleSalvarSenha = (e: React.FormEvent) => {
+  useEffect(() => {
+    setLoadingContato(true);
+    getPatientContact()
+      .then((data) => {
+        setEmail(data.email);
+        setTelefone(data.phone ?? '');
+      })
+      .catch(() => {
+        setErro('Não foi possível carregar os dados de contato.');
+      })
+      .finally(() => setLoadingContato(false));
+  }, []);
+
+  const handleSalvarSenha = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar nova senha clicado");
-    // Lógica da API aqui
+    setErro(null);
+    setMensagem(null);
+    setLoadingSenha(true);
+
+    try {
+      await updatePatientPassword({
+        current_password: senhaAtual,
+        new_password: novaSenha,
+        confirm_password: confirmarSenha,
+      });
+      setMensagem('Senha atualizada com sucesso.');
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarSenha('');
+    } catch (error: any) {
+      setErro(error.response?.data?.detail || 'Erro ao atualizar a senha.');
+    } finally {
+      setLoadingSenha(false);
+    }
   };
 
-  const handleSalvarContato = (e: React.FormEvent) => {
+  const handleSalvarContato = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar contato clicado");
-    // Lógica da API aqui
+    setErro(null);
+    setMensagem(null);
+    setLoadingContato(true);
+
+    try {
+      await updatePatientContact({
+        email,
+        phone: telefone,
+      });
+      setMensagem('Contato atualizado com sucesso.');
+    } catch (error: any) {
+      setErro(error.response?.data?.detail || 'Erro ao atualizar o contato.');
+    } finally {
+      setLoadingContato(false);
+    }
   };
 
   // Função para gerenciar o clique de logout
@@ -69,38 +124,68 @@ export const Configs = ({ userName }: ConfigsProps) => {
           <h2 className="set-card-title">Alterar Senha</h2>
           
           <form onSubmit={handleSalvarSenha} className="set-form">
-            <div className="set-input-group">
+            <div className="set-input-group password-group">
               <label>Senha atual</label>
-              <input 
-                type="password" 
-                placeholder="Digite sua senha atual" 
-                value={senhaAtual}
-                onChange={(e) => setSenhaAtual(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={showSenhaAtual ? 'text' : 'password'} 
+                  placeholder="Digite sua senha atual" 
+                  value={senhaAtual}
+                  onChange={(e) => setSenhaAtual(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="set-password-toggle"
+                  onClick={() => setShowSenhaAtual((prev) => !prev)}
+                  aria-label={showSenhaAtual ? 'Ocultar senha atual' : 'Mostrar senha atual'}
+                >
+                  {showSenhaAtual ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             
-            <div className="set-input-group">
+            <div className="set-input-group password-group">
               <label>Nova senha</label>
-              <input 
-                type="password" 
-                placeholder="Digite nova senha forte" 
-                value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={showNovaSenha ? 'text' : 'password'} 
+                  placeholder="Digite nova senha forte" 
+                  value={novaSenha}
+                  onChange={(e) => setNovaSenha(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="set-password-toggle"
+                  onClick={() => setShowNovaSenha((prev) => !prev)}
+                  aria-label={showNovaSenha ? 'Ocultar nova senha' : 'Mostrar nova senha'}
+                >
+                  {showNovaSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             
-            <div className="set-input-group">
+            <div className="set-input-group password-group">
               <label>Confirmar nova senha</label>
-              <input 
-                type="password" 
-                placeholder="Repita nova senha" 
-                value={confirmarSenha}
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={showConfirmarSenha ? 'text' : 'password'} 
+                  placeholder="Repita nova senha" 
+                  value={confirmarSenha}
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="set-password-toggle"
+                  onClick={() => setShowConfirmarSenha((prev) => !prev)}
+                  aria-label={showConfirmarSenha ? 'Ocultar confirmação de senha' : 'Mostrar confirmação de senha'}
+                >
+                  {showConfirmarSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
-            <button type="submit" className="set-btn">
-              Salvar nova senha
+            <button type="submit" className="set-btn" disabled={loadingSenha}>
+              {loadingSenha ? 'Salvando...' : 'Salvar nova senha'}
             </button>
           </form>
         </div>
@@ -130,13 +215,19 @@ export const Configs = ({ userName }: ConfigsProps) => {
               />
             </div>
 
-            <button type="submit" className="set-btn" style={{marginTop: 'auto'}}>
-              Salvar alterações de contato
+            <button type="submit" className="set-btn" disabled={loadingContato}>
+              {loadingContato ? 'Salvando...' : 'Salvar alterações de contato'}
             </button>
           </form>
         </div>
 
       </div>
+      {(mensagem || erro) && (
+        <div className="set-feedback">
+          {mensagem && <p className="set-success">{mensagem}</p>}
+          {erro && <p className="set-error">{erro}</p>}
+        </div>
+      )}
     </div>
   );
 };

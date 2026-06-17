@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
-import { Search, User } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Search, Loader2, UserX } from 'lucide-react';
+import { getMyDoctors, type MyDoctor } from '../../../../services/patientService';
 import './doctors.css';
-
-// Dados falsos para popular a lista
-const doctorsMock = [
-  { id: 1, name: 'Dr. Marcos Paulo', specialty: 'Cardiologista', clinic: 'Clínica Pró Saúde', location: 'Betim/MG' },
-  { id: 2, name: 'Dr. Marcos Paulo', specialty: 'Cardiologista', clinic: 'Clínica Pró Saúde', location: 'São Paulo/SP' },
-  { id: 3, name: 'Dr. Marcos Paulo', specialty: 'Cardiologista', clinic: 'Clínica Pró Saúde', location: 'Rio de Janeiro/RJ' },
-  { id: 4, name: 'Dr. Marcos Paulo', specialty: 'Cardiologista', clinic: 'Clínica Pró Saúde', location: 'Porto Alegre/RS' },
-];
 
 export const Doctors = () => {
   const [busca, setBusca] = useState('');
+  const [medicos, setMedicos] = useState<MyDoctor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState<string | null>(null);
 
-  // Filtra os médicos pelo nome conforme o usuário digita
-  const medicosFiltrados = doctorsMock.filter(medico =>
+  useEffect(() => {
+    setLoading(true);
+    setErro(null);
+    getMyDoctors()
+      .then(setMedicos)
+      .catch(() => setErro('Não foi possível carregar seus médicos.'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Filtra os médicos pelo nome ou localização conforme o usuário digita
+  const medicosFiltrados = medicos.filter(medico =>
     medico.name.toLowerCase().includes(busca.toLowerCase()) ||
     medico.location.toLowerCase().includes(busca.toLowerCase())
   );
 
   return (
     <div className="dr-container">
-      {/* Cabeçalho com Título e Pesquisa alinhados como no seu print */}
       <div className="dr-header">
         <h1 className="dr-title">Meus Médicos</h1>
-        
+
         <div className="dr-search-container">
           <input
             type="text"
@@ -37,30 +41,34 @@ export const Doctors = () => {
         </div>
       </div>
 
-      {/* Grid de Cards dos Médicos */}
-      <div className="dr-grid">
-        {medicosFiltrados.length > 0 ? (
-          medicosFiltrados.map((medico) => (
-            <div key={medico.id} className="dr-card">
-              {/* Informações e Botões */}
-              <div className="dr-info-container">
-                <div className="dr-textos">
-                  <h3 className="dr-medico-nome">{medico.name} - {medico.specialty}</h3>
-                  <p className="dr-medico-local">{medico.clinic} - {medico.location}</p>
-                </div>
+      {erro && <p className="dr-erro">{erro}</p>}
 
-                <div className="dr-actions">
-                  <button className="dr-btn-perfil">Ver Perfil</button>
-                  <button className="dr-btn-servicos">Consulta/Serviços</button>
+      {loading ? (
+        <div className="dr-loading">
+          <Loader2 size={32} className="dr-spin" />
+          <p>Carregando médicos...</p>
+        </div>
+      ) : (
+        <div className="dr-grid">
+          {medicosFiltrados.length > 0 ? (
+            medicosFiltrados.map((medico) => (
+              <div key={medico.id} className="dr-card">
+                <div className="dr-info-container">
+                  <div className="dr-textos">
+                    <h3 className="dr-medico-nome">{medico.name} - {medico.specialty}</h3>
+                    <p className="dr-medico-local">{medico.clinic} - {medico.location}</p>
+                  </div>
                 </div>
               </div>
-
+            ))
+          ) : (
+            <div className="dr-vazio">
+              <UserX size={48} color="#d1d5db" />
+              <p>{busca ? 'Nenhum médico encontrado para sua busca.' : 'Você ainda não tem médicos cadastrados.'}</p>
             </div>
-          ))
-        ) : (
-          <p className="dr-vazio">Nenhum médico encontrado para sua busca.</p>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

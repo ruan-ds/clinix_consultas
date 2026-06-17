@@ -94,6 +94,13 @@ export type ClinicWithService = {
   service_id: number;
   price: number;
 };
+export type MyDoctor = {
+  id: number;
+  name: string;
+  specialty: string;
+  clinic: string;
+  location: string;
+};
 
 // ─── Funções existentes ─────────────────────────────────────────────
 export async function validateFeed(): Promise<FeedValidation> {
@@ -151,5 +158,40 @@ export async function listClinicsByService(specialtyId: number, serviceName: str
 
 export async function listDoctorsByClinicAndService(clinicId: number, serviceId: number): Promise<Doctor[]> {
   const response = await api.get(`/patient/clinics/${clinicId}/services/${serviceId}/doctors`);
+  return response.data;
+}
+
+export type PatientContact = {
+  email: string;
+  phone?: string | null;
+};
+
+export type UpdatePatientContactData = {
+  email?: string;
+  phone?: string;
+};
+
+export type UpdatePatientPasswordData = {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+};
+
+export async function getPatientContact(): Promise<PatientContact> {
+  const response = await api.get("/patient/account/contact");
+  return response.data;
+}
+
+export async function updatePatientContact(data: UpdatePatientContactData): Promise<void> {
+  await api.put("/patient/account/contact", data);
+}
+
+export async function updatePatientPassword(data: UpdatePatientPasswordData): Promise<void> {
+  await api.put("/patient/account/password", data);
+}
+
+
+export async function getMyDoctors(): Promise<MyDoctor[]> {
+  const response = await api.get("/patient/my-doctors");
   return response.data;
 }

@@ -23,6 +23,7 @@ from app.services.patient_services import (
     create_medical_appointment_service,
     update_patient_contact_service,
     update_patient_password_service,
+    get_patient_contact_service,
     validate_feed_service,
     get_appointment_history_service,
     list_clinics_service,
@@ -37,7 +38,7 @@ from app.services.patient_services import (
     get_active_appointments_service,
     cancel_appointment_service,
 )
-from app.schemas.patient_access import OutPatientAccess, UpdatePatientContact, UpdatePatientPassword
+from app.schemas.patient_access import OutPatientAccess, OutPatientContact, UpdatePatientContact, UpdatePatientPassword
 from app.utils.jwt import decode_access_token
 
 router = APIRouter(prefix="/patient", tags=["Patient"])
@@ -91,6 +92,14 @@ def update_contact(
     db: Session = Depends(get_db),
 ) -> OutPatientAccess:
     return update_patient_contact_service(db=db, patient_id=current_user.patient_id, data=data)
+
+
+@router.get("/account/contact", response_model=OutPatientContact)
+def get_contact(
+    current_user: PatientAccess = Depends(get_current_patient),
+    db: Session = Depends(get_db),
+) -> OutPatientContact:
+    return get_patient_contact_service(db=db, patient_id=current_user.patient_id)
 
 
 @router.post("/appointments", response_model=OutMedicalAppointment)
