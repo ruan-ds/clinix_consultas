@@ -150,9 +150,8 @@ def get_my_doctors(
     current_user: PatientAccess = Depends(get_current_patient),
     db: Session = Depends(get_db),
 ):
-    # Busca o ID clínico do paciente usando o person_id do token
-    patient = db.query(Patient).filter(Patient.person_id == current_user.person_id).first()
-    return get_my_doctors_service(db, patient.id)
+    return get_my_doctors_service(db, current_user.patient_id)
+
 
 @router.get("/appointments/active", response_model=List[AppointmentHistoryItem])
 def get_active_appointments(
