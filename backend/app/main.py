@@ -1,5 +1,6 @@
 from app.api.public.registration import router as registration_router
 from app.api.public.login import router as login_router
+from app.api.public.patient import router as patient_router
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +25,7 @@ app.add_middleware(
 
 app.include_router(registration_router)
 app.include_router(login_router)
+app.include_router(patient_router)
 
 
 @app.get("/")

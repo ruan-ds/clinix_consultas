@@ -4,12 +4,13 @@ import logo from '../../assets/images/logoNome.png';
 import { useState } from "react"
 import { getLogin } from "../../services/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { saveToken } from "../../services/tokenService";
+
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
   changeAuth: (valor: number) => void;//defino que o parâmetro changeAuth deve receber somente numeros, é void pois nao retorna nada
 };
-
 function Login({changeAuth}:  Props) {
 
   // variavel pra alterar a visibilidade da senha
@@ -18,25 +19,44 @@ function Login({changeAuth}:  Props) {
   //vai chamar os dados 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [erro, setErro] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    async function sign_in() {
+  const parseLoginError = (error: any) => {
+    const detail = error?.response?.data?.detail;
+    if (typeof detail === 'string') {
+      return detail;
+    }
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item: any) => {
+          if (typeof item === 'string') return item;
+          if (item?.msg) return item.msg;
+          if (item?.detail) return item.detail;
+          if (item?.loc) return `${item.loc.join('.')} ${item.msg ?? ''}`.trim();
+          return JSON.stringify(item);
+        })
+        .join(' | ');
+    }
+    return 'E-mail ou senha incorretos.';
+  };
 
-      const login = {
-           email: email,
-           password: password
-      };
-      //linha pra fazer a requisicao, assim como no register
+  async function sign_in() {
+    setIsSubmitting(true);
+    try {
+      const login = { email, password };
       const response = await getLogin(login);
 
-        if(response.status === 200){
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          window.location.href = "/feed";
-        } else {
-          alert("Login falhou. Verifique suas credenciais.");
-        } 
+      if (response.status === 200) {
+        saveToken(response.data.access_token);
+        window.location.href = "/feed.html";
+      }
+    } catch (error: any) {
+      setErro(parseLoginError(error));
+    } finally {
+      setIsSubmitting(false);
     }
-
+  }
   
   return (
      <main className="login-container">
@@ -53,11 +73,14 @@ function Login({changeAuth}:  Props) {
           </div>
           
           <div className="input-group">
-            <input type={showPassword ? "text" : "password"} id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
+            <input type={showPassword ? "text" : "password"} id="password" minLength={8} placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
             <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button> 
           </div>
 
-          <button type="submit" className="btn-login">Entrar na Conta</button>
+          <button type="submit" className="btn-login" disabled={isSubmitting}>
+            {isSubmitting ? 'Entrando...' : 'Entrar na Conta'}
+          </button>
+          {erro && <p className="erro-msg">{erro}</p>}
           
         </form>
 

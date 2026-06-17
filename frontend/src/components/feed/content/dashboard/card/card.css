@@ -81,3 +81,37 @@
     grid-column: span 2; /* Faz o endereço ocupar a largura total do grid */
     margin-top: 4px;
 }
+/* --- ESTADO VAZIO DO CARD --- */
+.appointment-card.empty-card {
+    border: 1px dashed #cbd5e1;
+    background-color: #ffffff;
+    cursor: default;
+}
+
+.appointment-card.empty-card:hover {
+    border-color: #94a3b8;
+    transform: none;
+    box-shadow: none;
+}
+
+.status-badge.no-appointment {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+
+.card-empty-content {
+    padding: 8px 0;
+    text-align: left;
+}
+
+.card-empty-content h3 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.card-empty-content p {
+    font-size: 14px;
+    color: #64748b;
+}

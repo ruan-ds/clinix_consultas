@@ -768,3 +768,186 @@
 .ac-search-input::placeholder {
   color: #9ca3af;
 }
+/* =========================================
+   NAVEGAÇÃO DE DIAS (Etapa médicos)
+   ========================================= */
+
+.ac-dias-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ac-dia-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.ac-dia-btn:hover {
+  border-color: #149488;
+  background-color: #f0fdf4;
+}
+
+.ac-dia-btn--ativo {
+  background-color: #149488;
+  border-color: #149488;
+  color: #ffffff;
+}
+
+.ac-dia-btn--ativo .ac-dia-label,
+.ac-dia-btn--ativo .ac-dia-data {
+  color: #ffffff;
+}
+
+.ac-dia-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.ac-dia-data {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.ac-horarios-wrap {
+  margin-top: 4px;
+}
+
+.ac-agenda-titulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+.ac-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ac-card-header-row .ac-clinica-nome {
+  margin-bottom: 0;
+}
+
+.ac-servico-preco {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ecfdf5;
+  color: #149488;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+/* =========================================
+   ESTILOS DO SELETOR DE CALENDÁRIO MODERNO
+   ========================================= */
+
+.ac-calendario-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.ac-calendario-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ac-calendario-input {
+  width: 100%;
+  max-width: 210px; /* Borda bem mais ajustada perto da data */
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e1; /* Borda nítida e moderna */
+  border-radius: 12px;       /* Bordas suavizadas identicas ao print */
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ac-calendario-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.15);
+}
+
+/* Alinhamento responsivo da seção da agenda */
+@media (min-width: 900px) {
+  .ac-calendario-container {
+    align-items: flex-end; /* Joga o seletor para a direita no desktop */
+  }
+  .ac-calendario-input {
+    text-align: center;
+  }
+}
+/* Médico card vira coluna no mobile, row no desktop */
+@media (min-width: 900px) {
+  .ac-medico-card {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .ac-medico-agenda {
+    align-items: flex-end;
+    max-width: 380px;
+  }
+
+  .ac-dias-nav {
+    justify-content: flex-end;
+  }
+}
+
+/* =========================================
+   LOADING
+   ========================================= */
+.ac-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 12px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ac-spin {
+  animation: spin 0.8s linear infinite;
+  color: #149488;
+}

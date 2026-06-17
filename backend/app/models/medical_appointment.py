@@ -19,7 +19,7 @@ class MedicalAppointment(Base):
     id = Column(Integer, primary_key=True)
     clinic_id = Column(Integer, ForeignKey("clinic.id"), nullable=False, index=True)
     doctor_id = Column(Integer, ForeignKey("doctor.id"), nullable=False, index=True)
-    patient_id = Column(Integer, ForeignKey("patient_access.id"), nullable=False, index=True)
+    patient_id = Column(Integer, ForeignKey("patient.id"), nullable=False, index=True)
     clinical_access_id = Column(Integer, ForeignKey("clinical_access.id"), nullable=False, index=True)
     service_id = Column(Integer, ForeignKey("service.id"), nullable=False, index=True)
     slot_id = Column(Integer, ForeignKey("doctor_schedule_slot.id"), nullable=False, unique=True, index=True)
@@ -31,7 +31,7 @@ class MedicalAppointment(Base):
 
     clinic = relationship("Clinic", back_populates="medical_appointments")
     doctor = relationship("Doctor", back_populates="medical_appointments")
-    patient_access = relationship("PatientAccess", back_populates="medical_appointments")
+    patient = relationship("Patient", back_populates="medical_appointments")
     clinical_access = relationship("ClinicalAccess", back_populates="medical_appointments")
     service = relationship("Service", back_populates="medical_appointments")
     slot = relationship("DoctorScheduleSlot", back_populates="medical_appointment")

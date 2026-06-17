@@ -8,11 +8,13 @@ from .doctor_schedule_config import DoctorScheduleConfig
 from .doctor_schedule_slot import DoctorScheduleSlot
 from .doctor_specialty import DoctorSpecialty
 from .doctor import Doctor
+from .doctor_service import DoctorService
 from .entity import Entity
 from .logs import Logs
 from .medical_appointment import MedicalAppointment
 from .medical_specialty import MedicalSpecialty
 from .patient_access import PatientAccess
+from .patient import Patient
 from .person import Person
 from .phone import Phone
 from .service import Service
