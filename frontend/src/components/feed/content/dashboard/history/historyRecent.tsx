@@ -7,6 +7,18 @@ function HistoryRecent(props: { historico: any[] }) {
     // Pega no máximo 3 itens
     const listaDeConsultas = (props.historico || []).slice(0, 3);
 
+    // Define o indicativo (label + cor) de acordo com o status da consulta
+    const getStatusBadge = (status: string, dateStr: string) => {
+        if (status === 'cancelled') {
+            return { label: 'Cancelada', colorClass: 'recent-status-red' };
+        }
+        const isPast = new Date(dateStr) < new Date();
+        if (isPast) {
+            return { label: 'Concluída', colorClass: 'recent-status-green' };
+        }
+        return { label: 'Agendada', colorClass: 'recent-status-blue' };
+    };
+
     return (
         <div className="history-section">
             <h2 className="history-title">Histórico Recente</h2>
@@ -27,6 +39,8 @@ function HistoryRecent(props: { historico: any[] }) {
                             minute: '2-digit'
                         });
 
+                        const statusBadge = getStatusBadge(item.status, item.date);
+
                         return (
                             <div key={index} className="history-item-card">
                                 <div className="history-left-column">
@@ -34,6 +48,9 @@ function HistoryRecent(props: { historico: any[] }) {
                                         <span className="history-specialty">{item.service_name ?? item.specialty}</span>
                                         <span className="history-doctor">{item.doctor_name}</span>
                                         <span className="history-location">{item.location ?? item.clinic_name}</span>
+                                        <span className={`recent-status-pill ${statusBadge.colorClass}`}>
+                                            {statusBadge.label}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="history-right-column">

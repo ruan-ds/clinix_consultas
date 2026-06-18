@@ -1,56 +1,47 @@
-/* configs.css */
-
 .set-container {
   width: 100%;
-  max-width: 1200px;
-  padding: 40px;
-  background-color: #ffffff; /* Fundo levemente cinza/azulado do projeto */
+  max-width: 860px;
+  padding: 32px 40px;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
 }
 
-/* ================================
-   CABEÇALHO E PERFIL
-   ================================ */
+/* CABEÇALHO */
 .set-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 40px;
+  align-items: center;
+  margin-bottom: 32px;
+  gap: 16px;
   flex-wrap: wrap;
-  gap: 24px;
 }
 
 .set-title {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   color: #111827;
   margin: 0;
 }
 
-/* Card do Paciente no topo direito */
 .set-profile-card {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Espaça o perfil do botão de logout */
+  gap: 14px;
   background-color: #ffffff;
-  border: 1px solid #20857c; /* Borda verde/teal do print */
+  border: 1px solid #20857c;
   border-radius: 8px;
-  padding: 12px 16px 12px 12px;
-  gap: 20px;
-  min-width: 340px; /* Largura mínima ajustada para caber o botão confortavelmente */
+  padding: 10px 14px;
 }
 
-/* Container interno esquerdo (Avatar + Textos) */
 .set-profile-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .set-avatar-placeholder {
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   background-color: #20857c;
   border-radius: 50%;
   display: flex;
@@ -60,33 +51,33 @@
 }
 
 .set-profile-name {
-  margin: 0 0 4px 0;
-  font-size: 20px;
+  margin: 0 0 2px 0;
+  font-size: 16px;
   font-weight: 700;
   color: #111827;
 }
 
 .set-profile-role {
   margin: 0;
-  font-size: 14px;
-  color: #4b5563;
+  font-size: 13px;
+  color: #6b7280;
 }
 
-/* Botão de Logout */
 .set-logout-btn {
   display: flex;
   align-items: center;
   gap: 6px;
   background-color: transparent;
-  border: 1px solid #dc2626; /* Vermelho sutil para indicação de saída */
+  border: 1px solid #dc2626;
   color: #dc2626;
-  padding: 8px 12px;
+  padding: 7px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  white-space: nowrap;
 }
 
 .set-logout-btn:hover {
@@ -94,110 +85,32 @@
   color: #ffffff;
 }
 
-/* ================================
-   GRID DE FORMULÁRIOS
-   ================================ */
+/* GRID DE FORMULÁRIOS */
 .set-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }
 
-@media (min-width: 900px) {
-  .set-grid {
-    grid-template-columns: 1fr 1fr; /* Duas colunas em telas maiores */
-  }
-}
-
-@media (max-width: 900px) {
+@media (max-width: 640px) {
   .set-container {
-    padding: 24px;
-  }
-
-  .set-header {
-    align-items: stretch;
-    gap: 20px;
-  }
-
-  .set-profile-card {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    min-width: auto;
-  }
-
-  .set-profile-left {
-    gap: 12px;
-  }
-
-  .set-card {
-    padding: 24px;
-  }
-
-  .set-card-title {
-    font-size: 22px;
-  }
-
-  .set-input-group label {
-    font-size: 15px;
-  }
-
-  .set-input-group input {
-    padding: 12px 14px;
-  }
-
-  .set-btn {
-    width: 100%;
-  }
-
-  .set-feedback {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 600px) {
-  .set-container {
-    padding: 16px;
-  }
-
-  .set-title {
-    font-size: 28px;
-  }
-
-  .set-profile-card {
-    padding: 16px;
-    gap: 14px;
-  }
-
-  .set-card {
     padding: 20px;
   }
-
-  .set-card-title {
-    font-size: 20px;
-    margin-bottom: 20px;
+  .set-grid {
+    grid-template-columns: 1fr;
   }
-
-  .set-input-group {
-    margin-bottom: 16px;
-  }
-
-  .set-logout-btn {
+  .set-profile-card {
     width: 100%;
-    justify-content: center;
-  }
-
-  .set-profile-left {
-    width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
 }
 
+/* CARDS */
 .set-card {
   background-color: #ffffff;
   border-radius: 12px;
   padding: 32px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
 }
@@ -209,13 +122,11 @@
   margin: 0 0 24px 0;
 }
 
-/* ================================
-   INPUTS E BOTÕES
-   ================================ */
+/* INPUTS */
 .set-form {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Faz o form preencher o card para empurrar o botão pra baixo */
+  flex: 1;
 }
 
 .set-input-group {
@@ -225,19 +136,23 @@
 }
 
 .set-input-group label {
-  font-size: 16px;
+  font-size: 15px;
   color: #374151;
   margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .set-input-group input {
   padding: 12px 16px;
   font-size: 15px;
-  border: 1px solid #20857c; /* Borda verde/teal igual ao print */
+  border: 1px solid #20857c;
   border-radius: 8px;
   outline: none;
   color: #111827;
+  font-family: 'Montserrat', sans-serif;
   transition: box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .set-input-group input::placeholder {
@@ -248,45 +163,64 @@
   box-shadow: 0 0 0 2px rgba(32, 133, 124, 0.2);
 }
 
-.password-group .set-password-field {
+/* OLHINHO */
+.set-password-field {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.password-group .set-password-field input {
+.set-password-field input {
   padding-right: 48px;
 }
 
 .set-password-toggle {
   position: absolute;
-  top: 50%;
   right: 12px;
-  transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: #4b5563;
   cursor: pointer;
-  padding: 4px;
+  color: #6b7280;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .set-password-toggle:hover {
   color: #111827;
 }
 
-.set-feedback {
+/* BOTÃO */
+.set-btn {
+  background-color: #20857c;
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
   margin-top: 24px;
-  max-width: 640px;
+  transition: opacity 0.2s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.set-btn:hover {
+  opacity: 0.9;
+}
+
+/* FEEDBACK */
+.set-feedback {
+  margin-top: 16px;
 }
 
 .set-feedback p {
-  border-radius: 12px;
-  padding: 14px 16px;
+  border-radius: 8px;
+  padding: 10px 14px;
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
 }
 
 .set-success {
@@ -299,21 +233,4 @@
   background-color: #fef2f2;
   color: #b91c1c;
   border: 1px solid #fecaca;
-}
-
-.set-btn {
-  background-color: #20857c; /* Verde padrão do projeto */
-  color: #ffffff;
-  border: none;
-  padding: 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 24px;
-  transition: opacity 0.2s;
-}
-
-.set-btn:hover {
-  opacity: 0.9;
 }
