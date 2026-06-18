@@ -55,16 +55,16 @@ body {
 }
 
 .input-group {
-    position: relative; /* ESSENCIAL */
     margin-bottom: 20px;
 }
+
 /* Inputs maiores e mais confortáveis */
 .input-group input {
     width: 100%;
-    padding: 16px 45px 16px 24px; /* espaço à direita */
+    padding: 16px 24px; 
     border: 1px solid #E0E0E0;
-    border-radius: 40px;
-    font-size: 16px;
+    border-radius: 40px; 
+    font-size: 16px; /* Fonte do input maior */
     color: #333;
     outline: none;
     transition: border-color 0.3s ease;
@@ -156,23 +156,7 @@ body {
     line-height: 1.5;
     opacity: 0.9;
 }
-.input-group button {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    
-    background: none;
-    border: none;
-    cursor: pointer;
 
-    color: #175a4f;
-    font-size: 22px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 /* Responsividade */
 @media (max-width: 900px) {
     .login-container {

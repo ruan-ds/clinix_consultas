@@ -3,7 +3,6 @@ import './login.css';
 import logo from '../../assets/images/logoNome.png';
 import { useState } from "react"
 import { getLogin } from "../../services/auth";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
@@ -12,8 +11,6 @@ type Props = {
 
 function Login({changeAuth}:  Props) {
 
-  // variavel pra alterar a visibilidade da senha
-  const [showPassword, setShowPassword] = useState(false);
   //requisicao do login 
   //vai chamar os dados 
   const [email, setEmail] = useState("");
@@ -27,14 +24,6 @@ function Login({changeAuth}:  Props) {
       };
       //linha pra fazer a requisicao, assim como no register
       const response = await getLogin(login);
-
-        if(response.status === 200){
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          window.location.href = "/feed";
-        } else {
-          alert("Login falhou. Verifique suas credenciais.");
-        } 
     }
 
   
@@ -49,15 +38,14 @@ function Login({changeAuth}:  Props) {
 
         <form onSubmit={(e) => {e.preventDefault(); sign_in();}}>
           <div className="input-group">
-            <input type ="email" id="user" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+            <input type="text" id="user" placeholder="Login" onChange={(e) => setEmail(e.target.value)} required />
           </div>
           
           <div className="input-group">
-            <input type={showPassword ? "text" : "password"} id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
-            <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button> 
+            <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
           </div>
 
-          <button type="submit" className="btn-login">Entrar na Conta</button>
+          <button type="submit" className="btn-login">Criar Conta</button>
           
         </form>
 
@@ -75,5 +63,5 @@ function Login({changeAuth}:  Props) {
     </main>
   );
 }
-//condição ? valor_se_true : valor_se_false ISSO É USADO NA VISIBILADE DA SENHA
+
 export default Login;

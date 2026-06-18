@@ -3,7 +3,6 @@ import './register.css';
 import logo from '../../assets/images/logoNome.png';
 import { useState } from "react";
 import { createAccount } from "../../services/auth";
-import { FaEye, FaEyeSlash } from "react-icons/fa";     
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
@@ -14,8 +13,6 @@ type Props = {
 function Register({ changeAuth }: Props) {
   //tirar os espaços na hora de manda pro banco 
   const limparTexto = (str: string) => str.trim().replace(/\s+/g, ' ');
-
-  const [showPassword, setShowPassword] = useState(false);
 
   //armazena dados
   //obs:fazer um para atualizar inputs
@@ -86,6 +83,7 @@ function Register({ changeAuth }: Props) {
     const ruaFormatada = limparTexto(rua) 
     const complementoFormatado = limparTexto(complemento)
 
+
     const data = {
       person: {
         name: nomeFormatado,
@@ -117,15 +115,6 @@ function Register({ changeAuth }: Props) {
       // LOG PARA CONFIRMAÇÃO DE SUCESSO
   console.log("Sucesso:", response.data);
 
-          if(response.status === 200 || response.status === 201){
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          window.location.href = "/authenticantion.html?auth=1";
-        } else {
-          alert("Registro falhou.");
-        } 
-
-
 } catch (error: any) {
   console.log("Erro completo:", error);
   console.log(
@@ -153,8 +142,8 @@ function Register({ changeAuth }: Props) {
             </div>
 
             <div className="input-group">
-                          <input type={showPassword ? "text" : "password"} id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
-                          <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button>             </div>
+              <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
+            </div>
 
             <button type="submit" className="btn-register">Prosseguir</button>
 
