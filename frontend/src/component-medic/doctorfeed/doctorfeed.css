@@ -1,0 +1,113 @@
+/* Container que ocupa a tela toda */
+.df-layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8fafc;
+}
+
+/* ==========================================
+   NAVBAR
+   ========================================== */
+.df-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  padding: 0 32px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 10;
+}
+
+.df-nav-logo h2 {
+  color: #149488;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.df-nav-profile {
+  display: flex;
+  align-items: center;
+}
+
+.df-profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #149488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #149488;
+  cursor: pointer;
+}
+
+/* ==========================================
+   CORPO (SIDEBAR + CONTEÚDO)
+   ========================================== */
+.df-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden; /* Evita que a página toda role */
+}
+
+/* ==========================================
+   SIDEBAR
+   ========================================== */
+.df-sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.df-menu-list {
+  list-style: none;
+  padding: 24px 0;
+  margin: 0;
+}
+
+.df-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  color: #4b5563;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent; /* Espaço para a borda verde do item ativo */
+}
+
+.df-menu-item:hover {
+  background-color: #f3f4f6;
+}
+
+/* Item Selecionado (Estilo baseado no seu print) */
+.df-menu-item.active {
+  background-color: #f0fdfa; /* Fundo verde super clarinho */
+  color: #0f766e; /* Texto verde escuro */
+  border-left-color: #149488; /* Linha lateral verde Clinix */
+  font-weight: 600;
+}
+
+.df-menu-icon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+/* ==========================================
+   ÁREA DE CONTEÚDO (MIOLO)
+   ========================================== */
+.df-main-content {
+  flex: 1;
+  overflow-y: auto; /* A rolagem acontece SÓ aqui dentro */
+  background-color: #ffffff;
+  padding: 0; /* O padding já está sendo dado por dentro do DoctorDashboard */
+}
