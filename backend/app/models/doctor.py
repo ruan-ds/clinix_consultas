@@ -59,8 +59,3 @@ class Doctor(Base):
         "DoctorScheduleSlot",
         back_populates="doctor"
     )
-
-    doctor_services = relationship(
-        "DoctorService",
-        back_populates="doctor"
-    )

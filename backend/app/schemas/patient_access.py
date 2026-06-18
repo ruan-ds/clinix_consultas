@@ -4,14 +4,13 @@ from app.schemas.phone import CreatePhone, OutPhone
 
 from pydantic import (BaseModel,
                       StringConstraints,
-                      ConfigDict,
-                      EmailStr
+                      ConfigDict
                       )
 from typing import Optional, Annotated
 
 
 class BasePatientAccess(BaseModel):
-    patient_id: int
+    person_id: int
     email: Annotated[str, StringConstraints(max_length=300)]
 
 
@@ -31,17 +30,6 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
-class OutPatientContact(BaseModel):
-    email: str
-    phone: Optional[str] = None
-    model_config = ConfigDict(from_attributes=True)
-
-
-class OutPatientAccessWithName(OutPatientAccess):
-    person_name: str
-    model_config = ConfigDict(from_attributes=True)
-
-    
 class OutLoginPatientAccess(BaseModel):
     access_token: str
     token_type: str
@@ -63,5 +51,5 @@ class FullPatientAccessRegistration(BaseModel):
 
 
 class LoginPatientAccess(BaseModel):
-    email: EmailStr
-    password: Annotated[str, StringConstraints(min_length=8)]
+    email: str
+    password: str

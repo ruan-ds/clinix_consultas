@@ -7,7 +7,7 @@ from app.models.person import Person
 from app.models.phone import Phone
 
 from app.schemas.patient_access import CreatePatientAccess, FullPatientAccessRegistration, OutFullPatientAccess
-from app.schemas.person import CreatePerson
+from app.schemas.person import CreatePerson, OutPerson
 from app.schemas.address import CreateAddress
 from app.schemas.phone import CreatePhone
 
@@ -17,7 +17,6 @@ from app.utils.cpf_utils import cpf_validator
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
 
 
@@ -68,14 +67,9 @@ def register_phone(db: Session, data: CreatePhone, entity_id: int) -> Phone:
     return new_phone
 
 
-def create_patient(db: Session, person_id: int) -> Patient:
-    db.execute(insert(Patient).values(id=person_id))
-    return db.query(Patient).filter(Patient.id == person_id).first()
-
-
-def create_patient_access(db: Session, data: CreatePatientAccess, patient_id: int) -> PatientAccess:
+def create_patient_access(db: Session, data: CreatePatientAccess, person_id: int) -> PatientAccess:
     new_patient_access = PatientAccess(
-        patient_id=patient_id,
+        person_id=person_id,
         email=data.email,
         password_hash=hash_password(data.password)
     )
@@ -135,7 +129,7 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
             patient_access = create_patient_access(
                 db=db,
                 data=data.access,
-                patient_id=patient.id
+                person_id=person.id
             )
 
             return OutFullPatientAccess(  
@@ -146,7 +140,7 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
             )
         
     except IntegrityError as e:
-        print("ERRO REAL:", e.orig)
+
         raise HTTPException(
         status_code=400,
         detail="Erro ao cadastrar paciente"
