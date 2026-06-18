@@ -207,6 +207,25 @@ body {
     font-weight: 700;
     text-decoration: underline;
 }
+/* --- ESTILIZAÇÃO DA MENSAGEM DE ERRO (VERSÃO CLEAN) --- */
+.erro-msg {
+    display: block;
+    text-align: center;         /* Centraliza o texto perfeitamente */
+    color: #dc2626;             /* Mantém o vermelho de alerta */
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;           /* Espaço sutil entre o botão e o erro */
+    margin-bottom: 5px;
+    width: 100%;                /* Garante que ocupe a largura total para alinhar ao centro */
+    animation: shakeErro 0.4s ease-in-out; /* Mantém a leve tremidinha ao aparecer */
+}
+
+/* Efeito de tremidinha bem suave quando o erro aparece */
+@keyframes shakeErro {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
 /* Responsividade */
 @media (max-width: 900px) {
     .register-container {

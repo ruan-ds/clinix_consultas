@@ -42,4 +42,4 @@ def invalid_cpf() -> None:
 
 
 def login_error() -> None:
-    auth_error(code="INVALID_CREDENTIALS", message="Usuário ou senha inválidos")
+    business_error(code="INVALID_CREDENTIALS", message="Usuário ou senha inválidos", status_code=401)
