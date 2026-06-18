@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, LogOut, Eye, EyeOff } from 'lucide-react';
 import './configs.css';
 import { removeToken } from '../../../../services/tokenService';
+import { getPatientContact, updatePatientContact, updatePatientPassword } from '../../../../services/patientService';
 
 interface ConfigsProps {
     userName: string; 
@@ -16,17 +17,73 @@ export const Configs = ({ userName }: ConfigsProps) => {
   const [mostrarNova, setMostrarNova] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
-  const [email, setEmail] = useState('exemplo@gamil.com');
-  const [telefone, setTelefone] = useState('(00) 9 9999-9999');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [loadingContato, setLoadingContato] = useState(true);
+  const [contatoStatus, setContatoStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [senhaStatus, setSenhaStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  const handleSalvarSenha = (e: React.FormEvent) => {
+  useEffect(() => {
+    async function loadContact() {
+      try {
+        const contact = await getPatientContact();
+        setEmail(contact.email ?? '');
+        setTelefone(contact.phone ?? '');
+      } catch (error) {
+        console.error('Erro ao carregar contato', error);
+      } finally {
+        setLoadingContato(false);
+      }
+    }
+
+    loadContact();
+  }, []);
+
+  const handleSalvarSenha = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar nova senha clicado");
+    setSenhaStatus(null);
+
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
+      setSenhaStatus({ type: 'error', message: 'Preencha todos os campos de senha.' });
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      setSenhaStatus({ type: 'error', message: 'A nova senha e a confirmação não coincidem.' });
+      return;
+    }
+
+    try {
+      await updatePatientPassword({
+        current_password: senhaAtual,
+        new_password: novaSenha,
+        confirm_password: confirmarSenha,
+      });
+
+      setSenhaStatus({ type: 'success', message: 'Senha atualizada com sucesso.' });
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarSenha('');
+    } catch (error) {
+      console.error('Erro ao salvar senha', error);
+      setSenhaStatus({ type: 'error', message: 'Não foi possível atualizar a senha. Verifique seus dados.' });
+    }
   };
 
-  const handleSalvarContato = (e: React.FormEvent) => {
+  const handleSalvarContato = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar contato clicado");
+    setContatoStatus(null);
+
+    try {
+      await updatePatientContact({
+        email,
+        phone: telefone || undefined,
+      });
+      setContatoStatus({ type: 'success', message: 'Informações de contato atualizadas.' });
+    } catch (error) {
+      console.error('Erro ao salvar contato', error);
+      setContatoStatus({ type: 'error', message: 'Não foi possível atualizar as informações de contato. Tente novamente.' });
+    }
   };
 
   const handleLogout = () => {
@@ -113,6 +170,14 @@ export const Configs = ({ userName }: ConfigsProps) => {
               Salvar nova senha
             </button>
           </form>
+
+          {senhaStatus && (
+            <div className="set-feedback">
+              <p className={senhaStatus.type === 'success' ? 'set-success' : 'set-error'}>
+                {senhaStatus.message}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* CARD 2: Informações de Contato */}
@@ -144,6 +209,14 @@ export const Configs = ({ userName }: ConfigsProps) => {
               Salvar alterações de contato
             </button>
           </form>
+
+          {contatoStatus && (
+            <div className="set-feedback">
+              <p className={contatoStatus.type === 'success' ? 'set-success' : 'set-error'}>
+                {contatoStatus.message}
+              </p>
+            </div>
+          )}
         </div>
 
       </div>
