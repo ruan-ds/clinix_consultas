@@ -2,6 +2,7 @@ from app.api.public.registration import router as registration_router
 from app.api.public.login import router as login_router
 from app.api.public.patient import router as patient_router
 from app.api.clinix.clinic import router as clinic_router
+from app.api.clinix.login import router as clinix_login_router
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,6 +29,7 @@ app.include_router(registration_router)
 app.include_router(login_router)
 app.include_router(patient_router)
 app.include_router(clinic_router)
+app.include_router(clinix_login_router)
 
 
 @app.get("/")
