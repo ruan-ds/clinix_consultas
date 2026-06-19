@@ -4,13 +4,14 @@ from app.schemas.phone import CreatePhone, OutPhone
 
 from pydantic import (BaseModel,
                       StringConstraints,
-                      ConfigDict
+                      ConfigDict,
+                      EmailStr
                       )
 from typing import Optional, Annotated
 
 
 class BasePatientAccess(BaseModel):
-    person_id: int
+    patient_id: int
     email: Annotated[str, StringConstraints(max_length=300)]
 
 
@@ -19,9 +20,15 @@ class CreatePatientAccess(BaseModel):
     password: Annotated[str, StringConstraints(min_length=8)]
 
 
-class UpdatePatientAccess(BaseModel):
+class UpdatePatientPassword(BaseModel):
+    current_password: str
+    new_password: Annotated[str, StringConstraints(min_length=8)]
+    confirm_password: Annotated[str, StringConstraints(min_length=8)]
+
+
+class UpdatePatientContact(BaseModel):
     email: Optional[Annotated[str, StringConstraints(max_length=300)]] = None
-    password: Optional[Annotated[str, StringConstraints(min_length=8)]] = None
+    phone: Optional[Annotated[str, StringConstraints(min_length=11, max_length=11)]] = None
 
 
 class OutPatientAccess(BasePatientAccess):
@@ -30,6 +37,17 @@ class OutPatientAccess(BasePatientAccess):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OutPatientContact(BaseModel):
+    email: str
+    phone: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class OutPatientAccessWithName(OutPatientAccess):
+    person_name: str
+    model_config = ConfigDict(from_attributes=True)
+
+    
 class OutLoginPatientAccess(BaseModel):
     access_token: str
     token_type: str
@@ -51,5 +69,5 @@ class FullPatientAccessRegistration(BaseModel):
 
 
 class LoginPatientAccess(BaseModel):
-    email: str
-    password: str
+    email: EmailStr
+    password: Annotated[str, StringConstraints(min_length=8)]

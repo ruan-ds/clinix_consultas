@@ -3,6 +3,7 @@ import './register.css';
 import logo from '../../assets/images/logoNome.png';
 import { useState } from "react";
 import { createAccount } from "../../services/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";     
 
 // Typescript pede que defina os tipos que podem ser passados em cada parâmetro da props, isso ocorre na linha abaixo
 type Props = {
@@ -13,6 +14,8 @@ type Props = {
 function Register({ changeAuth }: Props) {
   //tirar os espaços na hora de manda pro banco 
   const limparTexto = (str: string) => str.trim().replace(/\s+/g, ' ');
+
+  const [showPassword, setShowPassword] = useState(false);
 
   //armazena dados
   //obs:fazer um para atualizar inputs
@@ -35,6 +38,9 @@ function Register({ changeAuth }: Props) {
 
   //requisicao do telefone 
   const [telefone, setTelefone] = useState("");
+
+  //armazenar erro
+  const [erro, setErro] = useState("");
 
   function renderEstados() {
     const estados: { nome: string; sigla: string }[] = [
@@ -83,7 +89,6 @@ function Register({ changeAuth }: Props) {
     const ruaFormatada = limparTexto(rua) 
     const complementoFormatado = limparTexto(complemento)
 
-
     const data = {
       person: {
         name: nomeFormatado,
@@ -115,14 +120,20 @@ function Register({ changeAuth }: Props) {
       // LOG PARA CONFIRMAÇÃO DE SUCESSO
   console.log("Sucesso:", response.data);
 
-} catch (error: any) {
-  console.log("Erro completo:", error);
-  console.log(
-  "Erro backend:",
-  JSON.stringify(error.response?.data, null, 2)
-);
-}
-  }
+          if(response.status === 200 || response.status === 201){
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userId", response.data.userId);
+          window.location.href = "/authenticantion.html?auth=1";
+        } else {
+          alert("Registro falhou.");
+        } 
+
+
+        } catch (error: any) {
+          const mensagem = error.response?.data?.detail;
+          setErro(mensagem || "Erro ao criar conta. Verifique os dados.");
+          }
+        }
 
 
   if (estado === 0) {
@@ -142,8 +153,8 @@ function Register({ changeAuth }: Props) {
             </div>
 
             <div className="input-group">
-              <input type="password" id="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required />
-            </div>
+                          <input type={showPassword ? "text" : "password"} id="password" minLength={8} placeholder="Senha" onChange={(e) => setPassword(e.target.value)} required/>
+                          <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button>             </div>
 
             <button type="submit" className="btn-register">Prosseguir</button>
 
@@ -286,6 +297,7 @@ function Register({ changeAuth }: Props) {
             </div>
 
             <button type="submit" className="btn-register">Criar Conta</button>
+            {erro && <p className="erro-msg">{erro}</p>}
           </form>
 
           <div className="signup-footer">

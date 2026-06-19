@@ -14,3 +14,4 @@ class MedicalSpecialty(Base):
     name = Column(String(100), nullable=False, unique=True)
 
     doctors = relationship("Doctor", secondary="doctor_specialty", back_populates="specialties")
+    services = relationship("Service", back_populates="medical_specialty")

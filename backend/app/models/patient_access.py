@@ -7,8 +7,9 @@ class PatientAccess(Base):
     __tablename__ = "patient_access"
 
     id = Column(Integer, primary_key=True)
-    person_id = Column(Integer, ForeignKey("person.id"), nullable=False, unique=True)
+    patient_id = Column(Integer, ForeignKey("patient.id"), nullable=False, unique=True)
     email = Column(String(300), nullable=False, unique=True)
     password_hash = Column(String(500), nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
-    person = relationship("Person", back_populates="patient_access")
+
+    patient = relationship("Patient", back_populates="patient_access")

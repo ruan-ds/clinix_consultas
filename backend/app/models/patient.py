@@ -1,16 +1,15 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from app.models.entity import Entity
+from app.models.person import Person
 
 
-class Patient(Entity):
+class Patient(Person):
     __tablename__ = "patient"
 
-    id = Column(Integer, ForeignKey("entity.id"), primary_key=True)
-    person_id = Column(Integer, ForeignKey("person.id", ondelete="RESTRICT"), nullable=False, index=True, unique=True)
+    id = Column(Integer, ForeignKey("person.id"), primary_key=True)
     is_active = Column(Boolean, default=True, nullable=False)
 
-    person = relationship("Person", back_populates="patient", uselist=False)
+    patient_access = relationship("PatientAccess", back_populates="patient", uselist=False)
     medical_appointments = relationship("MedicalAppointment", back_populates="patient")
     dependent_links = relationship(
         "Dependent",
@@ -23,4 +22,4 @@ class Patient(Entity):
         back_populates="dependent_patient",
     )
 
-    __mapper_args__ = {"polymorphic_identity": "T"}
+    __mapper_args__ = {"polymorphic_identity": "P"}
