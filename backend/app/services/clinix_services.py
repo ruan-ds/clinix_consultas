@@ -76,10 +76,10 @@ def login_clinix_access_service(db: Session, data: LoginClinixAccess) -> OutLogi
         login_error()
 
     if needs_rehash(user.password_hash):
-        user.password_hash = hash_password(data.password)
-        db.add(user)
-        db.flush()
-        db.commit()
+        with db.begin():
+            user.password_hash = hash_password(data.password)
+            db.add(user)
+            db.flush()
 
     token = create_access_token({"sub": str(user.person_id)})
 
