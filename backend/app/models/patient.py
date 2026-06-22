@@ -22,4 +22,6 @@ class Patient(Person):
         back_populates="dependent_patient",
     )
 
+    medical_record = relationship("PatientMedicalRecord", back_populates="patient", uselist=False)
+
     __mapper_args__ = {"polymorphic_identity": "P"}

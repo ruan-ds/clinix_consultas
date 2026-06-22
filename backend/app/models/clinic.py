@@ -24,5 +24,6 @@ class Clinic(Entity):
     clinical_access = relationship("ClinicalAccess", back_populates="clinic")
     medical_appointments = relationship("MedicalAppointment", back_populates="clinic")
     services = relationship("Service", back_populates="clinic")
+    medical_records = relationship("PatientMedicalRecord", back_populates="clinic")
 
     __mapper_args__ = {"polymorphic_identity": "C"}
