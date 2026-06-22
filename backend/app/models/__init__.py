@@ -16,6 +16,7 @@ from .medical_specialty import MedicalSpecialty
 from .patient import Patient
 from .patient_access import PatientAccess
 from .patient import Patient
+from .patient_medical_record import PatientMedicalRecord
 from .person import Person
 from .phone import Phone
 from .service import Service

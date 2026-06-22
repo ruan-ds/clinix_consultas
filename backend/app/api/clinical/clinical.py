@@ -10,6 +10,7 @@ from app.schemas.clinical_access import OutMeClinicalAccess
 from app.schemas.medical_appointment import OutDoctorSchedule, UpdateAppointmentStatus
 from app.schemas.medical_appointment import OutAttendedPatient
 from app.schemas.medical_appointment import OutPatientAppointmentHistory
+from app.schemas.patient_medical_record import OutPatientMedicalRecord, UpdatePatientMedicalRecord
 
 from app.services.clinical.clinical_services import get_current_clinical_user
 from app.services.clinical.schedule import (
@@ -18,6 +19,11 @@ from app.services.clinical.schedule import (
     get_attended_patients_history_service,
     get_single_patient_history_service,
 )
+from app.services.clinical.medical_record import (
+    get_or_create_medical_record_service,
+    update_medical_record_service,
+)
+
 
 router = APIRouter(prefix="/clinical", tags=["Clinical"])
 
@@ -72,4 +78,31 @@ def get_single_patient_history(
         db=db, 
         clinical_access=current_user, 
         patient_id=patient_id
+    )
+
+
+@router.get("/patients/{patient_id}/medical-record", response_model=OutPatientMedicalRecord)
+def get_or_create_medical_record(
+    patient_id: int,
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> OutPatientMedicalRecord:
+    return get_or_create_medical_record_service(
+        db=db, 
+        clinical_access=current_user, 
+        patient_id=patient_id
+    )
+
+@router.put("/patients/{patient_id}/medical-record", response_model=OutPatientMedicalRecord)
+def update_medical_record(
+    patient_id: int,
+    data: UpdatePatientMedicalRecord,
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> OutPatientMedicalRecord:
+    return update_medical_record_service(
+        db=db, 
+        clinical_access=current_user, 
+        patient_id=patient_id, 
+        data=data
     )
