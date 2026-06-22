@@ -120,3 +120,20 @@ class OutClinicWithService(BaseModel):
     service_id: int
     price: float
     model_config = ConfigDict(from_attributes=True)
+
+
+class OutDoctorSchedule(BaseModel):
+    slot_id: int
+    appointment_id: int
+    start_datetime: datetime
+    slot_status: str
+    appointment_status: str
+    patient_name: str
+    service_name: str
+    specialty_name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UpdateAppointmentStatus(BaseModel):
+    appointment_id: int
