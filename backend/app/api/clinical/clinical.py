@@ -11,6 +11,7 @@ from app.schemas.medical_appointment import OutDoctorSchedule, UpdateAppointment
 from app.schemas.medical_appointment import OutAttendedPatient
 from app.schemas.medical_appointment import OutPatientAppointmentHistory
 from app.schemas.patient_medical_record import OutPatientMedicalRecord, UpdatePatientMedicalRecord
+from app.schemas.patient_prescription import CreatePatientPrescription, OutPatientPrescription, OutPrescriptionDetail
 
 from app.services.clinical.clinical_services import get_current_clinical_user
 from app.services.clinical.schedule import (
@@ -22,6 +23,11 @@ from app.services.clinical.schedule import (
 from app.services.clinical.medical_record import (
     get_or_create_medical_record_service,
     update_medical_record_service,
+)
+from app.services.clinical.patient_prescription import (
+    create_prescription_service,
+    list_clinic_prescriptions_service,
+    get_prescription_detail_service,
 )
 
 
@@ -105,4 +111,38 @@ def update_medical_record(
         clinical_access=current_user, 
         patient_id=patient_id, 
         data=data
+    )
+
+
+@router.get("/prescriptions", response_model=List[OutPatientPrescription])
+def list_clinic_prescriptions(
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> List[OutPatientPrescription]:
+    return list_clinic_prescriptions_service(db=db, clinical_access=current_user)
+
+
+@router.post("/prescriptions", response_model=OutPatientPrescription)
+def create_prescription(
+    data: CreatePatientPrescription,
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> OutPatientPrescription:
+    return create_prescription_service(
+        db=db, 
+        clinical_access=current_user, 
+        data=data
+    )
+
+
+@router.get("/prescriptions/{prescription_id}", response_model=OutPrescriptionDetail)
+def get_prescription_detail(
+    prescription_id: int,
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> OutPrescriptionDetail:
+    return get_prescription_detail_service(
+        db=db, 
+        clinical_access=current_user, 
+        prescription_id=prescription_id
     )
