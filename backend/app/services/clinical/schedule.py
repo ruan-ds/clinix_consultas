@@ -3,6 +3,8 @@ from typing import List
 
 from sqlalchemy.orm import Session, joinedload
 
+from sqlalchemy import func, desc
+
 from app.exceptions.clinical_exceptions import (
     doctor_profile_not_found_error,
     appointment_not_found_error,
@@ -12,6 +14,8 @@ from app.models.clinical_access import ClinicalAccess
 from app.models.doctor import Doctor
 from app.models.medical_appointment import MedicalAppointment
 from app.models.doctor_schedule_slot import DoctorScheduleSlot
+from app.models.patient import Patient
+
 from app.schemas.medical_appointment import OutDoctorScheduleSlot
 
 def get_doctor_schedule_service(
@@ -108,3 +112,85 @@ def update_appointment_status_service(
 
     db.add(appointment)
     db.commit()
+
+
+def get_attended_patients_history_service(
+    db: Session,
+    clinical_access: ClinicalAccess,
+) -> List[OutAttendedPatient]:
+    doctor = db.query(Doctor).filter(Doctor.clinical_access_id == clinical_access.id).first()
+
+    if not doctor:
+        doctor_profile_not_found_error()
+
+    results = (
+        db.query(
+            Patient,
+            func.max(MedicalAppointment.created_at).label("last_appointment_date")
+        )
+        .join(MedicalAppointment, MedicalAppointment.patient_id == Patient.id)
+        .filter(
+            MedicalAppointment.doctor_id == doctor.id,
+            MedicalAppointment.status == "completed",
+            MedicalAppointment.is_active == True,
+        )
+        .group_by(Patient.id)
+        .order_by(desc("last_appointment_date"))
+        .all()
+    )
+
+    attended_patients = []
+    today = date.today()
+    for patient, last_date in results:
+        age = 0
+        if patient.person and patient.person.birthday:
+            birth = patient.person.birthday
+            age = today.year - birth.year - ((today.month, today.day) < (birth.month, birth.day))
+
+        attended_patients.append(
+            OutAttendedPatient(
+                patient_id=patient.id,
+                patient_name=patient.person.name,
+                age=age,
+                last_appointment_date=last_date,
+            )
+        )
+
+    return attended_patients
+
+
+def get_single_patient_history_service(
+    db: Session,
+    clinical_access: ClinicalAccess,
+    patient_id: int
+) -> List[OutPatientAppointmentHistory]:
+    doctor = db.query(Doctor).filter(Doctor.clinical_access_id == clinical_access.id).first()
+    if not doctor:
+        doctor_profile_not_found_error()
+
+    appointments = (
+        db.query(MedicalAppointment)
+        .options(
+            joinedload(MedicalAppointment.slot),
+            joinedload(MedicalAppointment.service).joinedload(lambda s: s.medical_specialty)
+        )
+        .filter(
+            MedicalAppointment.patient_id == patient_id,
+            MedicalAppointment.clinic_id == clinical_access.clinic_id,
+            MedicalAppointment.is_active == True
+        )
+        .join(DoctorScheduleSlot)
+        .order_by(DoctorScheduleSlot.start_datetime.desc())
+        .all()
+    )
+
+    return [
+        OutPatientAppointmentHistory(
+            appointment_id=appt.id,
+            date=appt.slot.start_datetime,
+            service_name=appt.service.name,
+            specialty_name=appt.service.medical_specialty.name,
+            status=appt.status
+        )
+        for appt in appointments
+    ]

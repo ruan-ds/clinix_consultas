@@ -3,11 +3,21 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.core.database import get_db
+
 from app.models.clinical_access import ClinicalAccess
+
 from app.schemas.clinical_access import OutMeClinicalAccess
 from app.schemas.medical_appointment import OutDoctorSchedule, UpdateAppointmentStatus
+from app.schemas.medical_appointment import OutAttendedPatient
+from app.schemas.medical_appointment import OutPatientAppointmentHistory
+
 from app.services.clinical.clinical_services import get_current_clinical_user
-from app.services.clinical.schedule import get_doctor_schedule_service, update_appointment_status_service
+from app.services.clinical.schedule import (
+    get_doctor_schedule_service,
+    update_appointment_status_service,
+    get_attended_patients_history_service,
+    get_single_patient_history_service,
+)
 
 router = APIRouter(prefix="/clinical", tags=["Clinical"])
 
@@ -41,4 +51,25 @@ def update_appointment_status(
         db=db,
         clinical_access=current_user,
         appointment_id=data.appointment_id,
+    )
+
+
+@router.get("/patients/history", response_model=List[OutAttendedPatient])
+def get_attended_patients_history(
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> List[OutAttendedPatient]:
+    return get_attended_patients_history_service(db=db, clinical_access=current_user)
+
+
+@router.get("/patients/{patient_id}/history", response_model=List[OutPatientAppointmentHistory])
+def get_single_patient_history(
+    patient_id: int,
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+    db: Session = Depends(get_db),
+) -> List[OutPatientAppointmentHistory]:
+    return get_single_patient_history_service(
+        db=db, 
+        clinical_access=current_user, 
+        patient_id=patient_id
     )
