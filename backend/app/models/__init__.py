@@ -13,8 +13,11 @@ from .entity import Entity
 from .logs import Logs
 from .medical_appointment import MedicalAppointment
 from .medical_specialty import MedicalSpecialty
+from .patient import Patient
 from .patient_access import PatientAccess
 from .patient import Patient
+from .patient_medical_record import PatientMedicalRecord
+from .patient_prescription import PatientPrescription
 from .person import Person
 from .phone import Phone
 from .service import Service

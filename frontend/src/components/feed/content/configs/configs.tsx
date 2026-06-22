@@ -1,67 +1,119 @@
-import React, { useState } from 'react';
-import { User, LogOut } from 'lucide-react'; // Importado o ícone LogOut
+import React, { useEffect, useState } from 'react';
+import { User, LogOut, Eye, EyeOff } from 'lucide-react';
 import './configs.css';
 import { removeToken } from '../../../../services/tokenService';
+import { getPatientContact, updatePatientContact, updatePatientPassword } from '../../../../services/patientService';
 
 interface ConfigsProps {
     userName: string; 
 }
 
 export const Configs = ({ userName }: ConfigsProps) => {
-  // Estados para o formulário de Senha
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
-  // Estados para o formulário de Contato
-  const [email, setEmail] = useState('exemplo@gamil.com');
-  const [telefone, setTelefone] = useState('(00) 9 9999-9999');
+  const [mostrarAtual, setMostrarAtual] = useState(false);
+  const [mostrarNova, setMostrarNova] = useState(false);
+  const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
 
-  const handleSalvarSenha = (e: React.FormEvent) => {
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [loadingContato, setLoadingContato] = useState(true);
+  const [contatoStatus, setContatoStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [senhaStatus, setSenhaStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  useEffect(() => {
+    async function loadContact() {
+      try {
+        const contact = await getPatientContact();
+        setEmail(contact.email ?? '');
+        setTelefone(contact.phone ?? '');
+      } catch (error) {
+        console.error('Erro ao carregar contato', error);
+      } finally {
+        setLoadingContato(false);
+      }
+    }
+
+    loadContact();
+  }, []);
+
+  const handleSalvarSenha = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar nova senha clicado");
-    // Lógica da API aqui
+    setSenhaStatus(null);
+
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
+      setSenhaStatus({ type: 'error', message: 'Preencha todos os campos de senha.' });
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      setSenhaStatus({ type: 'error', message: 'A nova senha e a confirmação não coincidem.' });
+      return;
+    }
+
+    try {
+      await updatePatientPassword({
+        current_password: senhaAtual,
+        new_password: novaSenha,
+        confirm_password: confirmarSenha,
+      });
+
+      setSenhaStatus({ type: 'success', message: 'Senha atualizada com sucesso.' });
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarSenha('');
+    } catch (error) {
+      console.error('Erro ao salvar senha', error);
+      setSenhaStatus({ type: 'error', message: 'Não foi possível atualizar a senha. Verifique seus dados.' });
+    }
   };
 
-  const handleSalvarContato = (e: React.FormEvent) => {
+  const handleSalvarContato = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Salvar contato clicado");
-    // Lógica da API aqui
+    setContatoStatus(null);
+
+    try {
+      await updatePatientContact({
+        email,
+        phone: telefone || undefined,
+      });
+      setContatoStatus({ type: 'success', message: 'Informações de contato atualizadas.' });
+    } catch (error) {
+      console.error('Erro ao salvar contato', error);
+      setContatoStatus({ type: 'error', message: 'Não foi possível atualizar as informações de contato. Tente novamente.' });
+    }
   };
 
-  // Função para gerenciar o clique de logout
   const handleLogout = () => {
-    removeToken();                                    // apaga o token do localStorage
+    removeToken();
     window.location.href = "/authenticantion.html";
   };
 
   return (
     <div className="set-container">
       
-      {/* Cabeçalho: Título e Card de Perfil */}
       <div className="set-header">
         <h1 className="set-title">Configurações</h1>
         
         <div className="set-profile-card">
           <div className="set-profile-left">
             <div className="set-avatar-placeholder">
-              <User size={36} color="#ffffff" strokeWidth={2} />
+              <User size={28} color="#ffffff" strokeWidth={2} />
             </div>
             <div className="set-profile-info">
               <h2 className="set-profile-name">{userName.split(" ")[0]}!</h2>
               <p className="set-profile-role">Paciente</p>
             </div>
           </div>
-
-          {/* Novo Botão de Logout */}
           <button className="set-logout-btn" onClick={handleLogout} title="Sair do sistema">
-            <LogOut size={18} />
+            <LogOut size={16} />
             <span>Sair</span>
           </button>
         </div>
       </div>
 
-      {/* Grid de Formulários */}
       <div className="set-grid">
         
         {/* CARD 1: Alterar Senha */}
@@ -71,38 +123,61 @@ export const Configs = ({ userName }: ConfigsProps) => {
           <form onSubmit={handleSalvarSenha} className="set-form">
             <div className="set-input-group">
               <label>Senha atual</label>
-              <input 
-                type="password" 
-                placeholder="Digite sua senha atual" 
-                value={senhaAtual}
-                onChange={(e) => setSenhaAtual(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={mostrarAtual ? 'text' : 'password'}
+                  placeholder="Digite sua senha atual" 
+                  value={senhaAtual}
+                  onChange={(e) => setSenhaAtual(e.target.value)}
+                />
+                <button type="button" className="set-password-toggle" onClick={() => setMostrarAtual(!mostrarAtual)}>
+                  {mostrarAtual ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             
             <div className="set-input-group">
               <label>Nova senha</label>
-              <input 
-                type="password" 
-                placeholder="Digite nova senha forte" 
-                value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={mostrarNova ? 'text' : 'password'}
+                  placeholder="Digite nova senha forte" 
+                  value={novaSenha}
+                  onChange={(e) => setNovaSenha(e.target.value)}
+                />
+                <button type="button" className="set-password-toggle" onClick={() => setMostrarNova(!mostrarNova)}>
+                  {mostrarNova ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             
             <div className="set-input-group">
               <label>Confirmar nova senha</label>
-              <input 
-                type="password" 
-                placeholder="Repita nova senha" 
-                value={confirmarSenha}
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-              />
+              <div className="set-password-field">
+                <input 
+                  type={mostrarConfirmar ? 'text' : 'password'}
+                  placeholder="Repita nova senha" 
+                  value={confirmarSenha}
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
+                />
+                <button type="button" className="set-password-toggle" onClick={() => setMostrarConfirmar(!mostrarConfirmar)}>
+                  {mostrarConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <button type="submit" className="set-btn">
               Salvar nova senha
             </button>
           </form>
+
+          {senhaStatus && (
+            <div className="set-feedback">
+              <p className={senhaStatus.type === 'success' ? 'set-success' : 'set-error'}>
+                {senhaStatus.message}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* CARD 2: Informações de Contato */}
@@ -134,6 +209,14 @@ export const Configs = ({ userName }: ConfigsProps) => {
               Salvar alterações de contato
             </button>
           </form>
+
+          {contatoStatus && (
+            <div className="set-feedback">
+              <p className={contatoStatus.type === 'success' ? 'set-success' : 'set-error'}>
+                {contatoStatus.message}
+              </p>
+            </div>
+          )}
         </div>
 
       </div>

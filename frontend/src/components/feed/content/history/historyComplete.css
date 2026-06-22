@@ -154,6 +154,29 @@
 .btn-action-view:hover { background-color: #00695c; }
 .btn-action-reschedule:hover { background-color: rgba(0, 137, 123, 0.04); }
 
+.complete-card-item {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    position: relative;
+}
+.card-status-line {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+}
+.status-red {
+    background-color: #dc2626;
+}
+.status-blue {
+    background-color: #00897b;
+}
+
 /* ==================================================== */
 /* RESPONSIVIDADE PARA CELULARES E TABLETS PEQUENOS    */
 /* ==================================================== */

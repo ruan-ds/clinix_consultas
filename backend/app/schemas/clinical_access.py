@@ -29,3 +29,20 @@ class OutClinicalAccess(BaseClinicalAccess):
     id: int
     is_active: bool
     model_config = ConfigDict(from_attributes=True)
+
+
+class LoginClinicalAccess(BaseModel):
+    email: Annotated[str, StringConstraints(max_length=300)]
+    password: str
+
+
+class OutLoginClinicalAccess(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class OutMeClinicalAccess(BaseModel):
+    id: int
+    role: str
+    person_name: str
+    model_config = ConfigDict(from_attributes=True)

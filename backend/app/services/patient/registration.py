@@ -94,6 +94,16 @@ def create_patient_access(db: Session, data: CreatePatientAccess, patient_id: in
     return new_patient_access
 
 
+def create_patient(db: Session, person_id: int) -> Patient:
+    new_patient = Patient(person_id=person_id)
+
+    db.add(new_patient)
+    db.flush()
+    db.refresh(new_patient)
+
+    return new_patient
+
+
 def register_patient_access_service(db: Session, data: FullPatientAccessRegistration):
     try:
         with db.begin():

@@ -18,6 +18,18 @@ function HistoryComplete() {
         item.doctor_name.toLowerCase().includes(pesquisa.toLowerCase())
     );
 
+    // Define o indicativo (label + cor) de acordo com o status da consulta
+    const getStatusBadge = (status: string, dateStr: string) => {
+        if (status === 'cancelled') {
+            return { label: 'Cancelada', colorClass: 'status-red' };
+        }
+        const isPast = new Date(dateStr) < new Date();
+        if (isPast) {
+            return { label: 'Concluída', colorClass: 'status-green' };
+        }
+        return { label: 'Agendada', colorClass: 'status-blue' };
+    };
+
     return (
         <div className="history-complete-container">
             <header className="history-complete-header">
@@ -45,12 +57,19 @@ function HistoryComplete() {
                         minute: '2-digit'
                     });
 
+                    const statusBadge = getStatusBadge(item.status, item.date);
+
                     return (
                         <div key={item.id} className="complete-card-item">
                             <div className="card-info-side">
                                 <div className="card-main-line">
                                     <span className="doctor-spec-txt">
                                         {item.doctor_name} - {item.specialty}
+                                    </span>
+                                </div>
+                                <div className="card-status-line">
+                                    <span className={`status-pill ${statusBadge.colorClass}`}>
+                                        {statusBadge.label}
                                     </span>
                                 </div>
                                 <div className="card-details-block">

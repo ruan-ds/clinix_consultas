@@ -20,19 +20,42 @@ function Login({changeAuth}:  Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [erro, setErro] = useState("");
-  async function sign_in() {
-  try {
-    const login = { email, password };
-    const response = await getLogin(login);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    if (response.status === 200) {
-      saveToken(response.data.access_token);
-      window.location.href = "/feed.html";
+  const parseLoginError = (error: any) => {
+    const detail = error?.response?.data?.detail;
+    if (typeof detail === 'string') {
+      return detail;
     }
-  } catch (error: any) {
-    const mensagem = error.response?.data?.detail;
-    setErro(mensagem || "E-mail ou senha incorretos.");
-  }
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item: any) => {
+          if (typeof item === 'string') return item;
+          if (item?.msg) return item.msg;
+          if (item?.detail) return item.detail;
+          if (item?.loc) return `${item.loc.join('.')} ${item.msg ?? ''}`.trim();
+          return JSON.stringify(item);
+        })
+        .join(' | ');
+    }
+    return 'E-mail ou senha incorretos.';
+  };
+
+  async function sign_in() {
+    setIsSubmitting(true);
+    try {
+      const login = { email, password };
+      const response = await getLogin(login);
+
+      if (response.status === 200) {
+        saveToken(response.data.access_token);
+        window.location.href = "/feed.html";
+      }
+    } catch (error: any) {
+      setErro(parseLoginError(error));
+    } finally {
+      setIsSubmitting(false);
+    }
   }
   
   return (
@@ -54,7 +77,10 @@ function Login({changeAuth}:  Props) {
             <button type="button" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button> 
           </div>
 
-          <button type="submit" className="btn-login">Entrar na Conta</button>{erro && <p className="erro-msg">{erro}</p>}
+          <button type="submit" className="btn-login" disabled={isSubmitting}>
+            {isSubmitting ? 'Entrando...' : 'Entrar na Conta'}
+          </button>
+          {erro && <p className="erro-msg">{erro}</p>}
           
         </form>
 
