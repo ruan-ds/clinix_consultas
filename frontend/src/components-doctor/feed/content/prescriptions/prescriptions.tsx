@@ -4,13 +4,20 @@ import {
   getDoctorPrescriptions,
   type Prescription,
 } from '../../../../services/doctorService';
-import { Loader2, FileText, Printer, Eye, X, ScanLine } from 'lucide-react';
+import { Loader2, FileText, ChevronDown, X, Printer, Pill, Calendar, User } from 'lucide-react';
 
-function Prescriptions() {
+const ITEMS_PER_PAGE = 10;
+
+interface PrescriptionsProps {
+  setTelaAtiva: (id: number) => void;
+}
+
+function Prescriptions({ setTelaAtiva }: PrescriptionsProps) {
   const [prescricoes, setPrescricoes] = useState<Prescription[]>([]);
   const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState('');
   const [ordem, setOrdem] = useState<'recentes' | 'az'>('recentes');
+  const [paginaAtual, setPaginaAtual] = useState(1);
   const [visualizar, setVisualizar] = useState<Prescription | null>(null);
 
   useEffect(() => {
@@ -33,11 +40,38 @@ function Prescriptions() {
         : new Date(b.ultimaConsulta).getTime() - new Date(a.ultimaConsulta).getTime()
     );
 
+  const totalPaginas = Math.max(1, Math.ceil(filtradas.length / ITEMS_PER_PAGE));
+  const paginadas = filtradas.slice(
+    (paginaAtual - 1) * ITEMS_PER_PAGE,
+    paginaAtual * ITEMS_PER_PAGE
+  );
+
   const formatarData = (dateStr: string) =>
     new Date(dateStr)
       .toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
       .toUpperCase()
       .replace('.', '');
+
+  const formatarDataLonga = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    }).toUpperCase();
+
+  const getPaginasVisiveis = () => {
+    const paginas: (number | '...')[] = [];
+    if (totalPaginas <= 5) {
+      for (let i = 1; i <= totalPaginas; i++) paginas.push(i);
+    } else {
+      paginas.push(1, 2, 3);
+      if (paginaAtual > 4) paginas.push('...');
+      if (paginaAtual > 3 && paginaAtual < totalPaginas - 1)
+        paginas.push(paginaAtual);
+      if (totalPaginas > 3) paginas.push('...', totalPaginas);
+    }
+    return [...new Set(paginas)];
+  };
 
   const handleImprimir = (p: Prescription) => {
     const janela = window.open('', '_blank');
@@ -55,7 +89,7 @@ function Prescriptions() {
       <h1>CLINIX — Prescrição Médica</h1>
       <p><span class="label">Paciente:</span> ${p.pacienteNome} (${p.pacienteIdade} anos)</p>
       <p><span class="label">ID:</span> ${p.pacienteId}</p>
-      <p><span class="label">Data:</span> ${formatarData(p.ultimaConsulta)}</p>
+      <p><span class="label">Data:</span> ${formatarDataLonga(p.ultimaConsulta)}</p>
       <hr/>
       <p><span class="label">Medicamento:</span> ${p.medicamento} ${p.dosagem}</p>
       <p><span class="label">Posologia:</span> ${p.posologia}</p>
@@ -69,44 +103,60 @@ function Prescriptions() {
 
   return (
     <div className="presc-container">
-      {/* Modal visualizar */}
+
+      {/* Modal Ver Prescrição */}
       {visualizar && (
         <div className="presc-modal-overlay" onClick={() => setVisualizar(null)}>
           <div className="presc-modal" onClick={(e) => e.stopPropagation()}>
             <button className="presc-modal-close" onClick={() => setVisualizar(null)}>
               <X size={20} />
             </button>
-            <div className="presc-modal-logo">CLINIX — Prescrição Médica</div>
-            <div className="presc-modal-row">
-              <span className="presc-label">Paciente</span>
-              <span>{visualizar.pacienteNome} ({visualizar.pacienteIdade} anos)</span>
+
+            <div className="presc-modal-header">
+              <div className="presc-modal-avatar">
+                <span>{visualizar.pacienteNome.charAt(0)}</span>
+              </div>
+              <div>
+                <h2>{visualizar.pacienteNome}</h2>
+                <p>ID {visualizar.pacienteId} · {visualizar.pacienteIdade} anos</p>
+              </div>
             </div>
-            <div className="presc-modal-row">
-              <span className="presc-label">ID</span>
-              <span>{visualizar.pacienteId}</span>
+
+            <div className="presc-modal-section">
+              <div className="presc-modal-section-title">
+                <Calendar size={15} /> Data da Prescrição
+              </div>
+              <p className="presc-modal-text">{formatarDataLonga(visualizar.ultimaConsulta)}</p>
             </div>
-            <div className="presc-modal-row">
-              <span className="presc-label">Data</span>
-              <span>{formatarData(visualizar.ultimaConsulta)}</span>
+
+            <div className="presc-modal-section">
+              <div className="presc-modal-section-title">
+                <Pill size={15} /> Medicamento
+              </div>
+              <p className="presc-modal-text">
+                {visualizar.medicamento} {visualizar.dosagem}
+              </p>
             </div>
-            <hr className="presc-divider" />
-            <div className="presc-modal-row">
-              <span className="presc-label">Medicamento</span>
-              <span>{visualizar.medicamento} {visualizar.dosagem}</span>
+
+            <div className="presc-modal-section">
+              <div className="presc-modal-section-title">
+                <FileText size={15} /> Posologia
+              </div>
+              <p className="presc-modal-text">{visualizar.posologia}</p>
             </div>
-            <div className="presc-modal-row">
-              <span className="presc-label">Posologia</span>
-              <span>{visualizar.posologia}</span>
+
+            <div className="presc-modal-section">
+              <div className="presc-modal-section-title">
+                <User size={15} /> Observações
+              </div>
+              <p className="presc-modal-text">{visualizar.observacoes}</p>
             </div>
-            <div className="presc-modal-row">
-              <span className="presc-label">Observações</span>
-              <span>{visualizar.observacoes}</span>
-            </div>
+
             <button
-              className="presc-btn-print-modal"
+              className="presc-modal-btn-print"
               onClick={() => handleImprimir(visualizar)}
             >
-              <Printer size={16} /> Imprimir
+              <Printer size={15} /> Imprimir Prescrição
             </button>
           </div>
         </div>
@@ -115,9 +165,6 @@ function Prescriptions() {
       {/* Header */}
       <header className="presc-header">
         <h2>Prescrições</h2>
-        <button className="presc-btn-scan">
-          <ScanLine size={16} /> + Escanear Prescrição
-        </button>
       </header>
 
       {/* Controls */}
@@ -126,24 +173,28 @@ function Prescriptions() {
           type="text"
           placeholder="Buscar pacientes por nome, CPF ou ID..."
           value={busca}
-          onChange={(e) => setBusca(e.target.value)}
+          onChange={(e) => { setBusca(e.target.value); setPaginaAtual(1); }}
           className="presc-search"
         />
-        <select
-          className="presc-select"
-          value={ordem}
-          onChange={(e) => setOrdem(e.target.value as 'recentes' | 'az')}
-        >
-          <option value="recentes">Recentes</option>
-          <option value="az">A–Z</option>
-        </select>
+        <div className="presc-select-wrapper">
+          <select
+            className="presc-select"
+            value={ordem}
+            onChange={(e) => setOrdem(e.target.value as 'recentes' | 'az')}
+          >
+            <option value="recentes">Recentes</option>
+            <option value="az">A–Z</option>
+          </select>
+          <ChevronDown size={16} className="presc-select-icon" />
+        </div>
+        <button className="presc-btn-criar" onClick={() => setTelaAtiva(3)}>Criar Prescrição</button>
       </div>
 
       {/* Table header */}
       <div className="presc-table-header">
         <span>Paciente info</span>
-        <span>Última Consulta</span>
-        <span>Medicamento / Dosagem</span>
+        <span>Data Prescrição</span>
+        <span>Preview Prescrição</span>
         <span className="presc-col-acoes">Ações</span>
       </div>
 
@@ -153,14 +204,14 @@ function Prescriptions() {
           <Loader2 size={32} className="presc-spin" />
           <p>Carregando prescrições...</p>
         </div>
-      ) : filtradas.length === 0 ? (
+      ) : paginadas.length === 0 ? (
         <div className="presc-empty">
           <FileText size={48} color="#d1d5db" />
           <p>Nenhuma prescrição encontrada.</p>
         </div>
       ) : (
         <div className="presc-list">
-          {filtradas.map((p) => (
+          {paginadas.map((p) => (
             <div key={p.id} className="presc-row">
               <div className="presc-info">
                 <strong>{p.pacienteNome}</strong>
@@ -173,20 +224,51 @@ function Prescriptions() {
               </div>
               <div className="presc-acoes">
                 <button
-                  className="presc-btn presc-btn-primary"
-                  onClick={() => handleImprimir(p)}
-                >
-                  <Printer size={14} /> Imprimir
-                </button>
-                <button
-                  className="presc-btn presc-btn-outline"
+                  className="presc-btn presc-btn-ver"
                   onClick={() => setVisualizar(p)}
                 >
-                  <Eye size={14} /> Ver
+                  Ver
                 </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Paginação */}
+      {!loading && filtradas.length > 0 && (
+        <div className="presc-pagination">
+          <button
+            className="presc-page-btn presc-page-text"
+            onClick={() => setPaginaAtual((p) => Math.max(1, p - 1))}
+            disabled={paginaAtual === 1}
+          >
+            Anterior
+          </button>
+          <span className="presc-page-separator">|</span>
+
+          {getPaginasVisiveis().map((pg, idx) =>
+            pg === '...' ? (
+              <span key={`ellipsis-${idx}`} className="presc-page-ellipsis">...</span>
+            ) : (
+              <button
+                key={pg}
+                className={`presc-page-btn ${paginaAtual === pg ? 'presc-page-active' : ''}`}
+                onClick={() => setPaginaAtual(pg as number)}
+              >
+                {pg}
+              </button>
+            )
+          )}
+
+          <span className="presc-page-separator">|</span>
+          <button
+            className="presc-page-btn presc-page-text"
+            onClick={() => setPaginaAtual((p) => Math.min(totalPaginas, p + 1))}
+            disabled={paginaAtual === totalPaginas}
+          >
+            Próximo
+          </button>
         </div>
       )}
     </div>

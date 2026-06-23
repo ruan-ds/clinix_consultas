@@ -2,6 +2,8 @@ import React from 'react';
 import Dashboard from './dashboard/dashboard';
 import Patients from './patients/patients';
 import Prescriptions from './prescriptions/prescriptions';
+import EmitirPrescricao from './prescriptionsIssue/prescriptionsissue';
+
 interface ContentProps {
   telaAtiva: number;
   setTelaAtiva: (id: number) => void;
@@ -18,7 +20,9 @@ function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
           case 1:
             return <Patients />;
           case 2:
-            return <Prescriptions />;
+            return <Prescriptions setTelaAtiva={setTelaAtiva} />;
+          case 3:
+            return <EmitirPrescricao setTelaAtiva={setTelaAtiva} />;
           default:
             return <Dashboard userName={userName} />;
         }

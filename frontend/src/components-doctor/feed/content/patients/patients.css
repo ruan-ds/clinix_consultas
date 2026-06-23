@@ -235,3 +235,81 @@
   .pat-container { padding: 16px 12px; }
   .pat-modal { padding: 20px 16px; }
 }
+/* =========================================
+   MODAL HISTÓRICO
+========================================= */
+.pat-modal-historico {
+  max-width: 620px;
+}
+
+.pat-historico-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.pat-historico-item {
+  display: flex;
+  gap: 16px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pat-historico-data {
+  background: #f0f9f7;
+  color: #0d6f63;
+  font-size: 0.75rem;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  padding: 14px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  min-width: 44px;
+  letter-spacing: 0.4px;
+}
+
+.pat-historico-body {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pat-historico-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.pat-historico-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0d6f63;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.pat-historico-row span:last-child {
+  font-size: 0.86rem;
+  color: #1f2937;
+}
+
+@media (max-width: 480px) {
+  .pat-historico-data {
+    writing-mode: horizontal-tb;
+    transform: none;
+    padding: 10px 14px;
+    min-width: unset;
+    width: 100%;
+    border-bottom: 1.5px solid #e5e7eb;
+    font-size: 0.72rem;
+  }
+  .pat-historico-item { flex-direction: column; }
+}

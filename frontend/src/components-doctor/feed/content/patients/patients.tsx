@@ -5,7 +5,16 @@ import {
   getPatientById,
   type Patient,
 } from '../../../../services/doctorService';
-import { Loader2, Users, X, FileText, Pill, AlertTriangle } from 'lucide-react';
+import { Loader2, Users, X, FileText, Pill, AlertTriangle, Clock } from 'lucide-react';
+
+// Tipo mock para histórico — adaptar ao tipo real do backend quando disponível
+interface HistoricoConsulta {
+  data: string;
+  motivo: string;
+  diagnostico: string;
+  medicamentoPrescrito: string;
+  observacoes: string;
+}
 
 function Patients() {
   const [pacientes, setPacientes] = useState<Patient[]>([]);
@@ -14,6 +23,34 @@ function Patients() {
   const [ordem, setOrdem] = useState<'recentes' | 'az'>('recentes');
   const [prontuario, setProntuario] = useState<Patient | null>(null);
   const [loadingProntuario, setLoadingProntuario] = useState(false);
+  const [historicoAberto, setHistoricoAberto] = useState<Patient | null>(null);
+
+  // Histórico mock — pronto para substituir por chamada real ao backend
+  const historicoMock: HistoricoConsulta[] = historicoAberto
+    ? [
+        {
+          data: historicoAberto.ultimaConsulta,
+          motivo: 'Consulta de rotina',
+          diagnostico: historicoAberto.diagnosticos?.[0] ?? 'Sem diagnóstico registrado',
+          medicamentoPrescrito: historicoAberto.medicamentos?.[0] ?? 'Nenhum',
+          observacoes: 'Paciente estável. Retorno em 30 dias.',
+        },
+        {
+          data: new Date(new Date(historicoAberto.ultimaConsulta).getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+          motivo: 'Queixa de dor de cabeça persistente',
+          diagnostico: 'Cefaleia tensional',
+          medicamentoPrescrito: 'Paracetamol 750mg',
+          observacoes: 'Orientado sobre hidratação e descanso.',
+        },
+        {
+          data: new Date(new Date(historicoAberto.ultimaConsulta).getTime() - 90 * 24 * 60 * 60 * 1000).toISOString(),
+          motivo: 'Acompanhamento anual',
+          diagnostico: 'Paciente sem queixas agudas',
+          medicamentoPrescrito: 'Nenhum',
+          observacoes: 'Exames laboratoriais solicitados.',
+        },
+      ]
+    : [];
 
   useEffect(() => {
     setLoading(true);
@@ -45,6 +82,12 @@ function Patients() {
     }
   };
 
+  const abrirHistorico = async (id: number) => {
+    const paciente = pacientes.find((p) => p.id === id) ?? null;
+    // Aqui virá a chamada ao backend: const historico = await getPatientHistory(id);
+    setHistoricoAberto(paciente);
+  };
+
   const formatarData = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -52,8 +95,16 @@ function Patients() {
       year: 'numeric',
     }).toUpperCase();
 
+  const formatarDataCurta = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).toUpperCase().replace('.', '');
+
   return (
     <div className="pat-container">
+
       {/* Modal prontuário */}
       {(prontuario || loadingProntuario) && (
         <div className="pat-modal-overlay" onClick={() => setProntuario(null)}>
@@ -117,6 +168,57 @@ function Patients() {
         </div>
       )}
 
+      {/* Modal histórico */}
+      {historicoAberto && (
+        <div className="pat-modal-overlay" onClick={() => setHistoricoAberto(null)}>
+          <div className="pat-modal pat-modal-historico" onClick={(e) => e.stopPropagation()}>
+            <button className="pat-modal-close" onClick={() => setHistoricoAberto(null)}>
+              <X size={20} />
+            </button>
+
+            <div className="pat-modal-header">
+              <div className="pat-modal-avatar">
+                <span>{historicoAberto.nome.charAt(0)}</span>
+              </div>
+              <div>
+                <h2>{historicoAberto.nome}</h2>
+                <p>ID {historicoAberto.id} · {historicoAberto.idade} anos · CPF {historicoAberto.cpf}</p>
+              </div>
+            </div>
+
+            <div className="pat-modal-section-title">
+              <Clock size={15} /> Histórico de Consultas
+            </div>
+
+            <div className="pat-historico-list">
+              {historicoMock.map((h, i) => (
+                <div key={i} className="pat-historico-item">
+                  <div className="pat-historico-data">{formatarDataCurta(h.data)}</div>
+                  <div className="pat-historico-body">
+                    <div className="pat-historico-row">
+                      <span className="pat-historico-label">Motivo</span>
+                      <span>{h.motivo}</span>
+                    </div>
+                    <div className="pat-historico-row">
+                      <span className="pat-historico-label">Diagnóstico</span>
+                      <span>{h.diagnostico}</span>
+                    </div>
+                    <div className="pat-historico-row">
+                      <span className="pat-historico-label">Medicamento</span>
+                      <span>{h.medicamentoPrescrito}</span>
+                    </div>
+                    <div className="pat-historico-row">
+                      <span className="pat-historico-label">Observações</span>
+                      <span>{h.observacoes}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="pat-header">
         <h2>Meus Pacientes</h2>
@@ -175,7 +277,10 @@ function Patients() {
                 >
                   Ver Prontuário
                 </button>
-                <button className="pat-btn pat-btn-outline">
+                <button
+                  className="pat-btn pat-btn-outline"
+                  onClick={() => abrirHistorico(p.id)}
+                >
                   Ver histórico completo
                 </button>
               </div>
