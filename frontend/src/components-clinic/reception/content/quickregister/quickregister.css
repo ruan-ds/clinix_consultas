@@ -1,0 +1,196 @@
+/* ─── Cadastro Rápido de Paciente ──────────────────────── */
+
+* { font-family: 'Montserrat', sans-serif; box-sizing: border-box; }
+
+.qr-container {
+  padding: 32px;
+  max-width: 1100px;
+}
+
+.qr-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px;
+}
+
+/* Status / Feedback */
+.qr-status {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.qr-status--success { background: #d1fae5; color: #065f46; }
+.qr-status--error   { background: #fee2e2; color: #991b1b; }
+
+/* Card branco que envolve as duas colunas */
+.qr-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 768px) {
+  .qr-card { grid-template-columns: 1fr; gap: 32px; padding: 20px; }
+}
+
+/* Seção (coluna) */
+.qr-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px;
+}
+
+/* Campo */
+.qr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.qr-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* Input base */
+.qr-input {
+  padding: 11px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111827;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.qr-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.1);
+}
+
+.qr-input--full { width: 100%; }
+
+.qr-select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* Linha com 2 colunas */
+.qr-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.qr-field--grow { flex: 1; }
+.qr-field--sm   { flex: 0 0 90px; }
+
+/* Checkbox */
+.qr-field--checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.qr-field--checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #149488;
+  cursor: pointer;
+}
+
+.qr-label-checkbox {
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Animação entrada dos campos de responsável */
+.qr-row--animate {
+  animation: fadeSlide 0.2s ease;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* CEP com spinner */
+.qr-cep-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.qr-cep-wrapper .qr-input { flex: 1; }
+
+.qr-cep-spin {
+  position: absolute;
+  right: 12px;
+  color: #149488;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Botões */
+.qr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.qr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.qr-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.qr-btn--clear {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1.5px solid #d1d5db;
+}
+
+.qr-btn--clear:hover:not(:disabled) { background: #e5e7eb; }
+
+.qr-btn--submit {
+  background: #149488;
+  color: #fff;
+}
+
+.qr-btn--submit:hover:not(:disabled) { background: #0f766e; }
+
+.qr-spin { animation: spin 0.7s linear infinite; }

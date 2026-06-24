@@ -1,0 +1,263 @@
+/* ─── Fluxo do Dia ─────────────────────────────────────── */
+
+* { font-family: 'Montserrat', sans-serif; box-sizing: border-box; }
+
+.df-container {
+  padding: 32px;
+  max-width: 1200px;
+}
+
+/* Cabeçalho */
+.df-header {
+  margin-bottom: 24px;
+}
+
+.df-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.df-date {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Barra de Busca */
+.df-search-wrapper {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 999px;
+  padding: 12px 20px;
+  margin-bottom: 28px;
+  transition: border-color 0.2s;
+}
+
+.df-search-wrapper:focus-within {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.1);
+}
+
+.df-search-icon {
+  color: #9ca3af;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.df-search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  color: #374151;
+  background: transparent;
+}
+
+.df-search-input::placeholder { color: #9ca3af; }
+
+/* Erro */
+.df-error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* Tabela */
+.df-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.df-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+.df-table thead tr th {
+  text-align: left;
+  padding: 0 16px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 1.5px solid #e5e7eb;
+}
+
+.df-table tbody tr {
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-radius: 10px;
+  transition: box-shadow 0.2s;
+}
+
+.df-table tbody tr:hover {
+  box-shadow: 0 4px 12px rgba(20, 148, 136, 0.1);
+}
+
+.df-table tbody tr td {
+  padding: 16px;
+  font-size: 14px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+/* Arredondamento nas células da borda */
+.df-table tbody tr td:first-child { border-radius: 10px 0 0 10px; }
+.df-table tbody tr td:last-child  { border-radius: 0 10px 10px 0; }
+
+.df-row-cancelled { opacity: 0.5; }
+
+/* Colunas */
+.df-col-time {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+  width: 80px;
+}
+
+.df-col-patient { min-width: 180px; }
+
+.df-patient-name {
+  display: block;
+  font-weight: 700;
+  color: #111827;
+  font-size: 15px;
+}
+
+.df-patient-id {
+  display: block;
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.df-col-specialty { color: #4b5563; }
+
+/* Status badges */
+.df-status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-waiting   { background: #fef9c3; color: #854d0e; }
+.status-done      { background: #d1fae5; color: #065f46; }
+.status-future    { background: #e0f2fe; color: #075985; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
+.status-attended  { background: #f3e8ff; color: #6b21a8; }
+
+/* Botões de ação */
+.df-col-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 210px;
+}
+
+.df-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.df-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.df-btn-checkin {
+  background: #149488;
+  color: #fff;
+}
+
+.df-btn-checkin:hover:not(:disabled) { background: #0f766e; }
+
+.df-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1.5px solid #d1d5db;
+}
+
+.df-btn-cancel:hover:not(:disabled) { background: #e5e7eb; }
+
+/* Loading cell */
+.df-loading-cell,
+.df-empty-cell {
+  text-align: center;
+  padding: 48px 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.df-loading-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Spinner */
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.df-spin { animation: spin 0.7s linear infinite; color: #149488; }
+
+/* Paginação */
+.df-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.df-page-btn {
+  background: none;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.df-page-btn:hover:not(:disabled) {
+  border-color: #149488;
+  color: #149488;
+}
+
+.df-page-btn--active {
+  background: #149488;
+  border-color: #149488;
+  color: #fff;
+}
+
+.df-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.df-page-sep   { color: #d1d5db; font-size: 16px; padding: 0 4px; }
+.df-page-ellipsis { color: #9ca3af; padding: 0 4px; font-size: 14px; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .df-container { padding: 16px; }
+  .df-title     { font-size: 22px; }
+  .df-col-actions { flex-direction: column; gap: 6px; min-width: 120px; }
+  .df-btn       { width: 100%; justify-content: center; }
+}
