@@ -1,5 +1,4 @@
 import React from 'react';
-// 👇 Tirei o BrowserRouter daqui de cima!
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // ==========================================
@@ -9,30 +8,34 @@ import Homepage from './pages/homepage/Homepage';
 import Authentication from './pages/auth/authenticantion'; 
 
 // ==========================================
-// IMPORTS DO MÉDICO
+// IMPORTS DA CLÍNICA (MÉDICO & RECEPÇÃO)
 // ==========================================
 import DoctorFeed from './pages/doctor/DoctorFeed';
+// 👇 Adicione o import da tela que criamos para a recepção! 
+// (Atenção: confira se o caminho da pasta está certinho com onde você salvou o arquivo)
+import DailyFlow from './pages/reception/reception'; 
 
 export const AppRoutes = () => {
-  // Lê a URL atual (ex: localhost, clinix.com, medico.clinix.com)
   const hostname = window.location.hostname;
   
-  // Se a URL começar com "clinica", ele ativa o modo doutor
-  const isAreaMedico = hostname.startsWith('clinica');
+  // Agora esse isAreaClinica serve para liberar o acesso a TUDO que for interno da clínica
+  const isAreaClinica = hostname.startsWith('clinica');
 
   return (
-    // 👇 Tirei a tag <BrowserRouter> daqui também! Fica só o <Routes>
     <Routes>
       
-      {isAreaMedico ? (
+      {isAreaClinica ? (
         /* =========================================
-           MUNDO DO MÉDICO (Acessado via Subdomínio)
+           MUNDO DA CLÍNICA (Acessado via Subdomínio clinica.*)
            ========================================= */
         <>
-          {/* Cai direto no Dashboard sem pedir login */}
+          {/* Painel do Médico - Rota padrão ("/") */}
           <Route path="/" element={<DoctorFeed />} />
           
-          {/* Se digitar qualquer coisa depois da barra, volta pro Dashboard */}
+          {/* Painel da Recepção / Fluxo - Nova Rota ("/recepcao") */}
+          <Route path="/recepcao" element={<DailyFlow />} />
+          
+          {/* Se a pessoa digitar um caminho maluco, devolve ela pro Médico */}
           <Route path="*" element={<Navigate to="/" />} />
         </>
       ) : (
