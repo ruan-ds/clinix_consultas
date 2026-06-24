@@ -5,6 +5,13 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
 
+  // ==========================================
+  // O SERVER FICA AQUI FORA!
+  // ==========================================
+  server: {
+    allowedHosts: ['clinica.lvh.me']
+  },
+
   build: {
     rollupOptions: {
       input: {
