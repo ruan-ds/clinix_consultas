@@ -1,26 +1,6 @@
 from typing import Optional
 
 
-CASES = {
-    0: 0,
-    1: 0,
-    2: 9,
-    3: 8,
-    4: 7,
-    5: 6,
-    6: 5,
-    7: 4,
-    8: 3,
-    9: 2,
-    10: 1
-}
-
-SEQUENTIALS = [
-    "12345678909",
-    "01234567890",
-    "98765432100"
-]
-
 CPF_REGION = {
     0: ["RS"],
     1: ["DF", "GO", "MS", "MT", "TO"],
@@ -34,10 +14,25 @@ CPF_REGION = {
     9: ["PR", "SC"]
 }
 
-CPF_FOR_TESTS = [  
-    "12345678062",  
-    "11122233396"
-]
+
+def cpf_convert_numbers(cpf: str) -> str:
+    return "".join(filter(str.isdigit, cpf))
+
+
+def calculate_digit(numbers: list[int], start_weight: int) -> int:
+    total = 0
+    weight = start_weight
+
+    for number in numbers:
+        total += number * weight
+        weight -= 1
+
+    remainder = total % 11
+
+    if remainder < 2:
+        return 0
+
+    return 11 - remainder
 
 
 def cpf_validator(cpf: str) -> bool:
@@ -45,55 +40,27 @@ def cpf_validator(cpf: str) -> bool:
 
     if len(cpf) != 11:
         return False
-    
+
     if cpf == cpf[0] * 11:
-        return False
-    
-    if cpf in SEQUENTIALS:
         return False
 
     cpf_list = [int(i) for i in cpf]
-    count_f = 10
-    count_s = 11
-    first_nine_digits = cpf_list[:9]
 
-    # Primeiro digito verificador
-    total = 0
-    for number in first_nine_digits:
-        value = number * count_f
-        count_f -= 1
-        total = total + value
-    remainder = total % 11
-    first_digit = CASES[remainder]
+    # Primeiro dígito verificador
+    first_digit = calculate_digit(cpf_list[:9], 10)
 
-    # Segundo digito verificador
-    total = 0
-    cpf_with_first_digit = first_nine_digits + [first_digit]
-    for number in cpf_with_first_digit:
-        value = number * count_s
-        count_s -= 1
-        total = total + value
-    remainder = total % 11
-    second_digit = CASES[remainder]
+    # Segundo dígito verificador
+    second_digit = calculate_digit(cpf_list[:9] + [first_digit], 11)
 
-    # Verificando se os digitos verificadores estão corretos
-    return cpf_list[9] == first_digit and cpf_list[10] == second_digit
-
-
-def cpf_convert_numbers(cpf: str) -> str:
-    return ''.join(filter(str.isdigit, cpf))
+    return (
+        cpf_list[9] == first_digit
+        and cpf_list[10] == second_digit
+    )
 
 
 def cpf_get_region(cpf: str) -> Optional[list]:
     if not cpf_validator(cpf):
         return None
+
     cpf = cpf_convert_numbers(cpf)
-
     return CPF_REGION[int(cpf[8])]
-
-
-def test_valid_cpf():
-    for cpf in CPF_FOR_TESTS:
-        print(f"Testando CPF: {cpf} - Valid: {cpf_validator(cpf)}")
-
-test_valid_cpf()

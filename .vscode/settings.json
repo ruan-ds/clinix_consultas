@@ -1,4 +1,9 @@
 {
     "python.defaultInterpreterPath": "backend/.venv/bin/python3.13",
-    "python.analysis.extraPaths": ["./app"], 
+    "python.analysis.extraPaths": [
+        "./app"
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:poetry",
+    "python-envs.defaultPackageManager": "ms-python.python:poetry",
+    
 }

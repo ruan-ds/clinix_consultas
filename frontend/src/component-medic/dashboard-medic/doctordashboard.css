@@ -1,0 +1,164 @@
+/* Container Principal */
+.medic-dashboard-container {
+  padding: 32px;
+  background-color: #fcfcfc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Ajuste para sua fonte real */
+}
+
+/* Cabeçalho */
+.medic-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.medic-title {
+  color: #149488;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 3px;
+}
+
+.medic-date-pill {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 50px;
+  padding: 8px 32px;
+  font-size: 16px;
+  color: #374151;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Tabela */
+.medic-table-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.medic-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.medic-table th {
+  background-color: #f3f4f6;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.medic-table td {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.medic-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Tipografia da Tabela */
+.col-time {
+  font-size: 15px;
+  color: #111827;
+}
+
+.col-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.col-reason {
+  font-size: 14px;
+  color: #374151;
+}
+
+/* Status (Bolinhas e Textos) */
+.status-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.dot-green { background-color: #10b981; }
+.dot-red { background-color: #ef4444; }
+.dot-yellow { background-color: #f59e0b; }
+
+.status-texts p {
+  margin: 0;
+}
+
+.status-main {
+  font-size: 14px;
+  color: #111827;
+}
+
+.status-sub {
+  font-size: 13px;
+  color: #4b5563;
+  margin-top: 2px !important;
+}
+
+/* Botões de Ação */
+.col-action {
+  text-align: center;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-icon {
+  font-size: 10px;
+}
+
+.btn-active {
+  background-color: #20857c; /* Verde escuro Clinix */
+  color: #ffffff;
+}
+
+.btn-active:hover {
+  background-color: #186b63;
+}
+
+.btn-disabled {
+  background-color: #bce3df; /* Verde claro desbotado */
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+/* Loading */
+.loading-state {
+  padding: 40px;
+  text-align: center;
+  font-size: 18px;
+  color: #6b7280;
+}
