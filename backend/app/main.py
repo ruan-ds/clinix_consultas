@@ -32,7 +32,8 @@ app.include_router(login_router)
 app.include_router(patient_router)
 app.include_router(clinical_login_router)
 app.include_router(clinical_router)
-
+app.include_router(clinix_login_router)
+app.include_router(clinic_router)
 
 @app.get("/")
 def root():

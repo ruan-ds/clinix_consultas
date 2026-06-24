@@ -4,7 +4,7 @@ from app.core.database import get_db
 from app.schemas.clinic import FullClinicRegistration, OutFullClinicRegistration
 from app.services.clinix.clinix_services import create_full_clinic_service
 
-router = APIRouter(prefix="/clinical", tags=["Clinical"])
+router = APIRouter(prefix="/clinix", tags=["Clinix"])
 
 @router.post("/clinic/registration", response_model=OutFullClinicRegistration)
 def register_clinic(

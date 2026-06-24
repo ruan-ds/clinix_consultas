@@ -6,7 +6,7 @@ from app.schemas.clinix_access import LoginClinixAccess, OutLoginClinixAccess
 from app.services.clinix.clinix_services import login_clinix_access_service
 
 
-router = APIRouter(prefix="/clinix", tags=["Clinix Login"])
+router = APIRouter(prefix="/clinix", tags=["Clinix"])
 
 
 @router.post("/login", response_model=OutLoginClinixAccess)
@@ -15,3 +15,4 @@ def login_clinix(
     db: Session = Depends(get_db)
 ) -> OutLoginClinixAccess:
     return login_clinix_access_service(db, data)
+
