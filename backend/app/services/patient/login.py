@@ -16,7 +16,7 @@ from app.utils.security import (
 
 from app.utils.jwt import create_access_token
 
-from app.exceptions.auth_exceptions import login_error
+from app.exceptions.patient_exceptions import login_error
 
 
 def get_user_by_email(

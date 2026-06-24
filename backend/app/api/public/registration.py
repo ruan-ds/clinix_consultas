@@ -2,7 +2,7 @@ from app.models.patient_access import PatientAccess
 
 from app.schemas.patient_access import FullPatientAccessRegistration, OutFullPatientAccess
 
-from app.services.registration import register_patient_access_service
+from app.services.patient.registration import register_patient_access_service
 
 from app.core.database import get_db
 

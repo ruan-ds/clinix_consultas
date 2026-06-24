@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.schemas.clinix_access import LoginClinixAccess, OutLoginClinixAccess
-from app.services.clinix_services import login_clinix_access_service
+from app.services.clinix.clinix_services import login_clinix_access_service
 
 
 router = APIRouter(prefix="/clinix", tags=["Clinix Login"])

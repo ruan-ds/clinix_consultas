@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from app.exceptions.auth_exceptions import business_error 
+from app.exceptions.patient_exceptions import business_error 
 
 
 def cnpj_already_exists() -> None: 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.schemas.clinic import FullClinicRegistration, OutFullClinicRegistration
-from app.services.clinix_services import create_full_clinic_service
+from app.services.clinix.clinix_services import create_full_clinic_service
 
 router = APIRouter(prefix="/clinical", tags=["Clinical"])
 

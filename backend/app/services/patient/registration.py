@@ -1,4 +1,4 @@
-from app.exceptions.auth_exceptions import (
+from app.exceptions.patient_exceptions import (
     cpf_already_exists, 
     email_already_exists, 
     invalid_cpf

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.clinical_access import ClinicalAccess
 from app.schemas.clinical_access import LoginClinicalAccess, OutLoginClinicalAccess
 from app.utils.auth import login_access_service
-from app.exceptions.doctor_exceptions import (
+from app.exceptions.clinical_exceptions import (
     unauthorized_origin_error,
     missing_origin_config_error,
     inactive_user_error,

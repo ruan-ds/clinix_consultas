@@ -4,7 +4,7 @@ from app.models.clinic import Clinic
 from app.models.entity import Entity
 from app.schemas.clinix_access import OutClinixAccess, UpdateClinixAccess
 from app.schemas.clinic import FullClinicRegistration, OutFullClinicRegistration
-from app.services.registration import register_address, register_phone
+from app.services.patient.registration import register_address, register_phone
 from app.utils.cnpj_utils import cnpj_validator
 from app.exceptions.clinic_exceptions import cnpj_already_exists, invalid_cnpj, legal_name_already_exists
 from sqlalchemy.exc import IntegrityError
@@ -13,7 +13,7 @@ from app.models.clinix_access import ClinixAccess
 from app.schemas.clinix_access import LoginClinixAccess, OutLoginClinixAccess
 from app.utils.security import verify_password, needs_rehash, hash_password, DUMMY_HASH
 from app.utils.jwt import create_access_token
-from app.exceptions.auth_exceptions import login_error
+from app.exceptions.patient_exceptions import login_error
 
 def create_full_clinic_service(db: Session, data: FullClinicRegistration) -> OutFullClinicRegistration:
     try:
