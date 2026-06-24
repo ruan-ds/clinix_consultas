@@ -19,7 +19,7 @@ from app.schemas.medical_appointment import (
     OutSlotDay,
     OutSpecialty,
 )
-from app.services.patient_services import (
+from app.services.patient.patient_services import (
     create_medical_appointment_service,
     update_patient_contact_service,
     update_patient_password_service,

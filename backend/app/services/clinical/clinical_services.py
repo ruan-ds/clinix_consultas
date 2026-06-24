@@ -1,3 +1,10 @@
+from fastapi import Depends, Header
+from sqlalchemy.orm import Session
+
+from app.core.database import get_db
+from app.models.clinical_access import ClinicalAccess
+from app.utils.jwt import decode_access_token
+
 from app.exceptions.clinical_exceptions import (
     missing_authorization_error,
     invalid_token_error,

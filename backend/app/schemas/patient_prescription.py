@@ -23,3 +23,16 @@ class OutPatientPrescription(PatientPrescriptionBase):
     is_valid: bool
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OutPrescriptionDetail(BaseModel):
+    prescription_id: int
+    patient_name: str
+    patient_age: int
+    doctor_name: str
+    clinic_name: str
+    created_at: datetime
+    date_valid: datetime
+    prescription: str
+
+    model_config = ConfigDict(from_attributes=True)
