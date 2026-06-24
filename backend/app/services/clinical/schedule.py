@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from typing import List
 
 from sqlalchemy.orm import Session, joinedload
@@ -16,7 +16,7 @@ from app.models.medical_appointment import MedicalAppointment
 from app.models.doctor_schedule_slot import DoctorScheduleSlot
 from app.models.patient import Patient
 
-from app.schemas.medical_appointment import OutDoctorScheduleSlot
+from app.schemas.medical_appointment import OutDoctorScheduleSlot, OutAttendedPatient, OutPatientAppointmentHistory
 
 def get_doctor_schedule_service(
     db: Session, 

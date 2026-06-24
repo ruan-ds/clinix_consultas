@@ -1,8 +1,5 @@
-from app.exceptions.patient_exceptions import (
-    cpf_already_exists, 
-    email_already_exists, 
-    invalid_cpf
-)
+from app.exceptions.patient_exceptions import cpf_already_exists, email_already_exists, invalid_cpf
+
 from app.exceptions.patient_exceptions import(
     patient_registration_error
 )

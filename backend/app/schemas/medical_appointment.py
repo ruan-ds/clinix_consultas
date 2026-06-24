@@ -122,10 +122,25 @@ class OutClinicWithService(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class OutDoctorScheduleSlot(BaseModel):
+    slot_id: int
+    appointment_id: int
+    start_datetime: datetime
+    end_datetime: datetime
+    slot_status: str
+    appointment_status: str
+    patient_name: str
+    service_name: str
+    specialty_name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class OutDoctorSchedule(BaseModel):
     slot_id: int
     appointment_id: int
     start_datetime: datetime
+    end_datetime: datetime
     slot_status: str
     appointment_status: str
     patient_name: str
