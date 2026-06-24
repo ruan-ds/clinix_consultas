@@ -1,0 +1,1036 @@
+/* appointment.css */
+
+/* =========================================
+   BASE E ETAPA 1 (Mantido do seu original)
+   ========================================= */
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ag-container {
+  width: 100%;
+  max-width: 1500px;
+  padding: 32px;
+  background-color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  padding-top: 25px;
+}
+
+/* Cabeçalho e Progresso */
+.ag-header {
+  margin-bottom: 40px;
+}
+
+.ag-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.ag-subtitle {
+  font-size: 16px;
+  color: #4b5563;
+  margin: 0 0 12px 0;
+}
+
+.ag-progress-track {
+  width: 100%;
+  height: 10px;
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ag-progress-fill {
+  height: 100%;
+  background-color: #149488;
+  border-radius: 999px;
+  transition: width 0.4s ease-in-out;
+}
+
+/* Especialidades (GRID) */
+.ag-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 24px 0;
+}
+
+.ag-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .ag-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .ag-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ag-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.ag-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(20, 148, 136, 0.3);
+}
+
+.ag-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ag-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #ccfbf1;
+  color: #0f766e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.ag-card:hover .ag-icon-container {
+  background-color: #99f6e4;
+}
+
+.ag-card-title {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.ag-arrow-icon {
+  color: #0f766e;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.ag-card:hover .ag-arrow-icon {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* =========================================
+   NOVAS CLASSES: ETAPAS 1.5, 2 e 3
+   ========================================= */
+
+/* Botão Voltar (Geral) */
+.ag-btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border: none;
+  color: #4b5563;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+  font-weight: 600;
+}
+
+.ag-btn-voltar:hover {
+  background-color: #e5e7eb;
+}
+
+/* =========================================
+   ETAPA 1.5: CLÍNICAS (LISTA VERTICAL)
+   ========================================= */
+.ag-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ag-card-clinica {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.ag-card-clinica:hover {
+  border-color: #149488;
+  box-shadow: 0 4px 12px rgba(20, 148, 136, 0.15);
+}
+
+.ag-clinica-nome {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.ag-clinica-endereco {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================================
+   ETAPA 2: MÉDICOS E HORÁRIOS
+   ========================================= */
+.ag-medico-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.1);
+  gap: 20px; /* Espaçamento interno mobile */
+}
+
+@media (min-width: 768px) {
+  .ag-medico-card {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+.ag-medico-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ag-medico-nome {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.ag-medico-esp {
+  color: #4b5563;
+  margin: 0;
+  font-size: 15px;
+}
+
+.ag-medico-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #eab308; /* Amarelo da estrela */
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.ag-medico-local {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.ag-medico-agenda {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .ag-medico-agenda {
+    align-items: flex-end; /* Alinha à direita no Desktop */
+  }
+}
+
+.ag-agenda-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.ag-horarios-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ag-horario-badge {
+  background-color: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ag-horario-badge:hover {
+  background-color: #99f6e4;
+  border-color: #0f766e;
+}
+
+.ag-btn-agendar {
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ag-btn-agendar {
+    width: auto;
+  }
+}
+
+.ag-btn-agendar:hover {
+  background-color: #0f766e;
+}
+
+/* =========================================
+   ETAPA 3: CONFIRMAÇÃO (REPLICANDO IMAGEM)
+   ========================================= */
+.ag-confirmacao-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: #f9fafb;
+  gap: 20px;
+}
+
+.ag-confirmacao-detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.ag-conf-secao {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ag-conf-icon {
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.ag-conf-info-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.ag-conf-medico-foto {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ag-conf-info {
+  margin-top: 2px;
+}
+
+.ag-conf-nome {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.ag-conf-sub {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 2px 0;
+}
+
+.ag-conf-avaliacao {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #eab308;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Card Visual da Clínica (Canto direito com borda verde) */
+.ag-clinica-visual-card {
+  border: 2px solid #149488; /* Borda verde característica */
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ag-clinica-visual-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.ag-clinica-visual-card p {
+  font-weight: 600;
+  color: #111827;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.ag-estrelas {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* Botões */
+.ag-btn-principal {
+  width: 100%;
+  background-color: #149488; /* Verde/Teal */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background-color 0.2s;
+}
+
+.ag-btn-principal:hover {
+  background-color: #0f766e;
+}
+
+.ag-btn-secundario {
+  width: 100%;
+  background-color: #6b7280; /* Cinza escuro da imagem */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ag-btn-secundario:hover {
+  background-color: #4b5563;
+}
+
+/* =========================================
+   ETAPA 4: SUCESSO (Adicionada)
+   ========================================= */
+.ag-sucesso-container {
+  text-align: center;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.ag-sucesso-circulo {
+  width: 100px;
+  height: 100px;
+  background-color: #149488;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.ag-sucesso-box {
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
+}
+
+.ag-sucesso-box p {
+  margin: 8px 0;
+  color: #4b5563;
+}
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 3 (CONFIRMAÇÃO)
+   ========================================= */
+
+/* A CAIXA GRANDE (Essa fará a borda igual ao print aparecer) */
+.ag-confirmacao-box {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #d1d5db; /* Borda cinza clara visível */
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra suave para destacar */
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+/* O Grid interno 2x2 para alinhar Médico, Data, Paciente e Local */
+.ag-conf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 24px;
+  flex: 1;
+}
+
+.ag-conf-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #111827;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+/* Estilos do Boneco/Médico */
+.ag-conf-medico {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ag-avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ag-texto-nome { margin: 0; font-weight: 700; color: #111827; font-size: 16px; }
+.ag-texto-sub { margin: 2px 0; color: #4b5563; font-size: 14px; }
+.ag-texto-rating { margin: 4px 0 0 0; color: #4b5563; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+
+/* Textos padrões (Data, Paciente, Local) */
+.ag-texto-destaque {
+  margin: 0;
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Lado Direito: Card da Clínica com borda verde */
+.ag-clinica-card {
+  border: 2px solid #149488;
+  border-radius: 12px;
+  padding: 12px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ag-clinica-foto {
+  width: 100%;
+  height: 90px;
+  background-color: #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.ag-clinica-nome-card {
+  margin: 4px 0 8px 0;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+}
+
+.ag-estrelas {
+  display: flex;
+  gap: 2px;
+}
+
+/* =========================================
+   BOTÕES GIGANTES DA ETAPA 3
+   ========================================= */
+.ag-botoes-finais {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ag-btn-verde {
+  width: 100%;
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(20, 148, 136, 0.2);
+  transition: opacity 0.2s;
+}
+
+.ag-btn-verde:hover { opacity: 0.9; }
+
+.ag-btn-cinza {
+  width: 100%;
+  background-color: #8c8c8c; /* Cor cinza do seu print */
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s;
+}
+
+.ag-btn-cinza:hover { opacity: 0.9; }
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 4 (SUCESSO)
+   ========================================= */
+.ag-sucesso-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.ag-icone-sucesso {
+  width: 90px;
+  height: 90px;
+  background-color: #149488;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* =========================================
+   ESTILOS EXCLUSIVOS DA ETAPA 4 (SUCESSO)
+   ========================================= */
+
+/* Centraliza o card na tela */
+.ag-container-centralizado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh; /* Faz o container ocupar a altura da tela para centralizar verticalmente */
+}
+
+/* O Quadrado de Notificação (Card branco com sombra) */
+.ag-sucesso-box-notificacao {
+  background-color: #ffffff;
+  padding: 48px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Sombra mais destacada parecendo notificação */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 500px; /* Impede que o quadrado fique muito largo */
+  border: 1px solid #f3f4f6; /* Borda bem suave */
+}
+
+.ag-icone-sucesso {
+  width: 72px;
+  height: 72px;
+  background-color: #149488; /* Verde/Teal */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(20, 148, 136, 0.3); /* Sombreado leve no próprio ícone */
+}
+
+.ag-title-sucesso {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.ag-subtitle-sucesso {
+  font-size: 15px;
+  color: #4b5563;
+  margin: 0 0 32px 0;
+}
+
+/* Ajuste específico para o botão da tela de sucesso */
+.ag-btn-sucesso {
+  width: auto;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* =========================================
+   BARRA DE PESQUISA (ETAPA 1 E OUTRAS)
+   ========================================= */
+
+.ag-search-container {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db; /* Borda cinza clara */
+  border-radius: 999px; /* Formato de pílula arredondada */
+  padding: 12px 20px;
+  margin-bottom: 32px; /* Espaço entre a barra e o título "Clínicas Disponíveis" */
+  transition: all 0.2s ease;
+}
+
+.ag-search-container:focus-within {
+  border-color: #149488; /* Fica verde ao clicar */
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.1);
+}
+
+.ag-search-icon {
+  color: #9ca3af;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.ag-search-input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  color: #374151;
+  background: transparent;
+}
+
+.ag-search-input::placeholder {
+  color: #9ca3af;
+}
+/* =========================================
+   NAVEGAÇÃO DE DIAS (Etapa médicos)
+   ========================================= */
+
+.ag-dias-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ag-dia-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.ag-dia-btn:hover {
+  border-color: #149488;
+  background-color: #f0fdf4;
+}
+
+.ag-dia-btn--ativo {
+  background-color: #149488;
+  border-color: #149488;
+  color: #ffffff;
+}
+
+.ag-dia-btn--ativo .ag-dia-label,
+.ag-dia-btn--ativo .ag-dia-data {
+  color: #ffffff;
+}
+
+.ag-dia-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.ag-dia-data {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.ag-horarios-wrap {
+  margin-top: 4px;
+}
+
+.ag-agenda-titulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+.ag-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ag-card-header-row .ag-clinica-nome {
+  margin-bottom: 0;
+}
+
+.ag-servico-preco {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ecfdf5;
+  color: #149488;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+/* =========================================
+   ESTILOS DO SELETOR DE CALENDÁRIO MODERNO
+   ========================================= */
+
+.ag-calendario-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.ag-calendario-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ag-calendario-input {
+  width: 100%;
+  max-width: 210px; /* Borda bem mais ajustada perto da data */
+  padding: 8px 12px;
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e1; /* Borda nítida e moderna */
+  border-radius: 12px;       /* Bordas suavizadas identicas ao print */
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ag-calendario-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.15);
+}
+
+/* Alinhamento responsivo da seção da agenda */
+@media (min-width: 900px) {
+  .ag-calendario-container {
+    align-items: flex-end; /* Joga o seletor para a direita no desktop */
+  }
+  .ag-calendario-input {
+    text-align: center;
+  }
+}
+/* Médico card vira coluna no mobile, row no desktop */
+@media (min-width: 900px) {
+  .ag-medico-card {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .ag-medico-agenda {
+    align-items: flex-end;
+    max-width: 380px;
+  }
+
+  .ag-dias-nav {
+    justify-content: flex-end;
+  }
+}
+
+/* =========================================
+   LOADING
+   ========================================= */
+.ag-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 12px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.ag-spin {
+  animation: spin 0.8s linear infinite;
+  color: #149488;
+}
+/* =========================================
+   MODAL CPF PACIENTE
+   ========================================= */
+.ag-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.ag-modal {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  min-width: 340px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ag-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.ag-modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.ag-modal-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.12);
+}
+
+.ag-modal-erro {
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  margin: -10px 0 0 0;
+  text-align: center;
+}
+
+.ag-modal-btn {
+  width: 100%;
+  font-size: 15px;
+}
+
+/* ─── Paciente badge ─────────────────────────────────────── */
+.ag-paciente-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* ─── Confirmation box updated ───────────────────────────── */
+.ag-conf-textos { display: flex; flex-direction: column; gap: 2px; }
+.ag-conf-item { display: flex; flex-direction: column; }
+.ag-empty { color: #9ca3af; text-align: center; padding: 40px 0; font-size: 14px; }
+.ag-erro { color: #dc2626; font-weight: 600; margin-bottom: 16px; font-size: 14px; }

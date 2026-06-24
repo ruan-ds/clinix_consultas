@@ -32,17 +32,18 @@ function Login({changeAuth}: Props) {
     return 'E-mail ou senha incorretos.';
   };
 
+  // TODO: usar getLogin/saveToken/parseLoginError de verdade quando o
+  // back-end estiver pronto. Por enquanto, o login é simulado: qualquer
+  // envio do formulário redireciona direto para a tela do médico.
   async function sign_in() {
     setIsSubmitting(true);
+    setErro("");
     try {
-      const login = { email, password };
-      const response = await getLogin(login);
-      if (response.status === 200) {
-        saveToken(response.data.access_token);
-        window.location.href = "/doctor.html"; // ← corrigido
-      }
-    } catch (error: any) {
-      setErro(parseLoginError(error));
+      // Simulação de chamada à API.
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      window.location.href = "/doctor.html";
+    } catch {
+      setErro("Não foi possível entrar. Tente novamente.");
     } finally {
       setIsSubmitting(false);
     }

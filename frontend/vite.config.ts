@@ -13,6 +13,8 @@ export default defineConfig({
         authenticantion: path.resolve(__dirname, 'authenticantion.html'),
         doctor:          path.resolve(__dirname, 'doctor.html'),
         doctorAuth:      path.resolve(__dirname, 'doctor-auth.html'), // ← novo
+        reception:       path.resolve(__dirname, 'reception.html'),  // ← novo
+        receptionAuth:   path.resolve(__dirname, 'reception-auth.html'), // ← novo
       },
     },
   },

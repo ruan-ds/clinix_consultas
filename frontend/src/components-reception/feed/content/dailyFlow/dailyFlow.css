@@ -1,0 +1,314 @@
+/* fluxoDia.css */
+
+* { font-family: 'Montserrat', sans-serif; }
+
+.fd-container {
+  width: 100%;
+  max-width: 1500px;
+  padding: 32px;
+  padding-top: 25px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+.fd-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.fd-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.fd-date {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.fd-counters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fd-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fd-counter--waiting {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.fd-counter--done {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.fd-counter--future {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+/* ─── Search ─────────────────────────────────────────────── */
+.fd-search-wrap {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.fd-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.fd-search-input {
+  width: 100%;
+  padding: 14px 14px 14px 46px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  color: #111827;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.fd-search-input:focus {
+  border-color: #149488;
+  box-shadow: 0 0 0 3px rgba(20, 148, 136, 0.12);
+}
+
+/* ─── Table Header ───────────────────────────────────────── */
+.fd-table-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 180px 200px 240px;
+  gap: 12px;
+  padding: 0 20px 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1.5px solid #e5e7eb;
+  margin-bottom: 8px;
+}
+
+/* ─── List rows ──────────────────────────────────────────── */
+.fd-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fd-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 180px 200px 240px;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.fd-row:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.fd-row--cancelled {
+  opacity: 0.55;
+}
+
+.fd-cell {
+  font-size: 14px;
+  color: #374151;
+}
+
+.fd-cell--time {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.fd-cell--patient {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fd-patient-name {
+  font-weight: 700;
+  color: #111827;
+  font-size: 15px;
+}
+
+.fd-patient-id {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ─── Status Badges ──────────────────────────────────────── */
+.fd-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fd-badge--waiting {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.fd-badge--done {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.fd-badge--future {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.fd-badge--cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ─── Action Buttons ─────────────────────────────────────── */
+.fd-cell--actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fd-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fd-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.fd-btn--checkin {
+  background-color: #149488;
+  color: #ffffff;
+}
+
+.fd-btn--checkin:hover:not(:disabled) {
+  background-color: #0f7a6e;
+}
+
+.fd-btn--cancel {
+  background-color: transparent;
+  color: #374151;
+  border: 1.5px solid #d1d5db;
+}
+
+.fd-btn--cancel:hover:not(:disabled) {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.fd-cancelled-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* ─── Loading / Empty / Error ────────────────────────────── */
+.fd-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 0;
+  color: #6b7280;
+}
+
+.fd-spin {
+  animation: fd-spin-kf 1s linear infinite;
+}
+
+@keyframes fd-spin-kf {
+  to { transform: rotate(360deg); }
+}
+
+.fd-erro {
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.fd-empty {
+  color: #9ca3af;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .fd-table-header,
+  .fd-row {
+    grid-template-columns: 70px 1fr 160px 180px;
+  }
+  .fd-table-header span:last-child,
+  .fd-cell--actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .fd-container { padding: 16px; }
+  .fd-table-header { display: none; }
+  .fd-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .fd-cell--time {
+    font-size: 14px;
+    font-weight: 600;
+    color: #149488;
+  }
+}
