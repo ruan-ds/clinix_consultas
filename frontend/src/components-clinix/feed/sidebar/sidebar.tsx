@@ -1,8 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './sidebar.css';
 import { FiHome, FiSettings } from 'react-icons/fi';
 import { HiOutlineBuildingOffice2 } from 'react-icons/hi2';
 import { MdOutlineManageAccounts } from 'react-icons/md';
+
+// Mapeamento índice → rota (espelho do ClinixFeed)
+const TELA_TO_ROUTE: Record<number, string> = {
+  0: '/clinix',
+  1: '/clinix/clinicas',
+  2: '/clinix/acesso',
+  3: '/clinix/config',
+};
 
 interface SidebarClinixProps {
   telaAtiva: number;
@@ -10,12 +19,19 @@ interface SidebarClinixProps {
 }
 
 function SidebarClinix({ telaAtiva, setTelaAtiva }: SidebarClinixProps) {
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    setTelaAtiva(id);
+    navigate(TELA_TO_ROUTE[id]);
+  };
+
   return (
     <aside className="sidebar">
       <nav className="menu">
         <div
           className={`menu-item ${telaAtiva === 0 ? 'active' : ''}`}
-          onClick={() => setTelaAtiva(0)}
+          onClick={() => handleClick(0)}
           style={{ cursor: 'pointer' }}
         >
           <FiHome className="icon" /> <span>Dashboard</span>
@@ -23,7 +39,7 @@ function SidebarClinix({ telaAtiva, setTelaAtiva }: SidebarClinixProps) {
 
         <div
           className={`menu-item ${telaAtiva === 1 ? 'active' : ''}`}
-          onClick={() => setTelaAtiva(1)}
+          onClick={() => handleClick(1)}
           style={{ cursor: 'pointer' }}
         >
           <HiOutlineBuildingOffice2 className="icon" /> <span>Gestão de Clínicas</span>
@@ -31,7 +47,7 @@ function SidebarClinix({ telaAtiva, setTelaAtiva }: SidebarClinixProps) {
 
         <div
           className={`menu-item ${telaAtiva === 2 ? 'active' : ''}`}
-          onClick={() => setTelaAtiva(2)}
+          onClick={() => handleClick(2)}
           style={{ cursor: 'pointer' }}
         >
           <MdOutlineManageAccounts className="icon" /> <span>Gestão de Acesso</span>
@@ -39,7 +55,7 @@ function SidebarClinix({ telaAtiva, setTelaAtiva }: SidebarClinixProps) {
 
         <div
           className={`menu-item ${telaAtiva === 3 ? 'active' : ''}`}
-          onClick={() => setTelaAtiva(3)}
+          onClick={() => handleClick(3)}
           style={{ cursor: 'pointer' }}
         >
           <FiSettings className="icon" /> <span>Config. Master</span>

@@ -41,7 +41,7 @@ function Login({changeAuth}: Props) {
     try {
       // Simulação de chamada à API.
       await new Promise((resolve) => setTimeout(resolve, 400));
-      window.location.href = "/doctor.html";
+      window.location.href = '/';
     } catch {
       setErro("Não foi possível entrar. Tente novamente.");
     } finally {
