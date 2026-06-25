@@ -1,3 +1,10 @@
+body {
+  display: block !important;
+  justify-content: unset !important;
+  align-items: unset !important;
+  background-color: #ffffff !important;
+}
+
 .feed-wrapper {
   display: flex;
   flex-direction: column;

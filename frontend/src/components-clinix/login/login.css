@@ -6,12 +6,12 @@
     font-family: 'Nunito', sans-serif;
 }
 
-body {
-    background-color: #FAFAFA;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+.login-page-wrapper {
+  background-color: #FAFAFA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 /* Container mais largo para acomodar o banner maior */

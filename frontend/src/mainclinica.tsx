@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById('root-clinica')!).render(
         <Route path="/clinix/auth"    element={<ClinixAuth />} />
 
         {/* ── MÉDICO ─────────────────────────────────────────────────────── */}
-        <Route path="/"            element={<DoctorFeed />} />
+        <Route path="/medico"            element={<DoctorFeed />} />
         <Route path="/pacientes"   element={<DoctorFeed />} />
         <Route path="/prescricoes" element={<DoctorFeed />} />
 
@@ -38,7 +38,7 @@ ReactDOM.createRoot(document.getElementById('root-clinica')!).render(
         <Route path="/recepcao/agendamento" element={<ReceptionFeed />} />
 
         {/* ── CLINIX ─────────────────────────────────────────────────────── */}
-        <Route path="/clinix"          element={<ClinixFeed />} />
+        <Route path="/"                element={<ClinixFeed />} />
         <Route path="/clinix/clinicas" element={<ClinixFeed />} />
         <Route path="/clinix/acesso"   element={<ClinixFeed />} />
         <Route path="/clinix/config"   element={<ClinixFeed />} />

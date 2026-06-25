@@ -34,6 +34,7 @@ function Login({ changeAuth }: Props) {
   }
 
   return (
+      <div className="login-page-wrapper">
     <main className="login-container">
       <section className="login-card">
         <div className="logo-box">
@@ -60,6 +61,7 @@ function Login({ changeAuth }: Props) {
         <p>Gerencie clínicas, acessos e<br />operações da rede Clinix</p>
       </aside>
     </main>
+    </div>
   );
 }
 
