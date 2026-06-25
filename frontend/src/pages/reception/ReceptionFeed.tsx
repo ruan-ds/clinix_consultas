@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import NavbarReception from '../../components-reception/general/navbar/navbargeneral';
+import NavbarGeneral from '../../components-doctor/general/navbar/navbargeneral';
 import SidebarReception from '../../components-reception/feed/sidebar/sidebar';
 import ContentReception from '../../components-reception/feed/content/content';
 import { validateReceptionFeed, type ReceptionFeedValidation } from '../../services/receptionService';
@@ -23,7 +23,7 @@ function ReceptionFeed() {
 
   return (
     <div className="feed-wrapper">
-      <NavbarReception telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} />
+      <NavbarGeneral/>
       <div className="page-container">
         <SidebarReception telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} />
         <main className="main-content">

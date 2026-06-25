@@ -15,6 +15,7 @@ export default defineConfig({
         doctorAuth:      path.resolve(__dirname, 'doctor-auth.html'), // ← novo
         reception:       path.resolve(__dirname, 'reception.html'),  // ← novo
         receptionAuth:   path.resolve(__dirname, 'reception-auth.html'), // ← novo
+        clinix:          path.resolve(__dirname, 'clinix.html'), // ← novo
       },
     },
   },

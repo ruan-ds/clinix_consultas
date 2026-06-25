@@ -1,0 +1,208 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-color: #FAFAFA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container mais largo para acomodar o banner maior */
+.login-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 1100px; /* Aumentado de 900px */
+    width: 100%;
+    padding: 20px;
+}
+
+/* --- CARTÃO BRANCO MAIOR --- */
+.login-card {
+    background-color: #FFFFFF;
+    width: 480px; /* Aumentado de 400px */
+    padding: 60px 50px; /* Espaçamento interno maior */
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-box {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.logo-box img{
+    width: 100px; 
+    height: auto;
+}
+
+.brand-name {
+    color: #1c7566;
+    font-size: 20px; /* Fonte maior */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+}
+
+.input-group {
+    position: relative; /* ESSENCIAL */
+    margin-bottom: 20px;
+}
+/* Inputs maiores e mais confortáveis */
+.input-group input {
+    width: 100%;
+    padding: 16px 45px 16px 24px; /* espaço à direita */
+    border: 1px solid #E0E0E0;
+    border-radius: 40px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #A0A0A0;
+}
+
+.input-group input:focus {
+    border-color: #1c7566;
+}
+
+/* Botão maior */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background-color: #207567;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 40px;
+    font-size: 15px; /* Fonte maior */
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #175a4f;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    color: #207567;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 45px;
+}
+
+.signup-footer {
+    text-align: center;
+    font-size: 15px; /* Fonte maior */
+    color: #555;
+    margin-top: auto;
+}
+
+.signup-footer a {
+    color: #207567;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- BANNER VERDE ESTICADO HORIZONTALMENTE --- */
+.promo-card {
+    background: linear-gradient(135deg, #0e4c41 0%, #22c7a7 100%);
+    color: #FFFFFF;
+    height: 460px; /* Acompanha o crescimento do cartão branco */
+    width: 650px; /* BEM MAIS LARGO (era 450px) */
+    padding: 50px 50px 50px 100px; /* Mais espaço para o texto respirar */
+    border-radius: 0 16px 16px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    margin-left: -60px; /* Puxa um pouco mais pra baixo do cartão branco */
+    z-index: 1;
+}
+
+/* Textos do banner maiores */
+.promo-card h2 {
+    font-size: 36px; /* Bem maior */
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.promo-card p {
+    font-size: 18px; /* Maior e mais legível */
+    font-weight: 400;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+.input-group button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    color: #175a4f;
+    font-size: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* --- ESTILIZAÇÃO DA MENSAGEM DE ERRO (VERSÃO CLEAN) --- */
+.erro-msg {
+    display: block;
+    text-align: center;         /* Centraliza o texto perfeitamente */
+    color: #dc2626;             /* Mantém o vermelho de alerta */
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;           /* Espaço sutil entre o botão e o erro */
+    margin-bottom: 5px;
+    width: 100%;                /* Garante que ocupe a largura total para alinhar ao centro */
+    animation: shakeErro 0.4s ease-in-out; /* Mantém a leve tremidinha ao aparecer */
+}
+
+/* Efeito de tremidinha bem suave quando o erro aparece */
+@keyframes shakeErro {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+/* Responsividade */
+@media (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .promo-card {
+        display: none;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 480px;
+    }
+}
