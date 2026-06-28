@@ -12,13 +12,17 @@ from app.schemas.medical_appointment import OutAttendedPatient
 from app.schemas.medical_appointment import OutPatientAppointmentHistory
 from app.schemas.patient_medical_record import OutPatientMedicalRecord, UpdatePatientMedicalRecord
 from app.schemas.patient_prescription import CreatePatientPrescription, OutPatientPrescription, OutPrescriptionDetail
+from app.schemas.clinical_access import OutClinicalFeedValidation
 
-from app.services.clinical.clinical_services import get_current_clinical_user
+from app.services.clinical.clinical_services import (
+    get_current_clinical_user,
+    validate_clinical_feed_service
+)
 from app.services.clinical.schedule import (
     get_doctor_schedule_service,
     update_appointment_status_service,
     get_attended_patients_history_service,
-    get_single_patient_history_service,
+    get_single_patient_history_service, 
 )
 from app.services.clinical.medical_record import (
     get_or_create_medical_record_service,
@@ -146,3 +150,10 @@ def get_prescription_detail(
         clinical_access=current_user, 
         prescription_id=prescription_id
     )
+
+
+@router.get("/feed/validate", response_model=OutClinicalFeedValidation)
+def validate_clinical_feed(
+    current_user: ClinicalAccess = Depends(get_current_clinical_user),
+) -> OutClinicalFeedValidation:
+    return validate_clinical_feed_service(clinical_access=current_user)

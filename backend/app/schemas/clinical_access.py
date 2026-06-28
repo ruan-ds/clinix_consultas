@@ -46,3 +46,14 @@ class OutMeClinicalAccess(BaseModel):
     role: str
     person_name: str
     model_config = ConfigDict(from_attributes=True)
+
+
+class OutClinicalFeedValidation(BaseModel):
+    clinical_access_id: int
+    person_name: str
+    role: str
+    clinic_id: int
+    clinic_name: str
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)
