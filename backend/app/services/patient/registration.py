@@ -1,5 +1,9 @@
 from app.exceptions.patient_exceptions import cpf_already_exists, email_already_exists, invalid_cpf
 
+from app.exceptions.patient_exceptions import(
+    patient_registration_error
+)
+
 from app.models.address import Address
 from app.models.patient import Patient
 from app.models.patient_access import PatientAccess
@@ -147,7 +151,4 @@ def register_patient_access_service(db: Session, data: FullPatientAccessRegistra
         
     except IntegrityError as e:
         print("ERRO REAL:", e.orig)
-        raise HTTPException(
-        status_code=400,
-        detail="Erro ao cadastrar paciente"
-    )
+        patient_registration_error()
