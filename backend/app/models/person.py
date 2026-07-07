@@ -13,6 +13,7 @@ class Person(Entity):
     birthday = Column(Date, nullable=False)
     address_id = Column(Integer, ForeignKey("address.id"), nullable=False, index=True)
 
+    patient = relationship("Patient", back_populates="person", uselist=False)
     address = relationship("Address", back_populates="persons")
     clinical_access = relationship("ClinicalAccess", back_populates="person")
     clinix_access = relationship("ClinixAccess", back_populates="person", uselist=False)
