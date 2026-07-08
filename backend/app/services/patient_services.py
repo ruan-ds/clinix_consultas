@@ -108,7 +108,7 @@ def validate_feed_service(db: Session, patient_id: int) -> FeedValidation:
         patient_id=patient_access.patient_id,
         email=patient_access.email,
         is_active=patient_access.is_active,
-        person_name=patient_access.patient.name,
+        person_name=patient_access.patient.person.name,
     )
 
     return FeedValidation(
