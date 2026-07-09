@@ -1,0 +1,277 @@
+* { font-family: 'Montserrat', sans-serif; }
+
+.am-container {
+  width: 100%;
+  max-width: 1500px;
+  padding: 32px;
+  padding-top: 25px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.am-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 28px 0;
+  text-align: center;
+}
+
+.am-card {
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px -4px rgba(0, 0, 0, 0.08);
+}
+
+.am-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  margin: 0 0 24px 0;
+}
+
+.am-erro {
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.am-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .am-grid-3 { grid-template-columns: 1fr; }
+}
+
+.am-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.am-column-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.am-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.am-search-icon {
+  position: absolute;
+  left: 12px;
+  color: #9ca3af;
+}
+
+.am-search-input,
+.am-input {
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.am-search-input {
+  padding-left: 36px;
+}
+
+.am-search-input:focus,
+.am-input:focus {
+  border-color: #149488;
+}
+
+.am-chip {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1.5px solid #149488;
+  color: #149488;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.am-chip--selected {
+  background-color: #eafaf7;
+  cursor: default;
+}
+
+.am-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.am-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.am-btn-primary {
+  background-color: #149488;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: block;
+  margin: 0 auto;
+}
+
+.am-btn-primary:hover:not(:disabled) {
+  background-color: #0f7a6e;
+}
+
+.am-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.am-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .am-form-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Table ───────────────────────────────────────────────── */
+.am-table-header {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 0.8fr 1fr;
+  background-color: #149488;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: 8px 8px 0 0;
+}
+
+.am-table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.am-table-row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 0.8fr 1fr;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.am-table-row:last-child {
+  border-bottom: none;
+}
+
+.am-status {
+  font-weight: 700;
+}
+
+.am-status--active {
+  color: #149488;
+}
+
+.am-status--inactive {
+  color: #dc2626;
+}
+
+.am-btn-danger,
+.am-btn-success {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.am-btn-danger {
+  background-color: #dc2626;
+}
+
+.am-btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+.am-btn-success {
+  background-color: #149488;
+}
+
+.am-btn-success:hover {
+  background-color: #0f7a6e;
+}
+
+.am-pagination {
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 16px;
+}
+
+.am-page--active {
+  color: #149488;
+  font-weight: 700;
+}
+
+.am-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 0;
+  color: #6b7280;
+}
+
+.am-spin {
+  animation: am-spin-kf 1s linear infinite;
+}
+
+@keyframes am-spin-kf {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .am-table-header,
+  .am-table-row {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 6px;
+  }
+}

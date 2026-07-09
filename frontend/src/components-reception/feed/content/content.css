@@ -1,0 +1,13 @@
+:root {
+  --font-main: 'Montserrat', sans-serif;
+}
+body{
+    font-family: var(--font-main);
+}
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+  .content-container {
+    margin-left: 0;
+    padding-bottom: 70px; /* espaço para a sidebar bottom nav */
+  }
+}

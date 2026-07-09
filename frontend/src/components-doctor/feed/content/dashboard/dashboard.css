@@ -1,0 +1,310 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.doc-dashboard-wrapper {
+  width: 100%;
+  padding: 36px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.doc-dash-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.doc-dash-header h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0d6f63;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.doc-date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0f5f4;
+  border: 1.5px solid #d5e5e2;
+  border-radius: 999px;
+  padding: 8px 22px;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.doc-date-input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+}
+
+.doc-table-wrapper {
+  width: 100%;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.doc-agenda-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  min-width: 750px;
+}
+
+.doc-agenda-table thead th:nth-child(1) { width: 80px; }
+.doc-agenda-table thead th:nth-child(2) { width: 22%; }
+.doc-agenda-table thead th:nth-child(3) { width: 22%; }
+.doc-agenda-table thead th:nth-child(4) { width: 28%; }
+.doc-agenda-table thead th:nth-child(5) { width: 20%; }
+
+.doc-agenda-table thead { background: #f9fafb; }
+
+.doc-agenda-table th {
+  padding: 13px 16px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.doc-agenda-table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.doc-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+.doc-row:hover { background: #f9fffe; }
+.doc-row:last-child { border-bottom: none; }
+.doc-row.row-urgencia { background: #fff5f5; }
+.doc-row.row-urgencia:hover { background: #fff0f0; }
+
+.doc-cell-hora {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.doc-cell-paciente { vertical-align: middle; }
+.doc-cell-paciente strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+}
+.doc-idade {
+  display: block;
+  font-size: 0.76rem;
+  color: #9ca3af;
+}
+
+.doc-cell-motivo { vertical-align: middle; }
+.doc-cell-motivo span:first-child {
+  display: block;
+  font-size: 0.86rem;
+  color: #374151;
+}
+.doc-esp-tag {
+  display: block;
+  font-size: 0.72rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.doc-cell-fila { vertical-align: middle; }
+.doc-fila-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.doc-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.doc-status-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+.doc-tempo {
+  font-weight: 400;
+  color: #6b7280;
+}
+.doc-estado-clinico {
+  display: block;
+  font-size: 0.74rem;
+  color: #6b7280;
+  margin-top: 3px;
+  margin-left: 16px;
+}
+
+.doc-cell-acoes { white-space: nowrap; }
+
+.doc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.doc-btn-iniciar { background: #0d6f63; color: #fff; }
+.doc-btn-iniciar:hover:not(:disabled) { background: #0a5a50; }
+.doc-btn-encerrar { background: #1a9688; color: #fff; }
+.doc-btn-encerrar:hover:not(:disabled) { background: #157a6e; }
+.doc-btn-disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+
+.doc-loading, .doc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 0;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.doc-spin { animation: spin 1s linear infinite; }
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+@media (max-width: 768px) {
+  .doc-dashboard-wrapper {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .doc-dash-header {
+    align-items: flex-start;
+  }
+
+  .doc-dash-header h1 {
+    font-size: 16px;
+  }
+
+  .doc-date-pill {
+    font-size: 0.8rem;
+    padding: 6px 14px;
+  }
+
+  .doc-table-wrapper {
+    border: none;
+    background: transparent;
+    overflow: visible;
+  }
+
+  /* CORREÇÃO AQUI: Adicionado min-width: 0 para anular os 750px do desktop */
+  .doc-agenda-table,
+  .doc-agenda-table tbody,
+  .doc-agenda-table tr,
+  .doc-agenda-table td {
+    display: block;
+    width: 100%;
+    min-width: 0; 
+    box-sizing: border-box;
+  }
+
+  .doc-agenda-table thead {
+    display: none;
+  }
+
+  .doc-agenda-table tbody tr {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Aumentado ligeiramente para melhor respiro */
+    overflow: hidden;
+  }
+
+  .doc-row.row-urgencia {
+    border-left: 4px solid #ef4444;
+    background: #fff5f5;
+  }
+
+  .doc-agenda-table td {
+    padding: 0;
+    overflow: visible;
+    white-space: normal;
+    border: none;
+  }
+
+  .doc-cell-hora {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .doc-cell-paciente strong {
+    font-size: 1rem;
+  }
+
+  .doc-fila-row {
+    flex-wrap: wrap;
+  }
+
+  .doc-estado-clinico {
+    margin-left: 0;
+  }
+
+  .doc-cell-acoes {
+    white-space: normal;
+    width: 100%;
+  }
+
+  .doc-btn {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+    font-size: 0.82rem;
+    margin-top: 4px;
+    box-sizing: border-box;
+    white-space: normal; /* Garante que o texto quebre caso a tela seja muito pequena */
+  }
+}
