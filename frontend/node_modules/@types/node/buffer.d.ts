@@ -1,48 +1,3 @@
-/**
- * `Buffer` objects are used to represent a fixed-length sequence of bytes. Many
- * Node.js APIs support `Buffer`s.
- *
- * The `Buffer` class is a subclass of JavaScript's [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) class and
- * extends it with methods that cover additional use cases. Node.js APIs accept
- * plain [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) s wherever `Buffer`s are supported as well.
- *
- * While the `Buffer` class is available within the global scope, it is still
- * recommended to explicitly reference it via an import or require statement.
- *
- * ```js
- * import { Buffer } from 'node:buffer';
- *
- * // Creates a zero-filled Buffer of length 10.
- * const buf1 = Buffer.alloc(10);
- *
- * // Creates a Buffer of length 10,
- * // filled with bytes which all have the value `1`.
- * const buf2 = Buffer.alloc(10, 1);
- *
- * // Creates an uninitialized buffer of length 10.
- * // This is faster than calling Buffer.alloc() but the returned
- * // Buffer instance might contain old data that needs to be
- * // overwritten using fill(), write(), or other functions that fill the Buffer's
- * // contents.
- * const buf3 = Buffer.allocUnsafe(10);
- *
- * // Creates a Buffer containing the bytes [1, 2, 3].
- * const buf4 = Buffer.from([1, 2, 3]);
- *
- * // Creates a Buffer containing the bytes [1, 1, 1, 1] – the entries
- * // are all truncated using `(value &#x26; 255)` to fit into the range 0–255.
- * const buf5 = Buffer.from([257, 257.5, -255, '1']);
- *
- * // Creates a Buffer containing the UTF-8-encoded bytes for the string 'tést':
- * // [0x74, 0xc3, 0xa9, 0x73, 0x74] (in hexadecimal notation)
- * // [116, 195, 169, 115, 116] (in decimal notation)
- * const buf6 = Buffer.from('tést');
- *
- * // Creates a Buffer containing the Latin-1 bytes [0x74, 0xe9, 0x73, 0x74].
- * const buf7 = Buffer.from('tést', 'latin1');
- * ```
- * @see [source](https://github.com/nodejs/node/blob/v25.x/lib/buffer.js)
- */
 declare module "node:buffer" {
     import { ReadableStream } from "node:stream/web";
     /**
@@ -120,11 +75,6 @@ declare module "node:buffer" {
      */
     export function resolveObjectURL(id: string): Blob | undefined;
     export { type AllowSharedBuffer, Buffer, type NonSharedBuffer };
-    /** @deprecated This alias will be removed in a future version. Use the canonical `BlobPropertyBag` instead. */
-    // TODO: remove in future major
-    export interface BlobOptions extends BlobPropertyBag {}
-    /** @deprecated This alias will be removed in a future version. Use the canonical `FilePropertyBag` instead. */
-    export interface FileOptions extends FilePropertyBag {}
     export type WithImplicitCoercion<T> =
         | T
         | { valueOf(): T }
@@ -1600,11 +1550,12 @@ declare module "node:buffer" {
             /**
              * If `value` is:
              *
-             * * a string, `value` is interpreted according to the character encoding in `encoding`.
-             * * a `Buffer` or [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array), `value` will be used in its entirety.
-             * To compare a partial `Buffer`, use `buf.subarray`.
+             * * a string, `value` is interpreted according to the character encoding in
+             *   `encoding`.
+             * * a `Buffer` or `Uint8Array`, `value` will be used in its entirety.
+             *   To compare a partial `Buffer`, use `buf.subarray`.
              * * a number, `value` will be interpreted as an unsigned 8-bit integer
-             * value between `0` and `255`.
+             *   value between `0` and `255`.
              *
              * ```js
              * import { Buffer } from 'node:buffer';
@@ -1632,12 +1583,13 @@ declare module "node:buffer" {
              * // Prints: 6
              * ```
              *
-             * If `value` is not a string, number, or `Buffer`, this method will throw a `TypeError`. If `value` is a number, it will be coerced to a valid byte value,
+             * If `value` is not a string, number, or `Buffer`, this method will throw a
+             * `TypeError`. If `value` is a number, it will be coerced to a valid byte value,
              * an integer between 0 and 255.
              *
              * If `byteOffset` is not a number, it will be coerced to a number. If the result
              * of coercion is `NaN` or `0`, then the entire buffer will be searched. This
-             * behavior matches [`String.prototype.indexOf()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf).
+             * behavior matches `String.prototype.indexOf()`.
              *
              * ```js
              * import { Buffer } from 'node:buffer';
@@ -1658,14 +1610,27 @@ declare module "node:buffer" {
              * ```
              *
              * If `value` is an empty string or empty `Buffer` and `byteOffset` is less
-             * than `buf.length`, `byteOffset` will be returned. If `value` is empty and`byteOffset` is at least `buf.length`, `buf.length` will be returned.
+             * than `buf.length`, `byteOffset` will be returned. If `value` is empty and
+             * `byteOffset` is at least `buf.length`, `buf.length` will be returned.
              * @since v1.5.0
              * @param value What to search for.
-             * @param [byteOffset=0] Where to begin searching in `buf`. If negative, then offset is calculated from the end of `buf`.
-             * @param [encoding='utf8'] If `value` is a string, this is the encoding used to determine the binary representation of the string that will be searched for in `buf`.
-             * @return The index of the first occurrence of `value` in `buf`, or `-1` if `buf` does not contain `value`.
+             * @param start Where to begin searching in `buf`. If negative, then
+             * offset is calculated from the end of `buf`. **Default:** `0`.
+             * @param end Where to stop searching in `buf` (exclusive). **Default:**
+             * `buf.length`.
+             * @param encoding If `value` is a string, this is the encoding used to
+             * determine the binary representation of the string that will be searched for in
+             * `buf`. **Default:** `'utf8'`.
+             * @returns The index of the first occurrence of `value` in `buf`, or
+             * `-1` if `buf` does not contain `value`.
              */
-            indexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
+            indexOf(
+                value: string | number | Uint8Array,
+                start?: number,
+                end?: number,
+                encoding?: BufferEncoding,
+            ): number;
+            indexOf(value: string | number | Uint8Array, start: number, encoding: BufferEncoding): number;
             indexOf(value: string | number | Uint8Array, encoding: BufferEncoding): number;
             /**
              * Identical to `buf.indexOf()`, except the last occurrence of `value` is found
@@ -1699,12 +1664,13 @@ declare module "node:buffer" {
              * // Prints: 4
              * ```
              *
-             * If `value` is not a string, number, or `Buffer`, this method will throw a `TypeError`. If `value` is a number, it will be coerced to a valid byte value,
+             * If `value` is not a string, number, or `Buffer`, this method will throw a
+             * `TypeError`. If `value` is a number, it will be coerced to a valid byte value,
              * an integer between 0 and 255.
              *
              * If `byteOffset` is not a number, it will be coerced to a number. Any arguments
              * that coerce to `NaN`, like `{}` or `undefined`, will search the whole buffer.
-             * This behavior matches [`String.prototype.lastIndexOf()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/lastIndexOf).
+             * This behavior matches `String.prototype.lastIndexOf()`.
              *
              * ```js
              * import { Buffer } from 'node:buffer';
@@ -1730,11 +1696,24 @@ declare module "node:buffer" {
              * If `value` is an empty string or empty `Buffer`, `byteOffset` will be returned.
              * @since v6.0.0
              * @param value What to search for.
-             * @param [byteOffset=buf.length - 1] Where to begin searching in `buf`. If negative, then offset is calculated from the end of `buf`.
-             * @param [encoding='utf8'] If `value` is a string, this is the encoding used to determine the binary representation of the string that will be searched for in `buf`.
-             * @return The index of the last occurrence of `value` in `buf`, or `-1` if `buf` does not contain `value`.
+             * @param start Where to begin searching in `buf`. If negative, then
+             * offset is calculated from the end of `buf`. **Default:**
+             * `buf.length - 1`.
+             * @param end Where to stop searching in `buf` (exclusive). **Default:**
+             * `buf.length`.
+             * @param encoding If `value` is a string, this is the encoding used to
+             * determine the binary representation of the string that will be searched for in
+             * `buf`. **Default:** `'utf8'`.
+             * @returns The index of the last occurrence of `value` in `buf`, or
+             * `-1` if `buf` does not contain `value`.
              */
-            lastIndexOf(value: string | number | Uint8Array, byteOffset?: number, encoding?: BufferEncoding): number;
+            lastIndexOf(
+                value: string | number | Uint8Array,
+                start?: number,
+                end?: number,
+                encoding?: BufferEncoding,
+            ): number;
+            lastIndexOf(value: string | number | Uint8Array, start: number, encoding: BufferEncoding): number;
             lastIndexOf(value: string | number | Uint8Array, encoding: BufferEncoding): number;
             /**
              * Equivalent to `buf.indexOf() !== -1`.
@@ -1761,12 +1740,22 @@ declare module "node:buffer" {
              * ```
              * @since v5.3.0
              * @param value What to search for.
-             * @param [byteOffset=0] Where to begin searching in `buf`. If negative, then offset is calculated from the end of `buf`.
-             * @param [encoding='utf8'] If `value` is a string, this is its encoding.
-             * @return `true` if `value` was found in `buf`, `false` otherwise.
+             * @param start Where to begin searching in `buf`. If negative, then
+             * offset is calculated from the end of `buf`. **Default:** `0`.
+             * @param end Where to stop searching in `buf` (exclusive). **Default:**
+             * `buf.length`.
+             * @param encoding If `value` is a string, this is its encoding.
+             * **Default:** `'utf8'`.
+             * @returns `true` if `value` was found in `buf`, `false` otherwise.
              */
-            includes(value: string | number | Buffer, byteOffset?: number, encoding?: BufferEncoding): boolean;
-            includes(value: string | number | Buffer, encoding: BufferEncoding): boolean;
+            includes(
+                value: string | number | Uint8Array,
+                start?: number,
+                end?: number,
+                encoding?: BufferEncoding,
+            ): boolean;
+            includes(value: string | number | Uint8Array, start: number, encoding: BufferEncoding): boolean;
+            includes(value: string | number | Uint8Array, encoding: BufferEncoding): boolean;
         }
         var Buffer: BufferConstructor;
     }

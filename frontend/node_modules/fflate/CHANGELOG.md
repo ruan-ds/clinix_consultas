@@ -1,3 +1,13 @@
+## 0.8.3
+- Fix buffer over-read for Zip64 extra fields
+- Support sync flushes (`Z_SYNC_FLUSH` in zlib)
+  - Allows for immediate decompression of all pushed bytes
+  - Enables DEFLATE stream concatenation
+- Fix `zip`/`zipSync` when using cross-realm `Uint8Array`
+- Improve Zip64 support for streamed or undersized archives
+- Update performance estimates in README
+- Fix typings for TypeScript v5.7+
+- Reduce memory consumption after compression stream completion
 ## 0.8.2
 - Fixed broken UMD build
 - Fixed edge-case causing skipped data during streaming compression

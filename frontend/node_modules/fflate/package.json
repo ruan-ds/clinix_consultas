@@ -1,6 +1,6 @@
 {
   "name": "fflate",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "High performance (de)compression in an 8kB package",
   "main": "./lib/index.cjs",
   "module": "./esm/browser.js",
@@ -50,7 +50,8 @@
         "types": "./lib/browser.d.cts",
         "default": "./lib/browser.cjs"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "targets": {
     "main": false,
@@ -92,30 +93,30 @@
     "build:umd": "SC=buildUMD npm run script",
     "build:rewrite": "SC=rewriteBuilds npm run script",
     "build:demo": "tsc --project tsconfig.demo.json && parcel build demo/index.html --no-cache --public-url \"./\" && SC=cpGHPages npm run script",
-    "build:docs": "typedoc --plugin typedoc-plugin-markdown --hideBreadcrumbs --readme none --disableSources --excludePrivate --excludeProtected --githubPages false --out docs/ src/index.ts",
+    "build:docs": "typedoc --plugin typedoc-plugin-markdown --hideBreadcrumbs --readme none --disableSources --excludePrivate --excludeProtected --expandParameters --githubPages false --out docs/ src/index.ts",
     "test": "TS_NODE_PROJECT=test/tsconfig.json uvu -b -r ts-node/register test",
     "prepack": "npm run build && npm run test"
   },
   "devDependencies": {
     "@parcel/service-worker": "^2.9.3",
-    "@types/node": "^14.11.2",
+    "@types/node": "^25.8.0",
     "@types/pako": "*",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "jszip": "^3.5.0",
+    "jszip": "^3.10.1",
     "pako": "*",
     "parcel": "^2.9.3",
     "preact": "^10.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "simple-git": "^3.19.1",
-    "terser": "^5.3.8",
+    "terser": "^5.47.1",
     "tiny-inflate": "*",
-    "ts-node": "^10.9.1",
-    "typedoc": "^0.25.0",
-    "typedoc-plugin-markdown": "^3.16.0",
-    "typescript": "^5.2.2",
-    "uvu": "^0.3.3",
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.28.19",
+    "typedoc-plugin-markdown": "^4.11.0",
+    "typescript": "^6.0.3",
+    "uvu": "^0.5.6",
     "uzip": "*"
   },
   "alias": {

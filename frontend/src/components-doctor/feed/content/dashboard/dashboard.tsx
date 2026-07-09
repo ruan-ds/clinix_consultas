@@ -10,6 +10,7 @@ import { Loader2, CalendarDays } from 'lucide-react';
 
 interface DashboardProps {
   userName: string;
+  userSpecialty?: string;
 }
 
 const STATUS_CONFIG = {
@@ -52,7 +53,7 @@ const ESTADO_LABEL: Record<string, string> = {
   Atrasado: 'Atrasado',
 };
 
-function Dashboard({ userName }: DashboardProps) {
+function Dashboard({ userName, userSpecialty }: DashboardProps) {
   const [agenda, setAgenda] = useState<AgendaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [acao, setAcao] = useState<number | null>(null);
@@ -109,7 +110,8 @@ function Dashboard({ userName }: DashboardProps) {
     <div className="doc-dashboard-wrapper">
       {/* Header */}
       <header className="doc-dash-header">
-        <h1>Dr. {userName.split(' ')[0]} — Sua Agenda de Hoje</h1>
+        <h1>Dra. {userName.split(' ')[0]} — Sua Agenda de Hoje</h1>
+        {userSpecialty && <span className="doc-specialty-badge">{userSpecialty}</span>}
         <div className="doc-date-pill">
           <CalendarDays size={16} />
           <span>{dataCapitalizada}</span>

@@ -29,6 +29,19 @@
   letter-spacing: 0.5px;
 }
 
+.doc-specialty-badge {
+  display: inline-block;
+  background: #e6f4f1;
+  color: #0d6f63;
+  border: 1.5px solid #b7ddd6;
+  border-radius: 999px;
+  padding: 4px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
 .doc-date-pill {
   display: inline-flex;
   align-items: center;

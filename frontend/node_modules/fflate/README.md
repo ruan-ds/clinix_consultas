@@ -8,7 +8,7 @@ In addition to the base decompression and compression APIs, `fflate` supports hi
 
 |                             | `pako` | `tiny-inflate`         | `UZIP.js`             | `fflate`                       |
 |-----------------------------|--------|------------------------|-----------------------|--------------------------------|
-| Decompression performance   | 1x     | Up to 40% slower       | **Up to 40% faster**  | **Up to 40% faster**           |
+| Decompression performance   | 1x     | Up to 40% slower       | **Up to 25% faster**  | **Up to 25% faster**           |
 | Compression performance     | 1x     | N/A                    | Up to 25% faster      | **Up to 50% faster**           |
 | Base bundle size (minified) | 45.6kB | **3kB (inflate only)** | 14.2kB                | 8kB **(3kB for inflate only)** |
 | Decompression support       | ✅     | ✅                      | ✅                    | ✅                             |
@@ -58,15 +58,15 @@ You should use either UNPKG or jsDelivr (i.e. only one of the following)
 
 Note that tree shaking is completely unsupported from the CDN. If you want
 a small build without build tools, please ask me and I will make one manually
-with only the features you need. This build is about 31kB, or 11.5kB gzipped.
+with only the features you need. This build is about 33kB, or 12.5kB gzipped.
 -->
-<script src="https://unpkg.com/fflate@0.8.2"></script>
-<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
+<script src="https://unpkg.com/fflate@0.8.3"></script>
+<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.3/umd/index.js"></script>
 <!-- Now, the global variable fflate contains the library -->
 
 <!-- If you're going buildless but want ESM, import from Skypack -->
 <script type="module">
-  import * as fflate from 'https://cdn.skypack.dev/fflate@0.8.2?min';
+  import * as fflate from 'https://cdn.skypack.dev/fflate@0.8.3?min';
 </script>
 ```
 
@@ -75,8 +75,8 @@ If you are using Deno:
 // Don't use the ?dts Skypack flag; it isn't necessary for Deno support
 // The @deno-types comment adds TypeScript typings
 
-// @deno-types="https://cdn.skypack.dev/fflate@0.8.2/lib/index.d.ts"
-import * as fflate from 'https://cdn.skypack.dev/fflate@0.8.2?min';
+// @deno-types="https://cdn.skypack.dev/fflate@0.8.3/lib/index.d.ts"
+import * as fflate from 'https://cdn.skypack.dev/fflate@0.8.3?min';
 ```
 
 
@@ -504,7 +504,7 @@ See the [documentation](https://github.com/101arrowz/fflate/blob/master/docs/REA
 
 The bundle size measurements for `fflate` on sites like Bundlephobia include every feature of the library and should be seen as an upper bound. As long as you are using tree shaking or dead code elimination, this table should give you a general idea of `fflate`'s bundle size for the features you need.
 
-The maximum bundle size that is possible with `fflate` is about 31kB (11.5kB gzipped) if you use every single feature, but feature parity with `pako` is only around 10kB (as opposed to 45kB from `pako`). If your bundle size increases dramatically after adding `fflate`, please [create an issue](https://github.com/101arrowz/fflate/issues/new).
+The maximum bundle size that is possible with `fflate` is about 33kB (12.5kB gzipped) if you use every single feature, but feature parity with `pako` is only around 10kB (as opposed to 45kB from `pako`). If your bundle size increases dramatically after adding `fflate`, please [create an issue](https://github.com/101arrowz/fflate/issues/new).
 
 | Feature                 | Bundle size (minified)         | Nearest competitor      |
 |-------------------------|--------------------------------|-------------------------|
@@ -524,9 +524,9 @@ Many JavaScript compression/decompression libraries exist. However, the most pop
 
 Note that there exist some small libraries like [`tiny-inflate`](https://npmjs.com/package/tiny-inflate) for solely decompression, and with a minified size of 3 kB, it can be appealing; however, its performance is lackluster, typically 40% worse than `pako` in my tests.
 
-[`UZIP.js`](https://github.com/photopea/UZIP.js) is both faster (by up to 40%) and smaller (14 kB minified) than `pako`, and it contains a variety of innovations that make it excellent for both performance and compression ratio. However, the developer made a variety of tiny mistakes and inefficient design choices that make it imperfect. Moreover, it does not support GZIP or Zlib data directly; one must remove the headers manually to use `UZIP.js`.
+[`UZIP.js`](https://github.com/photopea/UZIP.js) is both faster (by up to 25%) and smaller (14 kB minified) than `pako`, and it contains a variety of innovations that make it excellent for both performance and compression ratio. However, the developer made a variety of tiny mistakes and inefficient design choices that make it imperfect. Moreover, it does not support GZIP or Zlib data directly; one must remove the headers manually to use `UZIP.js`.
 
-So what makes `fflate` different? It takes the brilliant innovations of `UZIP.js` and optimizes them while adding direct support for GZIP and Zlib data. And unlike all of the above libraries, it uses ES Modules to allow for partial builds through tree shaking, meaning that it can rival even `tiny-inflate` in size while maintaining excellent performance. The end result is a library that, in total, weighs 8kB minified for the core build (3kB for decompression only and 5kB for compression only), is about 15% faster than `UZIP.js` or up to 60% faster than `pako`, and achieves the same or better compression ratio than the rest.
+So what makes `fflate` different? It takes the brilliant innovations of `UZIP.js` and optimizes them while adding direct support for GZIP and Zlib data. And unlike all of the above libraries, it uses ES Modules to allow for partial builds through tree shaking, meaning that it can rival even `tiny-inflate` in size while maintaining excellent performance. The end result is a library that, in total, weighs 8kB minified for the core build (3kB for decompression only and 5kB for compression only), is about 25% faster than `UZIP.js` or up to 50% faster than `pako`, and achieves the same or better compression ratio than the rest.
 
 Before you decide that `fflate` is the end-all compression library, you should note that JavaScript simply cannot rival the performance of a native program. If you're only using Node.js, it's probably better to use the [native Zlib bindings](https://nodejs.org/api/zlib.html), which tend to offer the best performance. Though note that even against Zlib, `fflate` is only around 30% slower in decompression and 10% slower in compression, and can still achieve better compression ratios!
 

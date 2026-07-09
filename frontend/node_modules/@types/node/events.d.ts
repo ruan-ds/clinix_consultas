@@ -1,39 +1,3 @@
-/**
- * Much of the Node.js core API is built around an idiomatic asynchronous
- * event-driven architecture in which certain kinds of objects (called "emitters")
- * emit named events that cause `Function` objects ("listeners") to be called.
- *
- * For instance: a `net.Server` object emits an event each time a peer
- * connects to it; a `fs.ReadStream` emits an event when the file is opened;
- * a `stream` emits an event whenever data is available to be read.
- *
- * All objects that emit events are instances of the `EventEmitter` class. These
- * objects expose an `eventEmitter.on()` function that allows one or more
- * functions to be attached to named events emitted by the object. Typically,
- * event names are camel-cased strings but any valid JavaScript property key
- * can be used.
- *
- * When the `EventEmitter` object emits an event, all of the functions attached
- * to that specific event are called _synchronously_. Any values returned by the
- * called listeners are _ignored_ and discarded.
- *
- * The following example shows a simple `EventEmitter` instance with a single
- * listener. The `eventEmitter.on()` method is used to register listeners, while
- * the `eventEmitter.emit()` method is used to trigger the event.
- *
- * ```js
- * import { EventEmitter } from 'node:events';
- *
- * class MyEmitter extends EventEmitter {}
- *
- * const myEmitter = new MyEmitter();
- * myEmitter.on('event', () => {
- *   console.log('an event occurred!');
- * });
- * myEmitter.emit('event');
- * ```
- * @see [source](https://github.com/nodejs/node/blob/v25.x/lib/events.js)
- */
 declare module "node:events" {
     import { AsyncResource, AsyncResourceOptions } from "node:async_hooks";
     // #region Event map helpers
@@ -68,7 +32,7 @@ declare module "node:events" {
     interface EventEmitterOptions {
         /**
          * It enables
-         * [automatic capturing of promise rejection](https://nodejs.org/docs/latest-v25.x/api/events.html#capture-rejections-of-promises).
+         * [automatic capturing of promise rejection](https://nodejs.org/docs/latest-v26.x/api/events.html#capture-rejections-of-promises).
          * @default false
          */
         captureRejections?: boolean | undefined;
@@ -481,7 +445,7 @@ declare module "node:events" {
             signal?: AbortSignal | undefined;
         }
         /**
-         * See how to write a custom [rejection handler](https://nodejs.org/docs/latest-v25.x/api/events.html#emittersymbolfornodejsrejectionerr-eventname-args).
+         * See how to write a custom [rejection handler](https://nodejs.org/docs/latest-v26.x/api/events.html#emittersymbolfornodejsrejectionerr-eventname-args).
          * @since v13.4.0, v12.16.0
          */
         const captureRejectionSymbol: unique symbol;
@@ -564,15 +528,12 @@ declare module "node:events" {
          * import { addAbortListener } from 'node:events';
          *
          * function example(signal) {
-         *   let disposable;
-         *   try {
-         *     signal.addEventListener('abort', (e) => e.stopImmediatePropagation());
-         *     disposable = addAbortListener(signal, (e) => {
-         *       // Do something when signal is aborted.
-         *     });
-         *   } finally {
-         *     disposable?.[Symbol.dispose]();
-         *   }
+         *   signal.addEventListener('abort', (e) => e.stopImmediatePropagation());
+         *   // addAbortListener() returns a disposable, so the `using` keyword ensures
+         *   // the abort listener is automatically removed when this scope exits.
+         *   using _ = addAbortListener(signal, (e) => {
+         *     // Do something when signal is aborted.
+         *   });
          * }
          * ```
          * @since v20.5.0
@@ -896,7 +857,7 @@ declare module "node:events" {
         /**
          * Integrates `EventEmitter` with `AsyncResource` for `EventEmitter`s that
          * require manual async tracking. Specifically, all events emitted by instances
-         * of `events.EventEmitterAsyncResource` will run within its [async context](https://nodejs.org/docs/latest-v25.x/api/async_context.html).
+         * of `events.EventEmitterAsyncResource` will run within its [async context](https://nodejs.org/docs/latest-v26.x/api/async_context.html).
          *
          * ```js
          * import { EventEmitterAsyncResource, EventEmitter } from 'node:events';

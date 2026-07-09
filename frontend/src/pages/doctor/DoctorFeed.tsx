@@ -4,9 +4,13 @@ import Sidebar from '../../components-doctor/feed/sidebar/sidebar';
 import Content from '../../components-doctor/feed/content/content';
 import './doctor-feed.css';
 
-// Nome do médico vem do token/API futuramente.
+// Nome e especialidade do médico vêm do token/API futuramente.
 // Por ora usamos mock diretamente na página.
-const MOCK_DOCTOR_NAME = 'Silva';
+// Persona escolhida para esta demonstração: Dra. Juliana Ferreira, Cardiologista.
+// Toda a agenda, pacientes e prescrições mockados em doctorService.ts
+// seguem esse mesmo recorte de especialidade.
+const MOCK_DOCTOR_NAME = 'Juliana Ferreira';
+const MOCK_DOCTOR_SPECIALTY = 'Cardiologia';
 
 function DoctorFeed() {
   const [telaAtiva, setTelaAtiva] = useState(0);
@@ -21,6 +25,7 @@ function DoctorFeed() {
             telaAtiva={telaAtiva}
             setTelaAtiva={setTelaAtiva}
             userName={MOCK_DOCTOR_NAME}
+            userSpecialty={MOCK_DOCTOR_SPECIALTY}
           />
         </main>
       </div>

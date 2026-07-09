@@ -8,15 +8,16 @@ interface ContentProps {
   telaAtiva: number;
   setTelaAtiva: (id: number) => void;
   userName: string;
+  userSpecialty?: string;
 }
 
-function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
+function Content({ telaAtiva, setTelaAtiva, userName, userSpecialty }: ContentProps) {
   return (
     <div className="content-container">
       {(() => {
         switch (telaAtiva) {
           case 0:
-            return <Dashboard userName={userName} />;
+            return <Dashboard userName={userName} userSpecialty={userSpecialty} />;
           case 1:
             return <Patients />;
           case 2:
@@ -24,7 +25,7 @@ function Content({ telaAtiva, setTelaAtiva, userName }: ContentProps) {
           case 3:
             return <EmitirPrescricao setTelaAtiva={setTelaAtiva} />;
           default:
-            return <Dashboard userName={userName} />;
+            return <Dashboard userName={userName} userSpecialty={userSpecialty} />;
         }
       })()}
     </div>

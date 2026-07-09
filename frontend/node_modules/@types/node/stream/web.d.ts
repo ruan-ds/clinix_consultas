@@ -52,11 +52,15 @@ declare module "node:stream/web" {
         signal?: AbortSignal;
     }
     interface Transformer<I = any, O = any> {
+        cancel?: TransformerCancelCallback;
         flush?: TransformerFlushCallback<O>;
         readableType?: undefined;
         start?: TransformerStartCallback<O>;
         transform?: TransformerTransformCallback<I, O>;
         writableType?: undefined;
+    }
+    interface TransformerCancelCallback {
+        (reason: any): void | PromiseLike<void>;
     }
     interface TransformerFlushCallback<O> {
         (controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
@@ -180,7 +184,7 @@ declare module "node:stream/web" {
         new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
         from<R = any>(iterable: Iterable<R> | AsyncIterable<R>): ReadableStream<R>;
     };
-    interface ReadableStreamAsyncIterator<T> extends NodeJS.AsyncIterator<T, NodeJS.BuiltinIteratorReturn, unknown> {
+    interface ReadableStreamAsyncIterator<T> extends NodeJS.AsyncIterator<T, BuiltinIteratorReturn, unknown> {
         [Symbol.asyncIterator](): ReadableStreamAsyncIterator<T>;
     }
     interface ReadableStreamBYOBReader extends ReadableStreamGenericReader {
@@ -206,7 +210,7 @@ declare module "node:stream/web" {
     interface ReadableStreamDefaultController<R = any> {
         readonly desiredSize: number | null;
         close(): void;
-        enqueue(chunk?: R): void;
+        enqueue(chunk: R): void;
         error(e?: any): void;
     }
     var ReadableStreamDefaultController: {
@@ -251,7 +255,7 @@ declare module "node:stream/web" {
     };
     interface TransformStreamDefaultController<O = any> {
         readonly desiredSize: number | null;
-        enqueue(chunk?: O): void;
+        enqueue(chunk: O): void;
         error(reason?: any): void;
         terminate(): void;
     }
@@ -284,7 +288,7 @@ declare module "node:stream/web" {
         abort(reason?: any): Promise<void>;
         close(): Promise<void>;
         releaseLock(): void;
-        write(chunk?: W): Promise<void>;
+        write(chunk: W): Promise<void>;
     }
     var WritableStreamDefaultWriter: {
         prototype: WritableStreamDefaultWriter;
