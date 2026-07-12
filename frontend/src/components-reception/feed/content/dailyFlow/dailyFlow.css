@@ -51,19 +51,24 @@
   font-weight: 600;
 }
 
-.fd-counter--waiting {
-  background-color: #fef3c7;
-  color: #92400e;
+.fd-counter--scheduled {
+  background-color: #f3f4f6;
+  color: #4b5563;
 }
 
-.fd-counter--done {
+.fd-counter--late {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.fd-counter--office {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.fd-counter--progress {
   background-color: #d1fae5;
   color: #065f46;
-}
-
-.fd-counter--future {
-  background-color: #e0f2fe;
-  color: #0369a1;
 }
 
 /* ─── Search ─────────────────────────────────────────────── */
@@ -178,19 +183,24 @@
   font-weight: 600;
 }
 
-.fd-badge--waiting {
-  background-color: #fef3c7;
-  color: #92400e;
+.fd-badge--scheduled {
+  background-color: #f3f4f6;
+  color: #4b5563;
 }
 
-.fd-badge--done {
+.fd-badge--late {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.fd-badge--office {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.fd-badge--progress {
   background-color: #d1fae5;
   color: #065f46;
-}
-
-.fd-badge--future {
-  background-color: #e0f2fe;
-  color: #0369a1;
 }
 
 .fd-badge--cancelled {
@@ -221,8 +231,10 @@
 }
 
 .fd-btn:disabled {
-  opacity: 0.55;
+  background-color: #e5e7eb;
+  color: #9ca3af;
   cursor: default;
+  opacity: 1;
 }
 
 .fd-btn--checkin {
@@ -244,6 +256,22 @@
   background-color: #fee2e2;
   border-color: #fca5a5;
   color: #991b1b;
+}
+
+.fd-btn--start {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.fd-btn--start:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.fd-btn--disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: default;
+  opacity: 1;
 }
 
 .fd-cancelled-label {

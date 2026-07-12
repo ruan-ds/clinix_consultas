@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Loader2, CheckCircle, XCircle, Clock, CalendarClock } from 'lucide-react';
+import { Search, Loader2, CheckCircle, XCircle, Clock, AlertCircle, Stethoscope } from 'lucide-react';
 import './dailyFlow.css';
 import {
   getDailyFlow,
@@ -9,16 +9,18 @@ import {
 } from '../../../../services/receptionService';
 
 const statusLabel: Record<DailyAppointment['arrival_status'], string> = {
-  waiting: 'Aguardando na Fila',
-  checked_in: 'Check-in Completo',
-  future: 'Agendamento Futuro',
+  scheduled: 'Agendado',
+  late: 'Em Atraso',
+  in_office: 'No Consultório',
+  in_progress: 'Em Atendimento',
   cancelled: 'Cancelado',
 };
 
 const statusClass: Record<DailyAppointment['arrival_status'], string> = {
-  waiting: 'fd-badge fd-badge--waiting',
-  checked_in: 'fd-badge fd-badge--done',
-  future: 'fd-badge fd-badge--future',
+  scheduled: 'fd-badge fd-badge--scheduled',
+  late: 'fd-badge fd-badge--late',
+  in_office: 'fd-badge fd-badge--office',
+  in_progress: 'fd-badge fd-badge--progress',
   cancelled: 'fd-badge fd-badge--cancelled',
 };
 
@@ -53,10 +55,25 @@ export const DailyFlow = () => {
     try {
       await checkInAppointment(id);
       setAppointments((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, arrival_status: 'checked_in' } : a))
+        prev.map((a) => (a.id === id ? { ...a, arrival_status: 'in_office' } : a))
       );
     } catch {
       setErro('Erro ao realizar check-in. Tente novamente.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleIniciarAtendimento = async (id: number) => {
+    setActionLoading(id);
+    try {
+      // TODO: substituir por chamada de serviço real ao integrar com o backend
+      await new Promise((r) => setTimeout(r, 400));
+      setAppointments((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, arrival_status: 'in_progress' } : a))
+      );
+    } catch {
+      setErro('Erro ao iniciar atendimento. Tente novamente.');
     } finally {
       setActionLoading(null);
     }
@@ -77,9 +94,10 @@ export const DailyFlow = () => {
   };
 
   const counts = {
-    waiting: appointments.filter((a) => a.arrival_status === 'waiting').length,
-    checked_in: appointments.filter((a) => a.arrival_status === 'checked_in').length,
-    future: appointments.filter((a) => a.arrival_status === 'future').length,
+    scheduled: appointments.filter((a) => a.arrival_status === 'scheduled').length,
+    late: appointments.filter((a) => a.arrival_status === 'late').length,
+    in_office: appointments.filter((a) => a.arrival_status === 'in_office').length,
+    in_progress: appointments.filter((a) => a.arrival_status === 'in_progress').length,
   };
 
   if (loading) {
@@ -99,17 +117,21 @@ export const DailyFlow = () => {
           <p className="fd-date">{today}</p>
         </div>
         <div className="fd-counters">
-          <div className="fd-counter fd-counter--waiting">
+          <div className="fd-counter fd-counter--scheduled">
             <Clock size={16} />
-            <span>{counts.waiting} Aguardando</span>
+            <span>{counts.scheduled} Agendado</span>
           </div>
-          <div className="fd-counter fd-counter--done">
+          <div className="fd-counter fd-counter--late">
+            <AlertCircle size={16} />
+            <span>{counts.late} Em Atraso</span>
+          </div>
+          <div className="fd-counter fd-counter--office">
             <CheckCircle size={16} />
-            <span>{counts.checked_in} Check-in</span>
+            <span>{counts.in_office} No Consultório</span>
           </div>
-          <div className="fd-counter fd-counter--future">
-            <CalendarClock size={16} />
-            <span>{counts.future} Futuros</span>
+          <div className="fd-counter fd-counter--progress">
+            <Stethoscope size={16} />
+            <span>{counts.in_progress} Em Atendimento</span>
           </div>
         </div>
       </div>
@@ -156,11 +178,11 @@ export const DailyFlow = () => {
               </span>
             </div>
             <div className="fd-cell fd-cell--actions">
-              {apt.arrival_status !== 'cancelled' && (
+              {(apt.arrival_status === 'scheduled' || apt.arrival_status === 'late') && (
                 <>
                   <button
                     className="fd-btn fd-btn--checkin"
-                    disabled={actionLoading === apt.id || apt.arrival_status === 'checked_in'}
+                    disabled={actionLoading === apt.id}
                     onClick={() => handleCheckin(apt.id)}
                   >
                     {actionLoading === apt.id ? (
@@ -177,6 +199,25 @@ export const DailyFlow = () => {
                     Cancelar
                   </button>
                 </>
+              )}
+              {apt.arrival_status === 'in_office' && (
+  <>
+    <button className="fd-btn fd-btn--checkin fd-btn--checkin-disabled" disabled>
+      Fazer Check-in
+    </button>
+    <button
+      className="fd-btn fd-btn--cancel"
+      disabled={actionLoading === apt.id}
+      onClick={() => handleCancelar(apt.id)}
+    >
+      Cancelar
+    </button>
+  </>
+)}
+              {apt.arrival_status === 'in_progress' && (
+                <button className="fd-btn fd-btn--disabled" disabled>
+                  Em Atendimento
+                </button>
               )}
               {apt.arrival_status === 'cancelled' && (
                 <span className="fd-cancelled-label">

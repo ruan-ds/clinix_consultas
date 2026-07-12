@@ -19,7 +19,7 @@ export type DailyAppointment = {
   patient_id: number;
   time: string; // "08:00"
   specialty: string;
-  arrival_status: "waiting" | "checked_in" | "future" | "cancelled";
+  arrival_status: "scheduled" | "late" | "in_office" | "in_progress" | "cancelled";
 };
 
 export type RegisterPatientData = {
@@ -96,22 +96,20 @@ const MOCK_DELAY = 400;
 const mockDelay = () => new Promise((r) => setTimeout(r, MOCK_DELAY));
 
 export const MOCK_DAILY_APPOINTMENTS: DailyAppointment[] = [
-  { id: 1, patient_name: "Joaquim S. de Moraes", patient_id: 10455, time: "08:00", specialty: "Odontologia", arrival_status: "waiting" },
-  { id: 2, patient_name: "Maria Santos", patient_id: 11300, time: "08:30", specialty: "Pediatria", arrival_status: "checked_in" },
-  { id: 3, patient_name: "João Pedro", patient_id: 12150, time: "09:15", specialty: "Odontologia", arrival_status: "checked_in" },
-  { id: 4, patient_name: "Ana Carolina Lima", patient_id: 13400, time: "10:00", specialty: "Triagem Geral", arrival_status: "future" },
-  { id: 5, patient_name: "Carlos Ferreira", patient_id: 14520, time: "10:30", specialty: "Cardiologia", arrival_status: "future" },
-  { id: 6, patient_name: "Fernanda Oliveira", patient_id: 15800, time: "11:00", specialty: "Ginecologia", arrival_status: "future" },
+  { id: 1, patient_name: "Lucas Gama", patient_id: 10455, time: "08:00", specialty: "Clínica Geral", arrival_status: "scheduled" },
+  { id: 2, patient_name: "Maria Santos", patient_id: 11300, time: "08:00", specialty: "Cardiologia", arrival_status: "late" },
+  { id: 3, patient_name: "João Pedro", patient_id: 12150, time: "08:00", specialty: "Dermatologia", arrival_status: "in_office" },
+  { id: 4, patient_name: "Ana Carolina Lima", patient_id: 13400, time: "08:00", specialty: "Ortopedia", arrival_status: "in_progress" },
+  { id: 5, patient_name: "Carlos Ferreira", patient_id: 14520, time: "10:00", specialty: "Pediatria", arrival_status: "scheduled" },
+  { id: 6, patient_name: "Fernanda Oliveira", patient_id: 15800, time: "10:00", specialty: "Cardiologia", arrival_status: "scheduled" },
 ];
 
 const MOCK_SPECIALTIES: ReceptionSpecialty[] = [
   { id: 1, name: "Clínica Geral" },
   { id: 2, name: "Cardiologia" },
   { id: 3, name: "Dermatologia" },
-  { id: 4, name: "Ginecologia" },
-  { id: 5, name: "Pediatria" },
-  { id: 6, name: "Ortopedia" },
-  { id: 7, name: "Odontologia" },
+  { id: 4, name: "Pediatria" },
+  { id: 5, name: "Ortopedia" },
 ];
 
 const MOCK_SERVICES: ReceptionServiceCatalogItem[] = [
@@ -210,7 +208,7 @@ export async function findPatientByCpf(cpf: string): Promise<PatientByDocument> 
   return {
     id: 99,
     patient_id: 99001,
-    name: "Paciente Mock",
+    name: "Reynaldo Pereira",
     cpf,
   };
 }
