@@ -5,6 +5,7 @@ import { useState } from "react"
 import { getLogin } from "../../services/auth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { saveToken } from "../../services/tokenService";
+import { grantAccess } from "../../services/roleGuard";
 
 type Props = {
   changeAuth: (valor: number) => void;
@@ -41,7 +42,8 @@ function Login({changeAuth}: Props) {
     try {
       // Simulação de chamada à API.
       await new Promise((resolve) => setTimeout(resolve, 400));
-      window.location.href = "/doctor.html";
+      grantAccess("doctor");
+      window.location.href = "/";
     } catch {
       setErro("Não foi possível entrar. Tente novamente.");
     } finally {

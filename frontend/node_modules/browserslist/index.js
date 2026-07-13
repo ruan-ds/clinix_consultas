@@ -1058,10 +1058,8 @@ var QUERIES = {
         throw new BrowserslistError('Unknown version ' + to + ' of electron')
       }
       return Object.keys(e2c)
-        .filter(function (i) {
-          var parsed = parseFloat(i)
-          return parsed >= from && parsed <= to
-        })
+        .filter(semverFilterLoose('>=', node.from))
+        .filter(semverFilterLoose('<=', node.to))
         .map(function (i) {
           return 'chrome ' + e2c[i]
         })

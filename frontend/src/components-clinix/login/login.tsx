@@ -3,6 +3,7 @@ import './login.css';
 import logo from '../../assets/images/logoNome.png';
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { grantAccess } from "../../services/roleGuard";
 
 type Props = {
   changeAuth: (valor: number) => void;
@@ -25,7 +26,8 @@ function Login({ changeAuth }: Props) {
     try {
       // Simulação de chamada à API.
       await new Promise((resolve) => setTimeout(resolve, 400));
-      window.location.href = "/clinix.html";
+      grantAccess("clinix");
+      window.location.href = "/";
     } catch {
       setErro("Não foi possível entrar. Tente novamente.");
     } finally {
