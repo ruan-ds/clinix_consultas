@@ -132,19 +132,46 @@ const MOCK_DASHBOARD_STATS: DashboardStats = {
 };
 
 const MOCK_RECENT_ACTIONS: RecentAction[] = [
-  { id: 1, datetime: "12/06/2026 14:15", operator: "Carlos M.", action: "Conf. Agend.", clinic: "Clínica Odonto" },
-  { id: 2, datetime: "11/06/2026 15:15", operator: "Juliana C.", action: "Val. Cad.", clinic: "Clínica Pediát." },
-  { id: 3, datetime: "10/06/2026 16:15", operator: "Maria S.", action: "Res. Financ", clinic: "Clínica Geral" },
-  { id: 4, datetime: "09/06/2026 17:15", operator: "João P.", action: "Conf. Agend.", clinic: "Clinica Odonto" },
-  { id: 5, datetime: "08/06/2026 10:15", operator: "Patricia R.", action: "Cad. Ráp.", clinic: "Clínica Pediát." },
+  {
+    id: 1,
+    datetime: "12/07/2026 14:15",
+    operator: "Carlos Administrador",
+    action: "Conf. Agend.",
+    clinic: "Clínica Central",
+  },
+  {
+    id: 2,
+    datetime: "11/07/2026 15:15",
+    operator: "Maria",
+    action: "Val. Cad.",
+    clinic: "Clínica Central",
+  },
+  {
+    id: 3,
+    datetime: "10/07/2026 16:15",
+    operator: "Julia",
+    action: "Cad. Paciente",
+    clinic: "Clínica Norte",
+  },
+  {
+    id: 4,
+    datetime: "09/07/2026 17:15",
+    operator: "Paulo Administrador",
+    action: "Res. Financ.",
+    clinic: "Clínica Norte",
+  },
+  {
+    id: 5,
+    datetime: "08/07/2026 10:15",
+    operator: "Maria",
+    action: "Cancel. Consulta",
+    clinic: "Clínica Central",
+  },
 ];
 
 let MOCK_CLINICS: Clinic[] = [
-  { id: "CL001", trade_name: "Clínica Odonto Pró", legal_name: "Odonto Pró Serviços Odontológicos LTDA", phone: "(31) 3333-1000", cnpj: "11.111.111/0001-11", street: "Rua da Bahia", number: "100", city: "BH", state: "MG", services: "Odont. Geral", status: "active" },
-  { id: "CL002", trade_name: "Clínica Pediátrica Unida", legal_name: "Pediátrica Unida LTDA", phone: "(11) 3333-2000", cnpj: "22.222.222/0001-22", street: "Av. Paulista", number: "500", city: "SP", state: "SP", services: "Pediá. | Vacinas", status: "active" },
-  { id: "CL003", trade_name: "Clínica Derma Center", legal_name: "Derma Center Estética LTDA", phone: "(21) 3333-3000", cnpj: "33.333.333/0001-33", street: "Rua do Ouvidor", number: "50", city: "RJ", state: "RJ", services: "Clínica Geral", status: "active" },
-  { id: "CL004", trade_name: "Clínica Pró Saúde", legal_name: "Pró Saúde Dermatologia LTDA", phone: "(31) 3333-4000", cnpj: "44.444.444/0001-44", street: "Rua Augusto", number: "333", city: "Betim", state: "MG", services: "Dermatologia", status: "active" },
-  { id: "CL005", trade_name: "Clínica Amor Saúde", legal_name: "Amor Saúde Estética LTDA", phone: "(27) 3333-5000", cnpj: "55.555.555/0001-55", street: "Av. Marcos", number: "1200", city: "Vitória", state: "ES", services: "Estética", status: "inactive" },
+  { id: "CL001", trade_name: "Clínica Central", legal_name: "Clínica Central LTDA", phone: "(31) 3333-1000", cnpj: "11.111.111/0001-11", street: "Rua da Bahia", number: "100", city: "BH", state: "MG", services: "Odont. Geral", status: "active" },
+  { id: "CL002", trade_name: "Clínica Norte", legal_name: "Clínica Norte LTDA", phone: "(11) 3333-2000", cnpj: "22.222.222/0001-22", street: "Av. Paulista", number: "500", city: "SP", state: "SP", services: "Pediá. | Vacinas", status: "active" },
 ];
 
 const MOCK_PERSONS: Person[] = [
@@ -154,11 +181,8 @@ const MOCK_PERSONS: Person[] = [
 ];
 
 let MOCK_CLINIC_USERS: ClinicUser[] = [
-  { id: "CL001", clinic_name: "Clínica Odonto Pró", status: "active" },
-  { id: "CL002", clinic_name: "Clínica Pediátrica Unida", status: "active" },
-  { id: "CL003", clinic_name: "Clínica Derma Center", status: "active" },
-  { id: "CL004", clinic_name: "Clínica Pró Saúde", status: "active" },
-  { id: "CL005", clinic_name: "Clínica Amor Saúde", status: "active" },
+  { id: "CL001", clinic_name: "Clínica Central", status: "active" },
+  { id: "CL002", clinic_name: "Clínica Norte", status: "active" },
 ];
 
 let MOCK_CLINICS_DEACTIVATION: ClinicForDeactivation[] = [
@@ -170,13 +194,47 @@ let MOCK_CLINICS_DEACTIVATION: ClinicForDeactivation[] = [
 ];
 
 let MOCK_CLINIC_ACCESS_DEACTIVATION: ClinicAccessForDeactivation[] = [
-  { id: "FU001", employee_name: "Dr. Silva", cpf: "087.836.076-09", clinic_name: "Clínica Odonto Pró", role: "Ginecologista", status: "active" },
-  { id: "FU002", employee_name: "Dra. Alice", cpf: "647.457.026-12", clinic_name: "Clínica Pediátrica Unida", role: "Pediátrica", status: "active" },
-  { id: "FU003", employee_name: "Dr. Wesley", cpf: "764.156.436-49", clinic_name: "Clínica Derma Center", role: "Veterinária", status: "active" },
-  { id: "FU004", employee_name: "Dr.João", cpf: "721.483.036-12", clinic_name: "Clínica Pró Saúde", role: "Cardiologista", status: "active" },
-  { id: "FU005", employee_name: "Dra. Lara", cpf: "736.125.136-64", clinic_name: "Clínica Amor Saúde", role: "Estéticista", status: "inactive" },
+  {
+    id: "FU001",
+    employee_name: "Dr. João Silva",
+    cpf: "123.456.780-62",
+    clinic_name: "Clínico Central",
+    role: "Clínica Geral",
+    status: "active",
+  },
+  {
+    id: "FU002",
+    employee_name: "Dra. Beatriz Cardoso",
+    cpf: "111.222.333-96",
+    clinic_name: "Clínica Central",
+    role: "Cardiologia",
+    status: "active",
+  },
+  {
+    id: "FU003",
+    employee_name: "Dr. Marcos Dermato",
+    cpf: "529.982.247-25",
+    clinic_name: "Clínica Norte",
+    role: "Dermatologia",
+    status: "active",
+  },
+  {
+    id: "FU004",
+    employee_name: "Dra. Fernanda Palhães",
+    cpf: "935.411.347-80",
+    clinic_name: "Clínica Norte",
+    role: "Pediatria",
+    status: "active",
+  },
+  {
+    id: "FU005",
+    employee_name: "Dr. Rafael Oliveira",
+    cpf: "286.255.878-87",
+    clinic_name: "Clínica Central",
+    role: "Ortopedia",
+    status: "active",
+  },
 ];
-
 let MOCK_CLINIX_ACCESS_DEACTIVATION: ClinixAccessForDeactivation[] = [
   { id: "U001", name: "Ruan Vinícius", cpf: "241.357.467-05", status: "active" },
   { id: "U002", name: "Bernardo Policarpo", cpf: "735.320.236-01", status: "active" },

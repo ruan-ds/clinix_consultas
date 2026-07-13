@@ -170,7 +170,7 @@ export async function validateAdminFeed(): Promise<AdminFeedValidation> {
   return {
     admin: {
       id: 1,
-      person_name: "Carlos Administrador",
+      person_name: "Ruan Administrador",
       clinic_name: "Clínica Central",
       email: "admin.central@clinicateste.com",
       is_active: true,
