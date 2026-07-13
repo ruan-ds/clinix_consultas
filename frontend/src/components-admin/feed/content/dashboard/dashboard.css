@@ -13,7 +13,16 @@
   font-size: 28px;
   font-weight: 700;
   color: #111827;
+  margin: 0 0 6px 0;
+}
+
+.adm-welcome {
+  font-size: 0.92rem;
+  color: #6b7280;
   margin: 0 0 28px 0;
+}
+.adm-welcome strong {
+  color: #0d6f63;
 }
 
 .adm-cards-row {

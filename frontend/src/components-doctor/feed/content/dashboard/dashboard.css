@@ -42,6 +42,12 @@
   text-transform: uppercase;
 }
 
+.doc-crm-clinic {
+  font-size: 0.78rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
 .doc-date-pill {
   display: inline-flex;
   align-items: center;
@@ -116,8 +122,8 @@
 }
 .doc-row:hover { background: #f9fffe; }
 .doc-row:last-child { border-bottom: none; }
-.doc-row.row-urgencia { background: #fff5f5; }
-.doc-row.row-urgencia:hover { background: #fff0f0; }
+.doc-row.row-atrasado { background: #fff5f5; }
+.doc-row.row-atrasado:hover { background: #fff0f0; }
 
 .doc-cell-hora {
   font-size: 0.92rem;
@@ -172,13 +178,6 @@
 .doc-tempo {
   font-weight: 400;
   color: #6b7280;
-}
-.doc-estado-clinico {
-  display: block;
-  font-size: 0.74rem;
-  color: #6b7280;
-  margin-top: 3px;
-  margin-left: 16px;
 }
 
 .doc-cell-acoes { white-space: nowrap; }
@@ -274,7 +273,7 @@
     overflow: hidden;
   }
 
-  .doc-row.row-urgencia {
+  .doc-row.row-atrasado {
     border-left: 4px solid #ef4444;
     background: #fff5f5;
   }
@@ -299,10 +298,6 @@
 
   .doc-fila-row {
     flex-wrap: wrap;
-  }
-
-  .doc-estado-clinico {
-    margin-left: 0;
   }
 
   .doc-cell-acoes {

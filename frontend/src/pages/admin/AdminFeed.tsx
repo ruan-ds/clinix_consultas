@@ -8,10 +8,14 @@ import './admin-feed.css';
 function AdminFeed() {
   const [telaAtiva, setTelaAtiva] = useState(0);
   const [adminName, setAdminName] = useState('');
+  const [clinicName, setClinicName] = useState('');
 
   useEffect(() => {
     // TODO: validar sessão/permissão do administrador junto ao backend real.
-    validateAdminFeed().then((data) => setAdminName(data.admin.person_name));
+    validateAdminFeed().then((data) => {
+      setAdminName(data.admin.person_name);
+      setClinicName(data.admin.clinic_name);
+    });
   }, []);
 
   return (
@@ -20,7 +24,12 @@ function AdminFeed() {
       <div className="page-container">
         <SidebarAdmin telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} />
         <main className="main-content">
-          <ContentAdmin telaAtiva={telaAtiva} setTelaAtiva={setTelaAtiva} adminName={adminName} />
+          <ContentAdmin
+            telaAtiva={telaAtiva}
+            setTelaAtiva={setTelaAtiva}
+            adminName={adminName}
+            clinicName={clinicName}
+          />
         </main>
       </div>
     </div>

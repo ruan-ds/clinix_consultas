@@ -12,9 +12,12 @@ export interface AgendaItem {
   pacienteIdade: number;
   motivo: string;
   especialidade: string;
-  filaStatus: 'no_consultorio' | 'em_triagem' | 'urgencia' | 'ausente' | 'aguardando';
+  // Somente 3 estados possíveis:
+  // - 'atrasado'       → paciente não chegou e o horário já passou (vermelho)
+  // - 'no_consultorio' → paciente chegou e aguarda ser chamado (azul claro)
+  // - 'em_atendimento' → paciente está sendo atendido agora (verde)
+  filaStatus: 'atrasado' | 'no_consultorio' | 'em_atendimento';
   filaTempoMin: number;
-  estadoClinico: 'Normal' | 'Acompanhamento' | 'Prioridade' | 'Atrasado';
 }
 
 export interface Patient {
@@ -43,89 +46,35 @@ export interface Prescription {
 
 // ─────────────────────────────────────────────
 // AGENDA (Dashboard do médico)
-// Persona: Dra. Juliana Ferreira — Cardiologista
+// Persona: Dra. Beatriz Cardoso — CRM 22222-SP — Cardiologia — Clínica Central
+// (mesma médica cadastrada pelo seed do backend: doctor.crm = "CRM22222-SP",
+// clinic = "Clinica Central", schedule = "morning" → 09h-17h)
 // Todos os atendimentos abaixo pertencem à sua agenda de Cardiologia.
 // ─────────────────────────────────────────────
 const AGENDA_MOCK: AgendaItem[] = [
   {
     id: 1,
     hora: '08:00',
-    pacienteNome: 'Carlos Mendes',
-    pacienteIdade: 62,
-    motivo: 'Retorno — Hipertensão Arterial',
+    pacienteNome: 'Lucas Gama',
+    pacienteIdade: 17,
+    motivo: 'MAPA 24h — Hipertensao Arterial Sistemica',
     especialidade: 'Cardiologia',
     filaStatus: 'no_consultorio',
     filaTempoMin: 12,
-    estadoClinico: 'Normal',
-  },
-  {
-    id: 2,
-    hora: '08:30',
-    pacienteNome: 'Maria Luiza Santos',
-    pacienteIdade: 65,
-    motivo: 'Retorno Pós-IAM',
-    especialidade: 'Cardiologia',
-    filaStatus: 'em_triagem',
-    filaTempoMin: 8,
-    estadoClinico: 'Acompanhamento',
-  },
-  {
-    id: 3,
-    hora: '09:15',
-    pacienteNome: 'João Pedro Alencar',
-    pacienteIdade: 58,
-    motivo: 'Dor Torácica Aguda',
-    especialidade: 'Cardiologia',
-    filaStatus: 'urgencia',
-    filaTempoMin: 0,
-    estadoClinico: 'Prioridade',
-  },
-  {
-    id: 4,
-    hora: '10:00',
-    pacienteNome: 'Ana Carolina Silva',
-    pacienteIdade: 54,
-    motivo: 'Telemedicina — Ecocardiograma (Retorno)',
-    especialidade: 'Cardiologia',
-    filaStatus: 'ausente',
-    filaTempoMin: 0,
-    estadoClinico: 'Atrasado',
-  },
-  {
-    id: 5,
-    hora: '11:00',
-    pacienteNome: 'Pedro Lima Castro',
-    pacienteIdade: 60,
-    motivo: 'Check-up Cardiológico',
-    especialidade: 'Cardiologia',
-    filaStatus: 'aguardando',
-    filaTempoMin: 10,
-    estadoClinico: 'Normal',
-  },
-  {
-    id: 6,
-    hora: '11:30',
-    pacienteNome: 'Juliana Costa Alves',
-    pacienteIdade: 50,
-    motivo: 'Avaliação de Arritmia (Holter 24h)',
-    especialidade: 'Cardiologia',
-    filaStatus: 'aguardando',
-    filaTempoMin: 5,
-    estadoClinico: 'Normal',
-  },
+  }
 ];
 
 // ─────────────────────────────────────────────
 // PACIENTES
-// Todos acompanhados pela Dra. Juliana Ferreira (Cardiologia)
+// Todos acompanhados pela Dra. Beatriz Cardoso (Cardiologia — Clínica Central)
 // ─────────────────────────────────────────────
 const PATIENTS_MOCK: Patient[] = [
   {
     id: 10455,
-    nome: 'Carlos Mendes',
+    nome: 'Lucas Gama',
     cpf: '123.456.789-00',
     idade: 62,
-    ultimaConsulta: '2026-05-25T08:00:00',
+    ultimaConsulta: '2026-07-13T08:00:00',
     prontuarioResumo: 'Paciente com hipertensão arterial sistêmica controlada. Nega alergias medicamentosas conhecidas.',
     diagnosticos: ['Hipertensão arterial sistêmica', 'Dislipidemia'],
     alergias: ['Nenhuma conhecida'],
@@ -190,15 +139,15 @@ const PATIENTS_MOCK: Patient[] = [
 
 // ─────────────────────────────────────────────
 // PRESCRIÇÕES
-// Emitidas pela Dra. Juliana Ferreira (Cardiologia)
+// Emitidas pela Dra. Beatriz Cardoso (Cardiologia — Clínica Central)
 // ─────────────────────────────────────────────
 const PRESCRIPTIONS_MOCK: Prescription[] = [
   {
     id: 1,
     pacienteId: 10455,
-    pacienteNome: 'Carlos Mendes',
+    pacienteNome: 'Lucas Gama',
     pacienteIdade: 62,
-    ultimaConsulta: '2026-05-25T08:00:00',
+    ultimaConsulta: '2026-07-13T08:00:00',
     medicamento: 'Losartana',
     dosagem: '50mg',
     posologia: '1x ao dia',

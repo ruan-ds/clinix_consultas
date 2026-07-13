@@ -11,49 +11,29 @@ import { Loader2, CalendarDays } from 'lucide-react';
 interface DashboardProps {
   userName: string;
   userSpecialty?: string;
+  userCrm?: string;
+  userClinic?: string;
 }
 
 const STATUS_CONFIG = {
+  atrasado: {
+    label: 'Em Atraso',
+    dot: '#ef4444',
+    tempo: (min: number) => (min > 0 ? `Atraso de ${min} min` : ''),
+  },
   no_consultorio: {
     label: 'No Consultório',
+    dot: '#60a5fa',
+    tempo: (min: number) => (min > 0 ? `Há ${min} min` : 'Acabou de chegar'),
+  },
+  em_atendimento: {
+    label: 'Em Atendimento',
     dot: '#22c55e',
-    badge: 'badge-green',
-    tempo: (min: number) => `Há ${min} min`,
-  },
-  em_triagem: {
-    label: 'Em Triagem',
-    dot: '#22c55e',
-    badge: 'badge-green',
-    tempo: (min: number) => `Há ${min} min`,
-  },
-  urgencia: {
-    label: 'Urgência Detectada',
-    dot: '#ef4444',
-    badge: 'badge-red',
-    tempo: () => '',
-  },
-  ausente: {
-    label: 'Paciente Ausente',
-    dot: '#ef4444',
-    badge: 'badge-red',
-    tempo: () => '',
-  },
-  aguardando: {
-    label: 'Aguardando na Recepção',
-    dot: '#f59e0b',
-    badge: 'badge-yellow',
-    tempo: (min: number) => `Há ${min} min`,
+    tempo: (min: number) => (min > 0 ? `Há ${min} min` : ''),
   },
 };
 
-const ESTADO_LABEL: Record<string, string> = {
-  Normal: 'Normal',
-  Acompanhamento: 'Acompanhamento',
-  Prioridade: 'Prioridade',
-  Atrasado: 'Atrasado',
-};
-
-function Dashboard({ userName, userSpecialty }: DashboardProps) {
+function Dashboard({ userName, userSpecialty, userCrm, userClinic }: DashboardProps) {
   const [agenda, setAgenda] = useState<AgendaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [acao, setAcao] = useState<number | null>(null);
@@ -85,7 +65,7 @@ function Dashboard({ userName, userSpecialty }: DashboardProps) {
       setAgenda((prev) =>
         prev.map((item) =>
           item.id === id
-            ? { ...item, filaStatus: 'no_consultorio', filaTempoMin: 0 }
+            ? { ...item, filaStatus: 'em_atendimento', filaTempoMin: 0 }
             : item
         )
       );
@@ -112,6 +92,13 @@ function Dashboard({ userName, userSpecialty }: DashboardProps) {
       <header className="doc-dash-header">
         <h1>Dra. {userName.split(' ')[0]} — Sua Agenda de Hoje</h1>
         {userSpecialty && <span className="doc-specialty-badge">{userSpecialty}</span>}
+        {(userCrm || userClinic) && (
+          <span className="doc-crm-clinic">
+            {userCrm}
+            {userCrm && userClinic && ' • '}
+            {userClinic}
+          </span>
+        )}
         <div className="doc-date-pill">
           <CalendarDays size={16} />
           <span>{dataCapitalizada}</span>
@@ -151,22 +138,20 @@ function Dashboard({ userName, userSpecialty }: DashboardProps) {
               <th>Hora</th>
               <th>Paciente (Nome | Idade)</th>
               <th>Motivo / Especialidade</th>
-              <th>Fila &amp; Estado Clínico</th>
+              <th>Status</th>
               <th>Ações</th>
             </tr>
           </thead>
             <tbody>
               {agenda.map((item) => {
                 const cfg = STATUS_CONFIG[item.filaStatus];
-                const tempoLabel =
-                  item.filaTempoMin > 0 ? cfg.tempo(item.filaTempoMin) : '';
-                const emAtendimento = item.filaStatus === 'no_consultorio';
-                const podeIniciar =
-                  item.filaStatus === 'aguardando' ||
-                  item.filaStatus === 'urgencia';
+                const tempoLabel = cfg.tempo(item.filaTempoMin);
+                const emAtendimento = item.filaStatus === 'em_atendimento';
+                const noConsultorio = item.filaStatus === 'no_consultorio';
+                const atrasado = item.filaStatus === 'atrasado';
 
                 return (
-                  <tr key={item.id} className={`doc-row ${item.filaStatus === 'urgencia' ? 'row-urgencia' : ''}`}>
+                  <tr key={item.id} className={`doc-row ${atrasado ? 'row-atrasado' : ''}`}>
                     <td className="doc-cell-hora">{item.hora}</td>
                     <td className="doc-cell-paciente">
                       <strong>{item.pacienteNome}</strong>
@@ -189,9 +174,6 @@ function Dashboard({ userName, userSpecialty }: DashboardProps) {
                           )}
                         </span>
                       </div>
-                      <span className="doc-estado-clinico">
-                        *{ESTADO_LABEL[item.estadoClinico]}*
-                      </span>
                     </td>
                     <td className="doc-cell-acoes">
                       {emAtendimento ? (
@@ -208,9 +190,9 @@ function Dashboard({ userName, userSpecialty }: DashboardProps) {
                         </button>
                       ) : (
                         <button
-                          className={`doc-btn doc-btn-iniciar ${!podeIniciar ? 'doc-btn-disabled' : ''}`}
-                          onClick={() => podeIniciar && handleIniciar(item.id)}
-                          disabled={!podeIniciar || isLoading(item.id)}
+                          className={`doc-btn doc-btn-iniciar ${atrasado ? 'doc-btn-disabled' : ''}`}
+                          onClick={() => noConsultorio && handleIniciar(item.id)}
+                          disabled={!noConsultorio || isLoading(item.id)}
                         >
                           {isLoading(item.id) ? (
                             <Loader2 size={14} className="doc-spin" />

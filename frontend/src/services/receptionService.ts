@@ -96,8 +96,8 @@ const MOCK_DELAY = 400;
 const mockDelay = () => new Promise((r) => setTimeout(r, MOCK_DELAY));
 
 export const MOCK_DAILY_APPOINTMENTS: DailyAppointment[] = [
-  { id: 1, patient_name: "Lucas Gama", patient_id: 10455, time: "08:00", specialty: "Clínica Geral", arrival_status: "scheduled" },
-  { id: 2, patient_name: "Maria Santos", patient_id: 11300, time: "08:00", specialty: "Cardiologia", arrival_status: "late" },
+  { id: 1, patient_name: "Lucas Gama", patient_id: 10455, time: "08:00", specialty: "Cardiologia", arrival_status: "scheduled" },
+  { id: 2, patient_name: "Maria Santos", patient_id: 11300, time: "08:00", specialty: "Ortopedia", arrival_status: "late" },
   { id: 3, patient_name: "João Pedro", patient_id: 12150, time: "08:00", specialty: "Dermatologia", arrival_status: "in_office" },
   { id: 4, patient_name: "Ana Carolina Lima", patient_id: 13400, time: "08:00", specialty: "Ortopedia", arrival_status: "in_progress" },
   { id: 5, patient_name: "Carlos Ferreira", patient_id: 14520, time: "10:00", specialty: "Pediatria", arrival_status: "scheduled" },

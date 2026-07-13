@@ -8,9 +8,10 @@ import {
 
 interface DashboardProps {
   adminName: string;
+  clinicName?: string;
 }
 
-export const Dashboard = ({ adminName }: DashboardProps) => {
+export const Dashboard = ({ adminName, clinicName }: DashboardProps) => {
   const [stats, setStats] = useState<DashboardAdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
@@ -41,6 +42,13 @@ export const Dashboard = ({ adminName }: DashboardProps) => {
   return (
     <div className="adm-container">
       <h1 className="adm-title">Dashboard</h1>
+      {(adminName || clinicName) && (
+        <p className="adm-welcome">
+          {adminName && <>Bem-vindo(a), <strong>{adminName}</strong></>}
+          {adminName && clinicName && ' — '}
+          {clinicName}
+        </p>
+      )}
 
       {erro && <p className="adm-erro">{erro}</p>}
 

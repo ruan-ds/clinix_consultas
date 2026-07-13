@@ -4,13 +4,16 @@ import Sidebar from '../../components-doctor/feed/sidebar/sidebar';
 import Content from '../../components-doctor/feed/content/content';
 import './doctor-feed.css';
 
-// Nome e especialidade do médico vêm do token/API futuramente.
+// Nome, especialidade, CRM e clínica do médico vêm do token/API futuramente.
 // Por ora usamos mock diretamente na página.
-// Persona escolhida para esta demonstração: Dra. Juliana Ferreira, Cardiologista.
-// Toda a agenda, pacientes e prescrições mockados em doctorService.ts
-// seguem esse mesmo recorte de especialidade.
-const MOCK_DOCTOR_NAME = 'Juliana Ferreira';
+// Persona escolhida para esta demonstração: Dra. Beatriz Cardoso, Cardiologista,
+// a mesma médica criada pelo seed do backend (CRM22222-SP, Clínica Central,
+// horário "morning" → 09h-17h). Toda a agenda, pacientes e prescrições
+// mockados em doctorService.ts seguem esse mesmo recorte de especialidade.
+const MOCK_DOCTOR_NAME = 'Beatriz Cardoso';
 const MOCK_DOCTOR_SPECIALTY = 'Cardiologia';
+const MOCK_DOCTOR_CRM = 'CRM 22222-SP';
+const MOCK_DOCTOR_CLINIC = 'Clínica Central';
 
 function DoctorFeed() {
   const [telaAtiva, setTelaAtiva] = useState(0);
@@ -26,6 +29,8 @@ function DoctorFeed() {
             setTelaAtiva={setTelaAtiva}
             userName={MOCK_DOCTOR_NAME}
             userSpecialty={MOCK_DOCTOR_SPECIALTY}
+            userCrm={MOCK_DOCTOR_CRM}
+            userClinic={MOCK_DOCTOR_CLINIC}
           />
         </main>
       </div>
